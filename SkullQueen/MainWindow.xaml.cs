@@ -11,42 +11,6 @@ using System.Windows.Shapes;
 
 namespace SkullQueen
 {
-    class Game
-    {
-        private List<Player>;
-    }
-    class Player
-    {
-
-    }
-    class Card
-    {
-
-    }
-    class DoubleCard : Card
-    {
-
-    }
-    class Round
-    {
-
-    }
-    class BlackCard : Card
-    {
-
-    }
-    class Plank
-    {
-
-    }
-    class Pawn
-    {
-
-    }
-    class Trick
-    {
-
-    }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>

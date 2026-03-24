@@ -1,0 +1,7 @@
+﻿namespace SkullQueen
+{
+    class Pawn
+    {
+
+    }
+}
