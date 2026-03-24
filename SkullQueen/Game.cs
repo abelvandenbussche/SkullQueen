@@ -2,6 +2,7 @@
 {
     class Game
     {
-        private List<Player>;
+        private List<Player> players;
+        private Round currentRound;
     }
 }
