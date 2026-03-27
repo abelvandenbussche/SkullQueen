@@ -9,6 +9,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using System.Net.Sockets;
+
 namespace SkullQueen
 {
     /// <summary>
@@ -19,6 +21,9 @@ namespace SkullQueen
         public MainWindow()
         {
             InitializeComponent();
+
+            // starting the game
+            Game game = new();
         }
     }
 }
