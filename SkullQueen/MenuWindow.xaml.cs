@@ -34,8 +34,7 @@ namespace SkullQueen
         public void HostButtonClick(object sender, RoutedEventArgs e)
         {
             game = new();
-            game.AddPlayer(new());
-            game.Host();
+            game.Host(NameField, LobbyTextBlock, StartButton);
         }
         public void JoinButtonClick(object sender, RoutedEventArgs e)
         {

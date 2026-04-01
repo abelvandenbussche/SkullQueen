@@ -9,9 +9,11 @@
     <Grid>
         <Button x:Name="HostButton" Content="Host" HorizontalAlignment="Left" Margin="300,41,0,0" VerticalAlignment="Top" Height="35" Width="50" FontSize="20"/>
         <Button x:Name="JoinButton" Content="Join" HorizontalAlignment="Left" Margin="377,41,0,0" VerticalAlignment="Top" Height="35" Width="50" FontSize="20"/>
-        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Lobby 0/8:" VerticalAlignment="Top" Height="151" Width="154" FontSize="30"/>
+        <TextBlock x:Name="LobbyTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="102" Width="116" FontSize="15" Margin="19,66,0,0"/>
         <TextBox x:Name="NameField" HorizontalAlignment="Left" Margin="300,142,0,0" TextWrapping="Wrap" Text="unnamed" VerticalAlignment="Top" Width="120"/>
         <TextBlock HorizontalAlignment="Left" Margin="300,107,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" FontSize="15"/>
+        <Button x:Name="StartButton" Content="Start game" HorizontalAlignment="Left" Margin="28,199,0,0" VerticalAlignment="Top" Height="36" Width="98"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,9,0,0" TextWrapping="Wrap" Text="Lobby 0/8" VerticalAlignment="Top" FontSize="30"/>
 
     </Grid>
 </Window>
