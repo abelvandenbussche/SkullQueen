@@ -47,6 +47,10 @@ namespace SkullQueen
             {
                 cts.Cancel();
                 server.Stop();
+
+                // starting the game
+                currentRound = new(players);
+                currentRound.DealCards();
             };
 
             // start accepting clients

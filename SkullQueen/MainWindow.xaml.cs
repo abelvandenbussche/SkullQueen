@@ -30,7 +30,7 @@ namespace SkullQueen
         public void HandUpdateEvent(object sender, List<Card> cards)
         {
             // updating the ui
-            double width = HandGroup.Width;
+            double width = HandGroup.ActualWidth;
             double spaceBetween = width / cards.Count;
 
             //TODO: reuse canvas instead of making new
@@ -40,17 +40,16 @@ namespace SkullQueen
             {
                 Card card = cards[i];
                 Rectangle newRect = new();
-                newRect.Width = 10;
-                newRect.Height = 10;
+                newRect.Width = 50;
+                newRect.Height = 100;
                 newRect.Fill = Brushes.Red;
                 newRect.Stroke = Brushes.Green;
                 newRect.StrokeThickness = 1;
 
-                // adding a possiton to the rect
-                canvas.Children.Add(newRect);
+                // positioning
+                Canvas.SetLeft(newRect, i * spaceBetween);
 
-                    Canvas.SetLeft(newRect, i * spaceBetween);
-                    Canvas.SetTop(newRect, 0);
+                canvas.Children.Add(newRect);
             }
             HandGroup.Content = canvas;
         }
