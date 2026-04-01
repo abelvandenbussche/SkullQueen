@@ -16,8 +16,8 @@
             Queue<Card> deck = new Queue<Card>();
 
             // the 2 black cards
-            deck.Enqueue(new BlackCard());
-            deck.Enqueue(new BlackCard());
+            deck.Enqueue(new BlackCard(false));
+            deck.Enqueue(new BlackCard(true));
 
             // all the rest
             for (int i = 0; i < 4; i++)
@@ -26,11 +26,11 @@
                 {
                     if (cardNumber == 5 || cardNumber == 8)
                     {
-                        deck.Enqueue(new DoubleCard());
+                        deck.Enqueue(new DoubleCard((Color)i, cardNumber == 8));
                     }
                     else
                     {
-                        deck.Enqueue(new Card());
+                        deck.Enqueue(new Card((Color)i, cardNumber));
                     }
                 }
             }

@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace SkullQueen
 {
-    enum Color
+    public enum Color
     {
         Red,
         Green,
         Blue,
         Yellow,
+        Black
     }
 }

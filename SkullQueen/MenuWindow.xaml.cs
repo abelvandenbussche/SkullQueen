@@ -8,7 +8,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
 using System.Net.Sockets;
 using System.Diagnostics;
 using System.IO;
@@ -69,7 +68,7 @@ namespace SkullQueen
                 // creating a new window
                 // making it the main one
                 // closing this one
-                MainWindow window = new();
+                MainWindow window = new(thisPlayer);
                 window.Show();
                 Application.Current.MainWindow = window;
                 this.Close();

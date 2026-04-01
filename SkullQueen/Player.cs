@@ -1,16 +1,21 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Net.Sockets;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Windows.Controls;
 
 namespace SkullQueen
 {
-    class Player
+    public class Player
     {
         private Plank plank;
         private List<Card> hand;
         private int score;
         public string name;
         TcpClient? connection;
+
+        public EventHandler<List<Card>> HandUpdate;
 
         public Player(string name, TcpClient? connection)
         {
@@ -24,6 +29,7 @@ namespace SkullQueen
         public void ReceiveCard(Card card)
         {
             hand.Add(card);
+            HandUpdate?.Invoke(this, hand);
         }
         
         public string ReceiveTcpData()

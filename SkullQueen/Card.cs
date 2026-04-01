@@ -2,9 +2,15 @@
 
 namespace SkullQueen
 {
-    class Card
+    public class Card
     {
-        protected Color suit;
+        public Color suit;
         protected int rank;
+
+        public Card(Color suit, int rank)
+        {
+            this.suit = suit;
+            this.rank = rank;
+        }
     }
 }
