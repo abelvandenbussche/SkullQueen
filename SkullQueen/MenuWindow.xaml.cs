@@ -31,6 +31,8 @@ namespace SkullQueen
             // getting button input
             HostButton.Click += HostButtonClick;
             JoinButton.Click += JoinButtonClick;
+
+            StartButton.Click += StartGame;
         }
         public void HostButtonClick(object sender, RoutedEventArgs e)
         {
@@ -58,6 +60,20 @@ namespace SkullQueen
             JoinButton.Visibility = Visibility.Collapsed;
             NameField.Visibility = Visibility.Collapsed;
             NameLabel.Visibility = Visibility.Collapsed;
+        }
+
+        private void StartGame(Object sender, EventArgs args)
+        {
+            if (game != null)
+            {
+                // creating a new window
+                // making it the main one
+                // closing this one
+                MainWindow window = new();
+                window.Show();
+                Application.Current.MainWindow = window;
+                this.Close();
+            }
         }
     }
 }

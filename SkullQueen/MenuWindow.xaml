@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SkullQueen"
         mc:Ignorable="d"
-        Title="MainWindow" Height="300" Width="600">
+        Title="Menu" Height="300" Width="600">
     <Grid>
         <Button x:Name="HostButton" Content="Host" HorizontalAlignment="Left" Margin="300,41,0,0" VerticalAlignment="Top" Height="35" Width="50" FontSize="20"/>
         <Button x:Name="JoinButton" Content="Join" HorizontalAlignment="Left" Margin="377,41,0,0" VerticalAlignment="Top" Height="35" Width="50" FontSize="20"/>
