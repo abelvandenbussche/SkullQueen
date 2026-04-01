@@ -14,8 +14,8 @@ namespace SkullQueen
 
         public Player(string name, TcpClient? connection)
         {
-            this.name = name;
             this.connection = connection;
+            this.name = name;
 
             this.plank = new Plank();
             this.score = 0;
@@ -34,7 +34,7 @@ namespace SkullQueen
             }
             NetworkStream stream = connection.GetStream();
             StreamReader reader = new StreamReader(stream);
-            string data = reader.ReadLine();
+            string data = reader.ReadLine()!;
 
             return data;
         }
@@ -47,6 +47,7 @@ namespace SkullQueen
             NetworkStream stream = connection.GetStream();
             StreamWriter writer = new StreamWriter(stream);
             writer.Write(data + "\n");
+            writer.Flush();
         }
     }
 }

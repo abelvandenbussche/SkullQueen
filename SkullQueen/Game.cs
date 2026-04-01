@@ -32,12 +32,13 @@ namespace SkullQueen
             lobbyText.Text += $"\n * {player.name}";
         }
 
-        public void Host(TextBox nameField, TextBlock lobbyText, Button startButton)
+        public Player Host(TextBox nameField, TextBlock lobbyText, Button startButton)
         {
             string name = nameField.Text;
 
-            //adding this player
-            AddPlayer(new(name, null), lobbyText);
+            // making this player
+            Player player = new(name, null);
+            AddPlayer(player, lobbyText);
 
             // making and adding a player
             startButton.Click += (s, e) =>
@@ -48,6 +49,8 @@ namespace SkullQueen
 
             // start accepting clients
             Task clientGetter = GetPlayers(lobbyText);
+
+            return player;
         }
 
         private async Task GetPlayers(TextBlock lobbyText)
@@ -61,8 +64,10 @@ namespace SkullQueen
                 {
                     TcpClient client = await server.AcceptTcpClientAsync();
                     // getting the players name
-                    string name = "something else";
-                    AddPlayer(new(name, client), lobbyText);
+                    Player newPlayer = new(null, client);
+                    newPlayer.name = newPlayer.ReceiveTcpData();
+                    AddPlayer(newPlayer, lobbyText);
+
                 }
             }
             catch (ObjectDisposedException)

@@ -21,6 +21,7 @@ namespace SkullQueen
     public partial class MenuWindow : Window
     {
         Game? game;
+        Player thisPlayer;
         String address = "127.0.0.1";
         
         public MenuWindow()
@@ -34,15 +35,17 @@ namespace SkullQueen
         public void HostButtonClick(object sender, RoutedEventArgs e)
         {
             game = new();
-            game.Host(NameField, LobbyTextBlock, StartButton);
+            this.thisPlayer = game.Host(NameField, LobbyTextBlock, StartButton);
         }
         public void JoinButtonClick(object sender, RoutedEventArgs e)
         {
             // starting a client
             TcpClient tcpClient = new(address, 5050);
-            Stream stream = tcpClient.GetStream();
-            // sending a test message
 
+            // creating a player
+            thisPlayer = new(NameField.Text, tcpClient);
+
+            thisPlayer.SendTcpData(thisPlayer.name);
         }
     }
 }
