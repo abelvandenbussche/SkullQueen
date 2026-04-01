@@ -18,12 +18,12 @@ namespace SkullQueen
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MenuWindow : Window
     {
-        Game game;
+        Game? game;
         String address = "127.0.0.1";
         
-        public MainWindow()
+        public MenuWindow()
         {
             InitializeComponent();
 
