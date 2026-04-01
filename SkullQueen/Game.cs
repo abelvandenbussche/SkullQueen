@@ -4,7 +4,9 @@ using System.Net.Sockets;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Xml.Linq;
+using System.Linq;
 
 namespace SkullQueen
 {
@@ -74,6 +76,11 @@ namespace SkullQueen
             {
                 // stopped accepting clients
             }
+        }
+
+        public void StartNextRound()
+        {
+            currentRound = new(players);
         }
     }
 }
