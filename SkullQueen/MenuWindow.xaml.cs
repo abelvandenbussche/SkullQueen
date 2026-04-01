@@ -37,9 +37,7 @@ namespace SkullQueen
             game = new();
             this.thisPlayer = game.Host(NameField, LobbyTextBlock, StartButton);
 
-            // removing both buttons
-            HostButton.Visibility = Visibility.Collapsed;
-            JoinButton.Visibility = Visibility.Collapsed;
+            HideStuff();
         }
         public void JoinButtonClick(object sender, RoutedEventArgs e)
         {
@@ -51,9 +49,15 @@ namespace SkullQueen
 
             thisPlayer.SendTcpData(thisPlayer.name);
 
-            // removing both buttons
+            HideStuff();
+        }
+
+        private void HideStuff()
+        {
             HostButton.Visibility = Visibility.Collapsed;
             JoinButton.Visibility = Visibility.Collapsed;
+            NameField.Visibility = Visibility.Collapsed;
+            NameLabel.Visibility = Visibility.Collapsed;
         }
     }
 }
