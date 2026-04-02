@@ -10,19 +10,20 @@ using System.Linq;
 
 namespace SkullQueen
 {
-    class Game
+    public class Game
     {
         private List<Player> players;
         private Round currentRound;
         private TcpListener server;
 
         private CancellationTokenSource cts = new CancellationTokenSource();
+        public EventHandler<String> updateLobbyText;
 
         public Game()
         {
             players = new List<Player>();
         }
-        public void AddPlayer(Player player, TextBlock lobbyText)
+        public void AddPlayer(Player player)
         {
             if (players.Count == 8)
             {
@@ -31,16 +32,16 @@ namespace SkullQueen
             players.Add(player);
 
             //updating the lobby text
-            lobbyText.Text += $"\n * {player.name}";
+            updateLobbyText?.Invoke(this, $" - {player.name}");
         }
 
-        public Player Host(TextBox nameField, TextBlock lobbyText, Button startButton)
+        public Player Host(TextBox nameField, Button startButton)
         {
             string name = nameField.Text;
 
             // making this player
             Player player = new(name, null);
-            AddPlayer(player, lobbyText);
+            AddPlayer(player);
 
             // making and adding a player
             startButton.Click += (s, e) =>
@@ -54,12 +55,12 @@ namespace SkullQueen
             };
 
             // start accepting clients
-            Task clientGetter = GetPlayers(lobbyText);
+            Task clientGetter = GetPlayers();
 
             return player;
         }
 
-        private async Task GetPlayers(TextBlock lobbyText)
+        private async Task GetPlayers()
         {
             // waiting on a player to join
             server = new(IPAddress.Any, 5050);
@@ -72,7 +73,7 @@ namespace SkullQueen
                     // getting the players name
                     Player newPlayer = new(null, client);
                     newPlayer.name = newPlayer.ReceiveTcpData();
-                    AddPlayer(newPlayer, lobbyText);
+                    AddPlayer(newPlayer);
 
                 }
             }

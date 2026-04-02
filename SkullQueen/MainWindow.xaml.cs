@@ -20,14 +20,14 @@ namespace SkullQueen
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(Player thisPlayer)
+        public MainWindow(Player thisPlayer, Game thisGame)
         {
             InitializeComponent();
 
-            thisPlayer.HandUpdate += HandUpdateEvent;
+            thisPlayer.HandUpdate += HandleHandUpdate;
         }
 
-        public void HandUpdateEvent(object sender, List<Card> cards)
+        public void HandleHandUpdate(object sender, List<Card> cards)
         {
             // updating the ui
             double width = HandGroup.ActualWidth;

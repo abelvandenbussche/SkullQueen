@@ -36,7 +36,8 @@ namespace SkullQueen
         public void HostButtonClick(object sender, RoutedEventArgs e)
         {
             game = new();
-            this.thisPlayer = game.Host(NameField, LobbyTextBlock, StartButton);
+            game.updateLobbyText += HandleLobbyTextUpdate;
+            this.thisPlayer = game.Host(NameField, StartButton);
 
             HideStuff();
         }
@@ -68,11 +69,15 @@ namespace SkullQueen
                 // creating a new window
                 // making it the main one
                 // closing this one
-                MainWindow window = new(thisPlayer);
+                MainWindow window = new(thisPlayer, game);
                 window.Show();
                 Application.Current.MainWindow = window;
                 this.Close();
             }
+        }
+        private void HandleLobbyTextUpdate(object sender, string toAdd)
+        {
+            LobbyTextBlock.Text += toAdd;
         }
     }
 }
