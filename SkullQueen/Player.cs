@@ -59,5 +59,18 @@ namespace SkullQueen
         {
             return hand.Count;
         }
+        public Card PlayCard(Color? leadSuit)
+        {
+            // temporary choosing a card
+            // playing a card
+            foreach(Card card in hand)
+            {
+                if (card.suit == leadSuit)
+                {
+                    return card;
+                }
+            }
+            return hand[0];
+        }
     }
 }
