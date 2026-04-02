@@ -20,6 +20,7 @@ namespace SkullQueen
     /// </summary>
     public partial class MainWindow : Window
     {
+        public EventHandler<Card> CardClicked;
         public MainWindow(Player thisPlayer, Game thisGame)
         {
             InitializeComponent();
@@ -58,6 +59,9 @@ namespace SkullQueen
                 newRect.Fill = colorToColor[card.suit];
                 newRect.Stroke = Brushes.Black;
                 newRect.StrokeThickness = 1;
+
+                newRect.DataContext = card;
+                newRect.MouseLeftButtonUp += (object s, MouseButtonEventArgs e) => { Rectangle rect = s as Rectangle; CardClicked.Invoke(s, rect.DataContext as Card); };
 
                 // making some text
                 TextBlock newText = new();

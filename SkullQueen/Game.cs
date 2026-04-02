@@ -32,7 +32,7 @@ namespace SkullQueen
             players.Add(player);
 
             //updating the lobby text
-            updateLobbyText?.Invoke(this, $" - {player.name}");
+            updateLobbyText?.Invoke(this, $" - {player.name}\n");
         }
 
         public Player Host(TextBox nameField, Button startButton)
@@ -52,6 +52,7 @@ namespace SkullQueen
                 // starting the game
                 currentRound = new(players);
                 currentRound.DealCards();
+                currentRound.StartRound();
             };
 
             // start accepting clients
@@ -78,6 +79,10 @@ namespace SkullQueen
                 }
             }
             catch (ObjectDisposedException)
+            {
+                // stopped accepting clients
+            }
+            catch(SocketException)
             {
                 // stopped accepting clients
             }

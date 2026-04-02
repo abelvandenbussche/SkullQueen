@@ -55,5 +55,9 @@ namespace SkullQueen
             writer.Write(data + "\n");
             writer.Flush();
         }
+        public int GetHandCount()
+        {
+            return hand.Count;
+        }
     }
 }
