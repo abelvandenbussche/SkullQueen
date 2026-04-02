@@ -18,7 +18,7 @@ namespace SkullQueen
             this.players = players;
             this.rand = rand;
         }
-        public void Play()
+        public async void Play()
         {
             List<Player> playerOrder = new();
             int startingPlayerIndex = rand.Next(0, players.Count);
@@ -38,8 +38,8 @@ namespace SkullQueen
                 foreach (Player player in playerOrder)
                 {
                     Debug.WriteLine($"{player.name}'s turn");
-                    Card playedCard = player.PlayCard(leadSuit);
-                    playedCards[player] = player.PlayCard(leadSuit);
+                    Card playedCard = await player.PlayCard(leadSuit);
+                    playedCards[player] = await player.PlayCard(leadSuit);
                     if (player ==  startingPlayer && playedCards[player].suit != Color.Black)
                     {
                         leadSuit = playedCards[player].suit;

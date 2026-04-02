@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace SkullQueen
@@ -15,7 +16,8 @@ namespace SkullQueen
         public string name;
         TcpClient? connection;
 
-        public EventHandler<List<Card>> HandUpdate;
+        public event EventHandler<List<Card>> HandUpdate;
+        public event EventHandler CardNeeded;
 
         public Player(string name, TcpClient? connection)
         {
@@ -59,18 +61,26 @@ namespace SkullQueen
         {
             return hand.Count;
         }
-        public Card PlayCard(Color? leadSuit)
+        public async Task<Card> PlayCard(Color? leadSuit)
         {
             // temporary choosing a card
             // playing a card
+            Card toPlay = null;
             foreach(Card card in hand)
             {
                 if (card.suit == leadSuit)
                 {
-                    return card;
+                    toPlay = card;
                 }
             }
-            return hand[0];
+            if (toPlay == null)
+            {
+                toPlay = hand[0];
+            }
+            await Task.Yield();
+            hand.Remove(toPlay);
+            HandUpdate?.Invoke(this, hand);
+            return toPlay;
         }
     }
 }

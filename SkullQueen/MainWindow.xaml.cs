@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,7 +21,7 @@ namespace SkullQueen
     /// </summary>
     public partial class MainWindow : Window
     {
-        public EventHandler<Card> CardClicked;
+        public event EventHandler<Card> CardClicked;
         public MainWindow(Player thisPlayer, Game thisGame)
         {
             InitializeComponent();
@@ -33,6 +34,7 @@ namespace SkullQueen
             // updating the ui
             double width = HandGroup.ActualWidth;
             double spaceBetween = (width - 50) / cards.Count;
+            Debug.WriteLine(width);
 
             //TODO: reuse canvas instead of making new
             Canvas canvas = new();
@@ -73,7 +75,8 @@ namespace SkullQueen
                 newGrid.Children.Add(newText);
                 Canvas.SetLeft(newGrid, i * spaceBetween);
 
-
+                canvas.Width = HandGroup.Width;
+                canvas.Height = HandGroup.Height;
                 canvas.Children.Add(newGrid);
             }
             HandGroup.Content = canvas;
