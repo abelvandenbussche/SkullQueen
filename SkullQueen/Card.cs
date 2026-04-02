@@ -5,7 +5,7 @@ namespace SkullQueen
     public class Card
     {
         public Color suit;
-        protected int rank;
+        public int rank;
 
         public Card(Color suit, int rank)
         {
