@@ -8,6 +8,7 @@ namespace SkullQueen
         private List<Player> players;
         private Trick currentTrick;
 
+        public event EventHandler<Card> CardPlayed;
         public Round(List<Player> players)
         {
             this.players = players;
@@ -53,9 +54,10 @@ namespace SkullQueen
             // adding remaining cards to center
         }
 
-        public void StartRound()
+        public async Task NewTrick()
         {
             currentTrick = new Trick(players, rand);
+            currentTrick.CardPlayed += (s, e) => CardPlayed?.Invoke(s, e);
             currentTrick.Play();
         }
     }

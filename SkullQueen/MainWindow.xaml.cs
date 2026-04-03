@@ -26,18 +26,23 @@ namespace SkullQueen
         {
             InitializeComponent();
 
+            // event listeners
+
             thisPlayer.HandUpdate += HandleHandUpdate;
+            thisGame.CardPlayed += HandleCardPlayed;
         }
 
         public void HandleHandUpdate(object sender, List<Card> cards)
         {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.Invoke(() => { HandleHandUpdate(sender, cards); });
+                return;
+            }
             // updating the ui
-            double width = HandGroup.ActualWidth;
+            double width = HandCanvas.ActualWidth;
             double spaceBetween = (width - 50) / cards.Count;
             Debug.WriteLine(width);
-
-            //TODO: reuse canvas instead of making new
-            Canvas canvas = new();
 
             Dictionary<Color, Brush> colorToColor = new Dictionary<Color, Brush>()
             {
@@ -63,7 +68,7 @@ namespace SkullQueen
                 newRect.StrokeThickness = 1;
 
                 newRect.DataContext = card;
-                newRect.MouseLeftButtonUp += (object s, MouseButtonEventArgs e) => { Rectangle rect = s as Rectangle; CardClicked.Invoke(s, rect.DataContext as Card); };
+                newRect.MouseLeftButtonUp += (object s, MouseButtonEventArgs e) => { Rectangle rect = s as Rectangle; CardClicked?.Invoke(s, rect.DataContext as Card); };
 
                 // making some text
                 TextBlock newText = new();
@@ -75,11 +80,11 @@ namespace SkullQueen
                 newGrid.Children.Add(newText);
                 Canvas.SetLeft(newGrid, i * spaceBetween);
 
-                canvas.Width = HandGroup.Width;
-                canvas.Height = HandGroup.Height;
-                canvas.Children.Add(newGrid);
+                HandCanvas.Children.Add(newGrid);
             }
-            HandGroup.Content = canvas;
         }
+        public void HandleCardPlayed(object sender, Card playedCard)
+        {
+        } 
     }
 }

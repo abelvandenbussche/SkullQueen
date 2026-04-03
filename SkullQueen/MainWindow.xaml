@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="skull Queen" Height="450" Width="800">
     <Grid>
-        <GroupBox x:Name="HandGroup" Header="Hand" Margin="50,255,50,25"/>
+        <Canvas x:Name="HandCanvas" Margin="50,300,50,0"/>
 
     </Grid>
 </Window>

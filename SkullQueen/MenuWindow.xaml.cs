@@ -36,7 +36,7 @@ namespace SkullQueen
         public void HostButtonClick(object sender, RoutedEventArgs e)
         {
             game = new();
-            game.updateLobbyText += HandleLobbyTextUpdate;
+            game.UpdateLobbyText += HandleLobbyTextUpdate;
             this.thisPlayer = game.Host(NameField, StartButton);
 
             HideStuff();

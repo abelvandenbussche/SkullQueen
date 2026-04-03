@@ -17,7 +17,8 @@ namespace SkullQueen
         private TcpListener server;
 
         private CancellationTokenSource cts = new CancellationTokenSource();
-        public EventHandler<String> updateLobbyText;
+        public event EventHandler<String> UpdateLobbyText;
+        public event EventHandler<Card> CardPlayed;
 
         public Game()
         {
@@ -32,7 +33,7 @@ namespace SkullQueen
             players.Add(player);
 
             //updating the lobby text
-            updateLobbyText?.Invoke(this, $" - {player.name}\n");
+            UpdateLobbyText?.Invoke(this, $" - {player.name}\n");
         }
 
         public Player Host(TextBox nameField, Button startButton)
@@ -51,8 +52,9 @@ namespace SkullQueen
 
                 // starting the game
                 currentRound = new(players);
+                currentRound.CardPlayed += (s, e) => CardPlayed?.Invoke(s, e);
                 currentRound.DealCards();
-                currentRound.StartRound();
+                currentRound.NewTrick();
             };
 
             // start accepting clients
