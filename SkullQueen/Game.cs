@@ -51,7 +51,7 @@ namespace SkullQueen
                 cts.Cancel();
                 server.Stop();
 
-                //displaying the players
+                // displaying the players
                 DisplayPlayers?.Invoke(this, players.Where(p => p != player).ToList());
 
                 // starting the game
@@ -84,13 +84,13 @@ namespace SkullQueen
                     // sending all current players to the client
                     foreach (Player player in players)
                     {
+                        Debug.WriteLine(player.name);
                         if (player != newPlayer)
                         {
                             newPlayer.SendTcpData(" - " + player.name);
                         }
                     }
                     AddPlayer(newPlayer);
-
                 }
             }
             catch (ObjectDisposedException)

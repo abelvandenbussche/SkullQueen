@@ -62,6 +62,7 @@ namespace SkullQueen
                     string data = thisPlayer.ReceiveTcpData();
                     if (data == "GAME START")
                     {
+                        Debug.WriteLine("The game would start");
                         break;
                     }
                     Debug.WriteLine(data);
@@ -86,6 +87,9 @@ namespace SkullQueen
         {
             if (game != null)
             {
+                // broadcasting the start of the game
+                game.Broadcast("GAME START");
+
                 // creating a new window
                 // making it the main one
                 // closing this one
