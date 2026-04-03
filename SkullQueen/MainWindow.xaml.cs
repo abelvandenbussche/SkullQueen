@@ -25,11 +25,13 @@ namespace SkullQueen
         public MainWindow(Player thisPlayer, Game thisGame)
         {
             InitializeComponent();
+            NameScope.SetNameScope(PlayersCanvas, new NameScope());
 
             // event listeners
 
             thisPlayer.HandUpdate += HandleHandUpdate;
             thisGame.CardPlayed += HandleCardPlayed;
+            thisGame.DisplayPlayers += DisplayPlayers;
         }
 
         public void HandleHandUpdate(object sender, List<Card> cards)
@@ -85,6 +87,27 @@ namespace SkullQueen
         }
         public void HandleCardPlayed(object sender, Card playedCard)
         {
-        } 
+        }
+        public void DisplayPlayers(object sender, List<Player> players)
+        {
+            double SpaceBetweenPlayers = PlayersCanvas.Width / players.Count;
+            for (int i = 0; i < players.Count; i++)
+            {
+                Player player = players[i];
+
+                // creating a canvas for each player
+                Canvas playerCanvas = new();
+                playerCanvas.Background = Brushes.Green;
+
+                Canvas.SetTop(playerCanvas, 0);
+                Canvas.SetLeft(playerCanvas, i * SpaceBetweenPlayers);
+
+                playerCanvas.Height = 100;
+                playerCanvas.Width = 100;
+
+                PlayersCanvas.RegisterName(player.name, playerCanvas);
+                PlayersCanvas.Children.Add(playerCanvas);
+            }
+        }
     }
 }

@@ -19,6 +19,7 @@ namespace SkullQueen
         private CancellationTokenSource cts = new CancellationTokenSource();
         public event EventHandler<String> UpdateLobbyText;
         public event EventHandler<Card> CardPlayed;
+        public event EventHandler<List<Player>> DisplayPlayers;
 
         public Game()
         {
@@ -49,6 +50,9 @@ namespace SkullQueen
             {
                 cts.Cancel();
                 server.Stop();
+
+                //displaying the players
+                DisplayPlayers?.Invoke(this, players.Where(p => p != player).ToList());
 
                 // starting the game
                 currentRound = new(players);
@@ -84,7 +88,7 @@ namespace SkullQueen
             {
                 // stopped accepting clients
             }
-            catch(SocketException)
+            catch (SocketException)
             {
                 // stopped accepting clients
             }
