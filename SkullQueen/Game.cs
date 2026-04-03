@@ -80,6 +80,15 @@ namespace SkullQueen
                     // getting the players name
                     Player newPlayer = new(null, client);
                     newPlayer.name = newPlayer.ReceiveTcpData();
+                    
+                    // sending all current players to the client
+                    foreach (Player player in players)
+                    {
+                        if (player != newPlayer)
+                        {
+                            newPlayer.SendTcpData(" - " + player.name);
+                        }
+                    }
                     AddPlayer(newPlayer);
 
                 }
@@ -97,6 +106,13 @@ namespace SkullQueen
         public void StartNextRound()
         {
             currentRound = new(players);
+        }
+        public void Broadcast(string message)
+        {
+            foreach(Player player in players)
+            {
+                player.SendTcpData(message);
+            }
         }
     }
 }

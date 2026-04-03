@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 using System.Net.Sockets;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace SkullQueen
 {
@@ -41,7 +42,7 @@ namespace SkullQueen
 
             HideStuff();
         }
-        public void JoinButtonClick(object sender, RoutedEventArgs e)
+        public async void JoinButtonClick(object sender, RoutedEventArgs e)
         {
             // starting a client
             TcpClient tcpClient = new(address, 5050);
@@ -52,6 +53,25 @@ namespace SkullQueen
             thisPlayer.SendTcpData(thisPlayer.name);
 
             HideStuff();
+
+            // getting messages from the host
+            await Task.Run(() =>
+            {
+                while (true)
+                {
+                    string data = thisPlayer.ReceiveTcpData();
+                    if (data == "GAME START")
+                    {
+                        break;
+                    }
+                    Debug.WriteLine(data);
+                    // otherwise updating the lobby text
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        LobbyTextBlock.Text += data + Environment.NewLine;
+                    });
+                }
+            });
         }
 
         private void HideStuff()
@@ -78,6 +98,8 @@ namespace SkullQueen
         private void HandleLobbyTextUpdate(object sender, string toAdd)
         {
             LobbyTextBlock.Text += toAdd;
+            // sending a message to all people
+            game.Broadcast(toAdd);
         }
     }
 }
