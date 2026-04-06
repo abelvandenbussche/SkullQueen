@@ -22,6 +22,8 @@ namespace SkullQueenClient
             InitializeComponent();
             
             Player? player = ConnectToServer("Player1");
+            LobbyList.Items.Add("Player1");
+
             if (player == null)
             {
                 // Connection failure, close the application
@@ -34,7 +36,6 @@ namespace SkullQueenClient
                 // Update the UI with the received message
                 Dispatcher.Invoke(() =>
                 {
-                    MessageBox.Show("Received message from server: " + message);
                     switch (message)
                     {
                         case "GAME START":
@@ -54,7 +55,6 @@ namespace SkullQueenClient
                 TcpClient client = new TcpClient("localhost", 5050);
                 Player player = new(playerName, client);
                 player.SendMessage(playerName);
-                MessageBox.Show("Connected to server as " + playerName);
                 return player;
             }
             catch (Exception ex)

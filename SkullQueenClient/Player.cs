@@ -5,7 +5,7 @@ namespace SkullQueenClient
 {
     public class Player
     {
-        private string name;
+        public string name;
         private TcpClient connection;
 
         private StreamWriter writer;
