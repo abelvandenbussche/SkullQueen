@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Net.Sockets;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Shared;
+using SkullQueenServer;
 
 namespace SkullQueenClient
 {
@@ -72,6 +74,11 @@ namespace SkullQueenClient
                         {
                             MainContent.Content = gameView;
                         });
+                        break;
+                    case Command.PlayCard:
+                        SkullQueenServer.Color suit = (SkullQueenServer.Color)Enum.Parse(typeof(SkullQueenServer.Color), args[0]);
+                        int rank = int.Parse(args[1]);
+                        Card newCard = new(suit, rank);
                         break;
                     case Command.JoinLobby:
                         lobbyView.AddPlayerToLobby(args[0]);
