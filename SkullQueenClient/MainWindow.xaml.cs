@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Shared;
 
 namespace SkullQueenClient
 {
@@ -19,6 +20,7 @@ namespace SkullQueenClient
     {
         private LobbyView lobbyView;
         private GameView gameView;
+        private bool GameStarted = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -45,15 +47,26 @@ namespace SkullQueenClient
                 // Update the UI with the received message
                 Dispatcher.Invoke(() =>
                 {
-                    switch (message)
+                    if (GameStarted)
                     {
-                        case "GAME START":
-                            MainContent.Content = gameView;
-                            break;
-                        default:
-                            // New player joined the lobby
-                            lobbyView.AddPlayerToLobby(message);
-                            break;
+                        switch (message)
+                        {
+                            case string s when s.StartsWith("CARD")
+                        }
+                    }
+                    else
+                    {
+                        switch (message)
+                        {
+                            case "GAME START":
+                                MainContent.Content = gameView;
+                                GameStarted = true;
+                                break;
+                            default:
+                                // New player joined the lobby
+                                lobbyView.AddPlayerToLobby(message);
+                                break;
+                        }
                     }
                 });
             });
