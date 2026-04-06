@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Net.Sockets;
 using System.Text;
 using System.Windows;
@@ -11,7 +12,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Shared;
-using SkullQueenServer;
 
 namespace SkullQueenClient
 {
@@ -23,19 +23,20 @@ namespace SkullQueenClient
         private LobbyView lobbyView;
         private GameView gameView;
         private ClientGame game;
-        private Dictionary<SkullQueenServer.Color, Brush> ColorToBrush = new()
+        private Dictionary<Shared.Color, Brush> ColorToBrush = new()
         {
-            {SkullQueenServer.Color.Red, Brushes.Red},
-            {SkullQueenServer.Color.Green, Brushes.Green},
-            {SkullQueenServer.Color.Blue, Brushes.Blue},
-            {SkullQueenServer.Color.Yellow, Brushes.Yellow},
-            {SkullQueenServer.Color.Black, Brushes.Black},
+            {Shared.Color.Red, Brushes.Red},
+            {Shared.Color.Green, Brushes.Green},
+            {Shared.Color.Blue, Brushes.Blue},
+            {Shared.Color.Yellow, Brushes.Yellow},
+            {Shared.Color.Black, Brushes.Black},
         };
         public MainWindow()
         {
             InitializeComponent();
             lobbyView = new LobbyView();
             gameView = new GameView();
+            gameView.HandCanvas.SizeChanged += (s, e) => DisplayHand(game.Hand);
 
             lobbyView.StartGameClicked += StartGame;
             MainContent.Content = lobbyView;
@@ -54,27 +55,26 @@ namespace SkullQueenClient
             // Start listening for messages from the server
             Task listener = player.ListenForMessages(message =>
             {
-                // splitting the message
-                // trying to parse the command
-                object cmd = null;
-                try
-                {
-                    string commandStr = message.Split(' ')[0];
-                    cmd = Enum.Parse(typeof(Command), commandStr);
-                    cmd = cmd as Command? ?? throw new Exception("Invalid command");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error parsing message: " + ex.Message);
-                    return;
-                }
-                string[] args = message.Split(' ').Skip(1).ToArray();
+            // splitting the message
+            // trying to parse the command
+            object cmd = null;
+            try
+            {
+                string commandStr = message.Split(' ')[0];
+                cmd = Enum.Parse(typeof(Command), commandStr);
+                cmd = cmd as Command? ?? throw new Exception("Invalid command");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error parsing message: " + ex.Message);
+                return;
+            }
+            string[] args = message.Split(' ').Skip(1).ToArray();
 
-                if (cmd == null)
-                {
-                    return;
-                }
-
+            if (cmd == null)
+            {
+                return;
+            }
                 switch (cmd)
                 {
                     case Command.StartGame:
@@ -86,8 +86,8 @@ namespace SkullQueenClient
                         game = new();
                         break;
 
-                    case Command.PlayCard:
-                        SkullQueenServer.Color suit = (SkullQueenServer.Color)Enum.Parse(typeof(SkullQueenServer.Color), args[0]);
+                    case Command.DealCard:
+                        Shared.Color suit = (Shared.Color)Enum.Parse(typeof(Shared.Color), args[0]);
                         int rank = int.Parse(args[1]);
                         Card newCard = new(suit, rank);
                         game.AddCardToHand(newCard);
@@ -118,39 +118,44 @@ namespace SkullQueenClient
         }
         public void DisplayHand(List<Card> hand)
         {
-            Dispatcher.Invoke(() =>
+            if (!Application.Current.Dispatcher.CheckAccess())
             {
-                double spaceBetween = gameView.HandCanvas.ActualWidth / (hand.Count + 1);
-                for (int i = 0; i < hand.Count; i++)
+                Dispatcher.Invoke(() => DisplayHand(hand));
+            }
+            gameView.HandCanvas.Children.Clear();
+            double spaceBetween = gameView.HandCanvas.ActualWidth / (hand.Count + 1);
+            for (int i = 0; i < hand.Count; i++)
+            {
+                Grid newGrid = new()
                 {
-                    Card card = hand[i];
+                    Height = 96,
+                    Width = 60,
+                };
+                Card card = hand[i];
 
-                    // creating the rectangle for the card
-                    Rectangle cardRect = new()
-                    {
-                        Width = 60,
-                        Height = 96,
-                        Fill = ColorToBrush[card.suit],
-                        Stroke = Brushes.Black,
-                    };
-                    Canvas.SetLeft(cardRect, i * spaceBetween);
-                    Canvas.SetTop(cardRect, 0);
+                // creating the rectangle for the card
+                Rectangle cardRect = new()
+                {
+                    Width = 60,
+                    Height = 96,
+                    Fill = ColorToBrush[card.suit],
+                    Stroke = Brushes.Black,
+                };
 
-                    // creating the text for the rank
-                    TextBlock rankText = new()
-                    {
-                        Text = card.rank.ToString(),
-                        Foreground = Brushes.White,
-                        FontSize = 24,
-                        FontWeight = FontWeights.Bold,
-                    };
-                    Canvas.SetLeft(rankText, i * spaceBetween + 20);
-                    Canvas.SetTop(rankText, 30);
+                // creating the text for the rank
+                TextBlock rankText = new()
+                {
+                    Text = card.rank.ToString(),
+                    Foreground = Brushes.White,
+                    FontSize = 16,
+                    FontWeight = FontWeights.Bold,
+                };
+                newGrid.Children.Add(cardRect);
+                newGrid.Children.Add(rankText);
 
-                    gameView.HandCanvas.Children.Add(cardRect);
-                    gameView.HandCanvas.Children.Add(rankText);
-                }
-            });
+                Canvas.SetLeft(newGrid, i * spaceBetween);
+                gameView.HandCanvas.Children.Add(newGrid);
+            }
         }
     }
 }

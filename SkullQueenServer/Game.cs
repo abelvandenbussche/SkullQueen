@@ -18,6 +18,7 @@ namespace SkullQueenServer
         {
             this.players = players;
             BroadCast(Command.StartGame);
+            NewRound();
         }
         private void BroadCast(Command cmd, string? message = null)
         {

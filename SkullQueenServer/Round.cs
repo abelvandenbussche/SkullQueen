@@ -20,7 +20,7 @@ namespace SkullQueenServer
 
         public void DealCards()
         {
-            while (deck.Count > 0)
+            while (deck.Count >= players.Count)
             {
                 foreach (Player player in players)
                 {
@@ -35,6 +35,10 @@ namespace SkullQueenServer
             List<Card> cards = new();
             foreach (Color suit in Enum.GetValues(typeof(Color)))
             {
+                if (suit == Color.Black)
+                {
+                    continue; // skip black suit for normal cards
+                }
                 for (int rank = 1; rank <= 13; rank++)
                 {
                     if (rank == 0 || rank == 13)

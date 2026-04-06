@@ -1,4 +1,4 @@
-﻿using SkullQueenServer;
+﻿using Shared;
 
 namespace SkullQueenClient
 {

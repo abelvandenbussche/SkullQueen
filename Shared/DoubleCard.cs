@@ -1,4 +1,4 @@
-﻿namespace SkullQueenServer
+﻿namespace Shared
 {
     public class DoubleCard : Card
     {
