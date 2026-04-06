@@ -11,5 +11,10 @@ namespace SkullQueenServer
         private readonly Random rand;
         private Color? leadSuit;
 
+        public Trick(List<Player> players)
+        {
+            this.rand = new Random();
+            this.players = players;
+        }
     }
 }

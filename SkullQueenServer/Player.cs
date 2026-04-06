@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Shared;
 
 namespace SkullQueenServer
 {
@@ -37,6 +38,11 @@ namespace SkullQueenServer
         public void SendMessage(string message)
         {
             writer.WriteLine(message);
+        }
+        public void ReceiveCard(Card card)
+        {
+            hand.Add(card);
+            SendMessage(Command.DealCard.ToString() + " " + card.ToString());
         }
     }
 }

@@ -12,5 +12,10 @@ namespace SkullQueenServer
             this.suit = suit;
             this.rank = rank;
         }
+
+        public override string ToString()
+        {
+            return $"{suit} {rank}";
+        }
     }
 }
