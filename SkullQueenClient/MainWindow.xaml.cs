@@ -20,21 +20,38 @@ namespace SkullQueenClient
         public MainWindow()
         {
             InitializeComponent();
+            
+            Player? player = ConnectToServer("Player1");
+            if (player == null)
+            {
+                // connection failure, close the application
+                return;
+            }
 
-            ConnectToServer("Player1");
+            // Start listening for messages from the server
+            player.ListenForMessages(message =>
+            {
+                // Update the UI with the received message
+                Dispatcher.Invoke(() =>
+                {
+                    MessageBox.Show("Received message from server: " + message);
+                });
+            });
         }
-        public void ConnectToServer(string playerName)
+        public Player? ConnectToServer(string playerName)
         {
             try
             {
                 TcpClient client = new TcpClient("localhost", 5050);
-                byte[] nameBytes = Encoding.UTF8.GetBytes(playerName);
-                client.GetStream().Write(nameBytes, 0, nameBytes.Length);
+                Player player = new(playerName, client);
+                player.SendMessage(playerName);
                 MessageBox.Show("Connected to server as " + playerName);
+                return player;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error connecting to server: " + ex.Message);
+                return null;
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Diagnostics.Tracing;
+using System.Net;
 using System.Net.Sockets;
 
 namespace SkullQueenServer
@@ -6,7 +7,6 @@ namespace SkullQueenServer
     public class Lobby
     {
         private List<Player> players = new List<Player>();
-        private CancellationTokenSource cts;
         private TcpListener server;
         public Lobby()
         {
@@ -15,20 +15,13 @@ namespace SkullQueenServer
         public Game StartGame()
         {
             // stop accepting new clients
-            cts.Cancel();
             server.Stop();
 
             // creating a new game instance with the players in the lobby
             Game game = new Game(players);
             return game;
         }
-
-        public void GetPlayers()
-        {
-            cts = new();
-            ConnectToClients().Wait();
-        }
-        private async Task ConnectToClients()
+        public async Task ConnectToClients(CancellationTokenSource cts)
         {
             server.Start();
             while (!cts.IsCancellationRequested && players.Count < 8)
