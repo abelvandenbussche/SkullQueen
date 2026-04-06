@@ -20,9 +20,12 @@ namespace SkullQueenClient
         public MainWindow()
         {
             InitializeComponent();
-            
+            LobbyView lobbyView = new LobbyView();
+            GameView gameView = new GameView();
+            MainContent.Content = lobbyView;
+
             Player? player = ConnectToServer("Player1");
-            LobbyList.Items.Add("Player1");
+            lobbyView.AddPlayerToLobby("Player1");
 
             if (player == null)
             {
@@ -31,7 +34,7 @@ namespace SkullQueenClient
             }
 
             // Start listening for messages from the server
-            player.ListenForMessages(message =>
+            Task listener = player.ListenForMessages(message =>
             {
                 // Update the UI with the received message
                 Dispatcher.Invoke(() =>
@@ -39,10 +42,11 @@ namespace SkullQueenClient
                     switch (message)
                     {
                         case "GAME START":
+                            MainContent.Content = gameView;
                             break;
                         default:
                             // New player joined the lobby
-                            LobbyList.Items.Add(message);
+                            lobbyView.AddPlayerToLobby(message);
                             break;
                     }
                 });

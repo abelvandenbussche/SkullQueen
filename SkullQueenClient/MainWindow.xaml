@@ -7,8 +7,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <ListBox x:Name="LobbyList" d:ItemsSource="{d:SampleData ItemCount=8}" Margin="26,72,622,196"/>
-        <TextBlock HorizontalAlignment="Left" Margin="61,27,0,0" TextWrapping="Wrap" Text="Lobby" VerticalAlignment="Top" FontSize="30"/>
-
+        <ContentControl x:Name="MainContent"/>
     </Grid>
 </Window>

@@ -14,9 +14,6 @@ namespace SkullQueenServer
         }
         public Game StartGame()
         {
-            // stop accepting new clients
-            server.Stop();
-
             // creating a new game instance with the players in the lobby
             Game game = new Game(players);
             return game;

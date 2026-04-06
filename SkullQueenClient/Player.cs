@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Net.Sockets;
 
 namespace SkullQueenClient
@@ -26,12 +27,29 @@ namespace SkullQueenClient
             return reader.ReadLine() ?? "";
         }
 
-        public async void ListenForMessages(Action<string> onMessageReceived)
+        public async Task ListenForMessages(Action<string> onMessageReceived)
         {
-            while (true)
+            try
             {
-                string message = await reader.ReadLineAsync() ?? "";
-                onMessageReceived(message);
+                while (true)
+                {
+                    string message = await reader.ReadLineAsync() ?? "";
+                    if (message == null)
+                    {
+                        break;
+                    }
+                    try
+                    {
+                        onMessageReceived(message);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error: " + e.Message);
             }
         }
     }
