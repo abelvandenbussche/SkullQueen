@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Sockets;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +20,22 @@ namespace SkullQueenClient
         public MainWindow()
         {
             InitializeComponent();
+
+            ConnectToServer("Player1");
+        }
+        public void ConnectToServer(string playerName)
+        {
+            try
+            {
+                TcpClient client = new TcpClient("localhost", 5050);
+                byte[] nameBytes = Encoding.UTF8.GetBytes(playerName);
+                client.GetStream().Write(nameBytes, 0, nameBytes.Length);
+                MessageBox.Show("Connected to server as " + playerName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error connecting to server: " + ex.Message);
+            }
         }
     }
 }

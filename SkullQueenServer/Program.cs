@@ -13,7 +13,14 @@ namespace SkullQueenServer
         static void Main(string[] args)
         {
             // Creating a new game instance
-            Game game = new Game();
+            Lobby lobby = new();
+            lobby.GetPlayers();
+
+            // TEMP: Replace this with client start
+            Console.ReadLine();
+
+            // Starting the game
+            Game game = lobby.StartGame();
         }
-}
+    }
 }

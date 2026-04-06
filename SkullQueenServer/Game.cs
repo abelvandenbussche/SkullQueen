@@ -11,12 +11,23 @@ namespace SkullQueenServer
     {
         private List<Player> players;
         private Round currentRound;
-        private TcpListener server;
 
 
-        public Game()
+        public Game(List<Player> players)
         {
-            players = new List<Player>();
+            this.players = players;
+            BroadCast("GAME START");
+        }
+        private void BroadCast(string message)
+        {
+            foreach (Player player in players)
+            {
+                player.SendMessage(message);
+            }
+        }
+        private void NewRound()
+        {
+            this.currentRound = new Round(players);
         }
     }
 }
