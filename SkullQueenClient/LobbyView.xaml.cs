@@ -20,6 +20,7 @@ namespace SkullQueenClient
     /// </summary>
     public partial class LobbyView : UserControl
     {
+        public event EventHandler<string> StartGameClicked;
         public LobbyView()
         {
             InitializeComponent();
@@ -27,6 +28,26 @@ namespace SkullQueenClient
         public void AddPlayerToLobby(string playerName)
         {
             LobbyList.Items.Add(playerName);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (UsernameTextBox.Text.Length == 0)
+            {
+                MessageBox.Show("Please enter a username.");
+                return;
+            }
+            StartGameClicked?.Invoke(this, UsernameTextBox.Text);
+
+            // hiding the button and text box after clicking start game
+            Button button = sender as Button;
+            button.IsEnabled = false;
+            button.Visibility = Visibility.Collapsed;
+
+            UsernameTextBox.IsEnabled = false;
+            UsernameTextBox.Visibility = Visibility.Collapsed;
+
+            UsernameHeader.Visibility = Visibility.Collapsed;
         }
     }
 }

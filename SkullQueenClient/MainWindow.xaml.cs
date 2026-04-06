@@ -17,15 +17,21 @@ namespace SkullQueenClient
     /// </summary>
     public partial class MainWindow : Window
     {
+        private LobbyView lobbyView;
+        private GameView gameView;
         public MainWindow()
         {
             InitializeComponent();
-            LobbyView lobbyView = new LobbyView();
-            GameView gameView = new GameView();
-            MainContent.Content = lobbyView;
+            lobbyView = new LobbyView();
+            gameView = new GameView();
 
-            Player? player = ConnectToServer("Player1");
-            lobbyView.AddPlayerToLobby("Player1");
+            lobbyView.StartGameClicked += StartGame;
+            MainContent.Content = lobbyView;
+        }
+        public void StartGame(object sender, string playerName)
+        {
+            Player? player = ConnectToServer(playerName);
+            lobbyView.AddPlayerToLobby(playerName);
 
             if (player == null)
             {

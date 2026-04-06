@@ -9,5 +9,8 @@
     <Grid>
         <ListBox x:Name="LobbyList" d:ItemsSource="{d:SampleData ItemCount=8}" Margin="26,72,622,196"/>
         <TextBlock HorizontalAlignment="Left" Margin="61,27,0,0" TextWrapping="Wrap" Text="Lobby" VerticalAlignment="Top" FontSize="30"/>
+        <TextBlock x:Name="UsernameHeader" HorizontalAlignment="Left" Margin="201,79,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" FontSize="20"/>
+        <TextBox x:Name="UsernameTextBox" HorizontalAlignment="Left" Margin="201,115,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <Button Content="Find game" HorizontalAlignment="Left" Margin="400,225,0,0" VerticalAlignment="Top" FontSize="50" Click="Button_Click"/>
     </Grid>
 </UserControl>
