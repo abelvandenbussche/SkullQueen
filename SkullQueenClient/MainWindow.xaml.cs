@@ -20,7 +20,6 @@ namespace SkullQueenClient
     {
         private LobbyView lobbyView;
         private GameView gameView;
-        private bool GameStarted = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -44,31 +43,41 @@ namespace SkullQueenClient
             // Start listening for messages from the server
             Task listener = player.ListenForMessages(message =>
             {
-                // Update the UI with the received message
-                Dispatcher.Invoke(() =>
+                // splitting the message
+                // trying to parse the command
+                object cmd = null;
+                try
                 {
-                    if (GameStarted)
-                    {
-                        switch (message)
+                    string commandStr = message.Split(' ')[0];
+                    cmd = Enum.Parse(typeof(Command), commandStr);
+                    cmd = cmd as Command? ?? throw new Exception("Invalid command");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error parsing message: " + ex.Message);
+                    return;
+                }
+                string[] args = message.Split(' ').Skip(1).ToArray();
+
+                if (cmd == null)
+                {
+                    return;
+                }
+
+                switch (cmd)
+                {
+                    case Command.StartGame:
+                        // Switch to the game view
+                        Dispatcher.Invoke(() =>
                         {
-                            case string s when s.StartsWith("CARD")
-                        }
-                    }
-                    else
-                    {
-                        switch (message)
-                        {
-                            case "GAME START":
-                                MainContent.Content = gameView;
-                                GameStarted = true;
-                                break;
-                            default:
-                                // New player joined the lobby
-                                lobbyView.AddPlayerToLobby(message);
-                                break;
-                        }
-                    }
-                });
+                            MainContent.Content = gameView;
+                        });
+                        break;
+                    case Command.JoinLobby:
+                        lobbyView.AddPlayerToLobby(args[0]);
+                        break;
+                }
+
             });
         }
         public Player? ConnectToServer(string playerName)

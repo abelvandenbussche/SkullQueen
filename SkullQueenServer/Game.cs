@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Windows;
 using System.Xml.Linq;
 using System.Linq;
+using Shared;
 
 namespace SkullQueenServer
 {
@@ -16,13 +17,13 @@ namespace SkullQueenServer
         public Game(List<Player> players)
         {
             this.players = players;
-            BroadCast("GAME START");
+            BroadCast(Command.StartGame);
         }
-        private void BroadCast(string message)
+        private void BroadCast(Command cmd, string? message = null)
         {
             foreach (Player player in players)
             {
-                player.SendMessage(message);
+                player.SendMessage(cmd.ToString() + message);
             }
         }
         private void NewRound()
