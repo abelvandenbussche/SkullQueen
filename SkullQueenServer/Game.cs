@@ -5,7 +5,7 @@ using System.Windows;
 using System.Xml.Linq;
 using System.Linq;
 
-namespace SkullQueen
+namespace SkullQueenServer
 {
     public class Game
     {

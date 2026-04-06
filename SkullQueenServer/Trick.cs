@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace SkullQueen
+namespace SkullQueenServer
 {
     class Trick
     {

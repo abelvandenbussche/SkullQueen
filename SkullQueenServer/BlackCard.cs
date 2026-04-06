@@ -1,4 +1,4 @@
-﻿namespace SkullQueen
+﻿namespace SkullQueenServer
 {
     class BlackCard : Card
     {

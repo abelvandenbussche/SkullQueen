@@ -6,11 +6,14 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-
-class Program
+namespace SkullQueenServer
 {
-    static void Main(string[] args)
+    class Program
     {
-        // Creating a new game instance
-    }
+        static void Main(string[] args)
+        {
+            // Creating a new game instance
+            Game game = new Game();
+        }
+}
 }

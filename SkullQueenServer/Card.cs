@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace SkullQueen
+namespace SkullQueenServer
 {
     public class Card
     {
