@@ -37,7 +37,7 @@ namespace SkullQueen
         public void HostButtonClick(object sender, RoutedEventArgs e)
         {
             game = new();
-            game.UpdateLobbyText += HandleLobbyTextUpdate;
+            game.UpdateLobby += HandleLobbyUpdate;
             this.thisPlayer = game.Host(NameField, StartButton);
 
             HideStuff();
@@ -69,7 +69,7 @@ namespace SkullQueen
                     // otherwise updating the lobby text
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        LobbyTextBlock.Text += data + Environment.NewLine;
+                        LobbyList.Items.Add(data);
                     });
                 }
             });
@@ -99,9 +99,12 @@ namespace SkullQueen
                 this.Close();
             }
         }
-        private void HandleLobbyTextUpdate(object sender, string toAdd)
+        private void HandleLobbyUpdate(object sender, string toAdd)
         {
-            LobbyTextBlock.Text += toAdd;
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                LobbyList.Items.Add(toAdd);
+            });
             // sending a message to all people
             game.Broadcast(toAdd);
         }

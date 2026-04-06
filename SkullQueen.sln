@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36127.28 d17.14
+VisualStudioVersion = 17.14.36127.28
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkullQueen", "SkullQueen\SkullQueen.csproj", "{488625A3-1CDB-4892-8BA7-43B6149C49B7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkullQueenServer", "SkullQueenServer\SkullQueenServer.csproj", "{BBF469D3-7B61-4AD3-ADA4-9907EE2101EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkullQueenClient", "SkullQueenClient\SkullQueenClient.csproj", "{27F5B4FB-DB5F-480F-A5D6-7709AF9AB867}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{488625A3-1CDB-4892-8BA7-43B6149C49B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{488625A3-1CDB-4892-8BA7-43B6149C49B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{488625A3-1CDB-4892-8BA7-43B6149C49B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{488625A3-1CDB-4892-8BA7-43B6149C49B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBF469D3-7B61-4AD3-ADA4-9907EE2101EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBF469D3-7B61-4AD3-ADA4-9907EE2101EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBF469D3-7B61-4AD3-ADA4-9907EE2101EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBF469D3-7B61-4AD3-ADA4-9907EE2101EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27F5B4FB-DB5F-480F-A5D6-7709AF9AB867}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27F5B4FB-DB5F-480F-A5D6-7709AF9AB867}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27F5B4FB-DB5F-480F-A5D6-7709AF9AB867}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27F5B4FB-DB5F-480F-A5D6-7709AF9AB867}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
