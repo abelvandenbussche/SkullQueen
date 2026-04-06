@@ -24,7 +24,7 @@ namespace SkullQueenClient
             Player? player = ConnectToServer("Player1");
             if (player == null)
             {
-                // connection failure, close the application
+                // Connection failure, close the application
                 return;
             }
 
@@ -35,6 +35,15 @@ namespace SkullQueenClient
                 Dispatcher.Invoke(() =>
                 {
                     MessageBox.Show("Received message from server: " + message);
+                    switch (message)
+                    {
+                        case "GAME START":
+                            break;
+                        default:
+                            // New player joined the lobby
+                            LobbyList.Items.Add(message);
+                            break;
+                    }
                 });
             });
         }

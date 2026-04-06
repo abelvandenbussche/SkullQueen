@@ -35,6 +35,15 @@ namespace SkullQueenServer
                 Player newPlayer = new Player(playerName, client);
                 players.Add(newPlayer);
 
+                // Updating all other players
+                foreach (Player player in players)
+                {
+                    if (player != newPlayer)
+                    {
+                        player.SendMessage(playerName);
+                    }
+                }
+
                 Console.WriteLine(playerName);
             }
         }

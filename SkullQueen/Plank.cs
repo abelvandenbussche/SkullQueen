@@ -1,7 +1,0 @@
-﻿namespace SkullQueen
-{
-    class Plank
-    {
-
-    }
-}
