@@ -55,26 +55,31 @@ namespace SkullQueenClient
             // Start listening for messages from the server
             Task listener = player.ListenForMessages(message =>
             {
-            // splitting the message
-            // trying to parse the command
-            object cmd = null;
-            try
-            {
-                string commandStr = message.Split(' ')[0];
-                cmd = Enum.Parse(typeof(Command), commandStr);
-                cmd = cmd as Command? ?? throw new Exception("Invalid command");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error parsing message: " + ex.Message);
-                return;
-            }
-            string[] args = message.Split(' ').Skip(1).ToArray();
+                Debug.WriteLine($"Raw: [{message}] Length: {message?.Length}");
 
-            if (cmd == null)
-            {
-                return;
-            }
+                foreach (char c in message)
+                {
+                    Debug.WriteLine($"Char: {(int)c}");
+                }
+                // Splitting the message
+                // Trying to parse the command
+                Command? cmd = null;
+                try
+                {
+                    string commandStr = message.Split(' ')[0];
+                    cmd = (Command)Enum.Parse(typeof(Command), commandStr);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error parsing message: " + ex.Message);
+                    return;
+                }
+                string[] args = message.Split(' ').Skip(1).ToArray();
+
+                if (cmd == null)
+                {
+                    return;
+                }
                 switch (cmd)
                 {
                     case Command.StartGame:
@@ -95,6 +100,7 @@ namespace SkullQueenClient
                         break;
 
                     case Command.JoinLobby:
+                        Debug.WriteLine(args[0]);
                         lobbyView.AddPlayerToLobby(args[0]);
                         break;
                 }
@@ -133,7 +139,7 @@ namespace SkullQueenClient
                 };
                 Card card = hand[i];
 
-                // creating the rectangle for the card
+                // Creating the rectangle for the card
                 Rectangle cardRect = new()
                 {
                     Width = 60,
@@ -142,7 +148,7 @@ namespace SkullQueenClient
                     Stroke = Brushes.Black,
                 };
 
-                // creating the text for the rank
+                // Creating the text for the rank
                 TextBlock rankText = new()
                 {
                     Text = card.rank.ToString(),

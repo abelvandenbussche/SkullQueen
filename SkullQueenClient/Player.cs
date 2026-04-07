@@ -34,9 +34,9 @@ namespace SkullQueenClient
                 while (true)
                 {
                     string message = await reader.ReadLineAsync() ?? "";
-                    if (message == null)
+                    if (message == "")
                     {
-                        break;
+                        continue;
                     }
                     try
                     {

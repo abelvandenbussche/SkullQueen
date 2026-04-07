@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.Tracing;
 using System.Net;
 using System.Net.Sockets;
+using Shared;
 
 namespace SkullQueenServer
 {
@@ -37,8 +38,8 @@ namespace SkullQueenServer
                 {
                     if (player != newPlayer)
                     {
-                        player.SendMessage(playerName);
-                        newPlayer.SendMessage(player.name);
+                        player.SendMessage(Command.JoinLobby.ToString() + " " + playerName);
+                        newPlayer.SendMessage(Command.JoinLobby.ToString() + " " + player.name);
                     }
                 }
 
