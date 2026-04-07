@@ -210,7 +210,7 @@ namespace SkullQueenClient
                     Canvas.SetLeft(cardGrid, 80);
                     opponent.grid.Children.Add(cardGrid);
                 }
-                Canvas.SetLeft(opponent.grid, i * spaceBetween);
+                Canvas.SetLeft(opponent.grid, i * spaceBetween + (spaceBetween / 2));
                 gameView.PlayersCanvas.Children.Add(opponent.grid);
             }
         }

@@ -18,16 +18,24 @@ namespace SkullQueenServer
         {
             this.players = players;
             BroadCast(Command.StartGame);
-            BroadCast(Command.Displayopponent, "OtherPlayer");
-            BroadCast(Command.Displayopponent, "AnotherPlayer");
-            BroadCast(Command.Displayopponent, "YetAnotherPlayer");
+
+            // Send all players their opponents
+            foreach (Player player in players)
+            {
+                BroadCast(Command.Displayopponent, player.name, player);
+            }
+
+            // Start the first round
             NewRound();
         }
-        private void BroadCast(Command cmd, string? message = null)
+        private void BroadCast(Command cmd, string? message = null, Player? exclude = null)
         {
             foreach (Player player in players)
             {
-                player.SendMessage(cmd.ToString() + " " + message);
+                if (exclude != player)
+                {
+                    player.SendMessage(cmd.ToString() + " " + message);
+                }
             }
         }
         private void NewRound()
