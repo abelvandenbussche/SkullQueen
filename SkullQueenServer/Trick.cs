@@ -60,7 +60,7 @@ namespace SkullQueenServer
             {
                 if (!sorted.ContainsKey(playedCard.suit))
                 {
-                    sorted[playedCard.suit] = new List<Card>();
+                    sorted[playedCard.suit] = new();
                 }
                 sorted[playedCard.suit].Add(playedCard);
             }
@@ -69,8 +69,16 @@ namespace SkullQueenServer
                 if (cards.Count <= 1) continue;
                 // Sort in descending order of rank
                 cards.Sort((a, b) => b.rank.CompareTo(a.rank));
-                Player firstPlayer = playedCards[cards[0]];
-                Player lastPlayer = playedCards[cards[cards.Count - 1]];
+                Card firstCard = cards[0];
+                Card lastCard = cards[cards.Count - 1];
+                Player firstPlayer = playedCards[firstCard];
+                Player lastPlayer = playedCards[lastCard];
+
+                firstPlayer.MovePieceOnPlank(firstCard.suit, true);
+                lastPlayer.MovePieceOnPlank(firstCard.suit, false);
+
+                firstPlayer.SendMessage(Command.DisplayPlank, firstPlayer.plank.ToString());
+                lastPlayer.SendMessage(Command.DisplayPlank, lastPlayer.plank.ToString());
             }
         }
     }

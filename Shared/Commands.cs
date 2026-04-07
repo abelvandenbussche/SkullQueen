@@ -8,5 +8,6 @@
         DealCard,
         DisplayOpponentCard,
         Displayopponent,
+        DisplayPlank,
     }
 }

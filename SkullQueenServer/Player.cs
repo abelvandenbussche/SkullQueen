@@ -9,7 +9,7 @@ namespace SkullQueenServer
 {
     public class Player
     {
-        private Plank plank;
+        public Plank plank { get; private set; }
         private List<Card> hand;
         private int score;
         public string name;
@@ -26,7 +26,7 @@ namespace SkullQueenServer
 
             this.name = name;
 
-            this.plank = new Plank();
+            this.plank = new Plank(0, 0, 0, 0); // This will need to be set by the user later, but for now we can just initialize it with dummy values
             this.score = 0;
             this.hand = new List<Card>();
         }
@@ -43,6 +43,10 @@ namespace SkullQueenServer
         {
             hand.Add(card);
             SendMessage(Command.DealCard, card.ToString());
+        }
+        public void MovePieceOnPlank(Color piece, bool moveForward, bool doubleMove = false)
+        {
+            plank.MovePiece(piece, moveForward, doubleMove);
         }
     }
 }
