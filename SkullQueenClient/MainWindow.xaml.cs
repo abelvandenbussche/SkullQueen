@@ -23,6 +23,9 @@ namespace SkullQueenClient
         private LobbyView lobbyView;
         private GameView gameView;
         private ClientGame game;
+
+        private event Action<Card> CardClicked;
+
         private Dictionary<Shared.Color, Brush> ColorToBrush = new()
         {
             {Shared.Color.Red, Brushes.Red},
@@ -54,7 +57,7 @@ namespace SkullQueenClient
             }
 
             // Start listening for messages from the server
-            Task listener = player.ListenForMessages(message =>
+            Task listener = player.ListenForMessages(async message =>
             {
                 Debug.WriteLine($"Raw: [{message}] Length: {message?.Length}");
 
@@ -100,6 +103,10 @@ namespace SkullQueenClient
                         DisplayHand(game.Hand);
                         break;
 
+                    case Command.PlayCard:
+                        await PlayCard(player);
+                        break;
+
                     case Command.Displayopponent:
                         Opponent opponent = new(args[0]);
                         game.opponents.Add(opponent);
@@ -121,7 +128,7 @@ namespace SkullQueenClient
             {
                 TcpClient client = new TcpClient("localhost", 5050);
                 Player player = new(playerName, client);
-                player.SendMessage(playerName);
+                player.SendMessage(Command.JoinLobby, playerName);
                 return player;
             }
             catch (Exception ex)
@@ -140,12 +147,14 @@ namespace SkullQueenClient
             double spaceBetween = gameView.HandCanvas.ActualWidth / (hand.Count + 1);
             for (int i = 0; i < hand.Count; i++)
             {
+                Card card = hand[i];
                 Grid newGrid = new()
                 {
                     Height = 96,
                     Width = 60,
+                    Tag = card,
                 };
-                Card card = hand[i];
+                newGrid.MouseLeftButtonUp += (s, e) => CardClicked?.Invoke((Card)((Grid)s).Tag);
 
                 // Creating the rectangle for the card
                 Rectangle cardRect = new()
@@ -213,6 +222,22 @@ namespace SkullQueenClient
                 Canvas.SetLeft(opponent.grid, i * spaceBetween + (spaceBetween / 2));
                 gameView.PlayersCanvas.Children.Add(opponent.grid);
             }
+        }
+
+        private async Task PlayCard(Player player)
+        {
+            TaskCompletionSource<Card> tcs = new();
+            void OnCardclicked(Card card)
+            {
+                tcs.SetResult(card);
+            }
+            
+            CardClicked += OnCardclicked;
+            Card cardToPlay = await tcs.Task;
+            CardClicked -= OnCardclicked;
+
+            // Send the card to the server
+            player.SendMessage(Command.PlayCard, cardToPlay.ToString());
         }
     }
 }

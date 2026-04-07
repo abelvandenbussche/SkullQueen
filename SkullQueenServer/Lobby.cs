@@ -15,7 +15,7 @@ namespace SkullQueenServer
         }
         public Game StartGame()
         {
-            // creating a new game instance with the players in the lobby
+            // Creating a new game instance with the players in the lobby
             Game game = new Game(players);
             return game;
         }
@@ -25,10 +25,12 @@ namespace SkullQueenServer
             while (!cts.IsCancellationRequested && players.Count < 8)
             {
                 TcpClient client = await server.AcceptTcpClientAsync();
-                // getting the players name
+                // Getting the players name
                 byte[] buffer = new byte[1024];
                 int bytesRead = await client.GetStream().ReadAsync(buffer, 0, buffer.Length);
-                string playerName = System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                // The message is expected to be in the format "JoinLobby playerName"
+                // That is why we split and take the second part as the player name
+                string playerName = System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRead).Split(" ")[1];
 
                 Player newPlayer = new Player(playerName, client);
                 players.Add(newPlayer);
@@ -38,8 +40,8 @@ namespace SkullQueenServer
                 {
                     if (player != newPlayer)
                     {
-                        player.SendMessage(Command.JoinLobby.ToString() + " " + playerName);
-                        newPlayer.SendMessage(Command.JoinLobby.ToString() + " " + player.name);
+                        player.SendMessage(Command.JoinLobby, playerName);
+                        newPlayer.SendMessage(Command.JoinLobby, player.name);
                     }
                 }
                 Console.Write(playerName);

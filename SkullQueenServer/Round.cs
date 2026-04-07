@@ -16,6 +16,19 @@ namespace SkullQueenServer
             deck = CreateAndShuffleDeck();
             DealCards();
             currentTrick = new Trick(players);
+
+            // DEBUG: listen client messages
+            foreach (Player player in players)
+            {
+                player.SendMessage(Command.PlayCard, Color.Yellow.ToString());
+                Task.Run(async () =>
+                {
+                    while (true)
+                    {
+                        Console.WriteLine(player.WaitOnMessage());
+                    }
+                });
+            }
         }
 
         public void DealCards()

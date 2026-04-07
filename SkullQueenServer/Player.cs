@@ -35,14 +35,14 @@ namespace SkullQueenServer
         {
             return reader.ReadLine();
         }
-        public void SendMessage(string message)
+        public void SendMessage(Command cmd, string? message = null)
         {
-            writer.WriteLine(message);
+            writer.WriteLine(cmd.ToString() + " " + message);
         }
         public void ReceiveCard(Card card)
         {
             hand.Add(card);
-            SendMessage(Command.DealCard.ToString() + " " + card.ToString());
+            SendMessage(Command.DealCard, card.ToString());
         }
     }
 }

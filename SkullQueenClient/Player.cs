@@ -19,9 +19,9 @@ namespace SkullQueenClient
             this.writer = new StreamWriter(connection.GetStream()) { AutoFlush = true };
             this.reader = new StreamReader(connection.GetStream());
         }
-        public void SendMessage(string message)
+        public void SendMessage(Command cmd, string? message = null)
         {
-            writer.WriteLine(message);
+            writer.WriteLine(cmd.ToString() + " " + message);
         }
         private string GetMessage()
         {

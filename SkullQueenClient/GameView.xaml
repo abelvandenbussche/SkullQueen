@@ -10,6 +10,6 @@
         <Canvas x:Name="HandCanvas" Margin="50,320,50,30" Height="100"/>
         <Canvas x:Name="PlayersCanvas" Margin="0,0,0,300"/>
         <Canvas x:Name="PlayingFieldMiddle" Margin="370,155,30,195"/>
-        <Canvas x:Name="PlayedCard" Margin="198,175,535,175"/>
+        <Canvas x:Name="PlayedCard" Margin="163,177,577,177" Height="96" Width="60"/>
     </Grid>
 </UserControl>

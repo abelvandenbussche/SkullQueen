@@ -34,7 +34,7 @@ namespace SkullQueenServer
             {
                 if (exclude != player)
                 {
-                    player.SendMessage(cmd.ToString() + " " + message);
+                    player.SendMessage(cmd, message);
                 }
             }
         }
