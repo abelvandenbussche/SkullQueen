@@ -28,9 +28,10 @@ namespace SkullQueenServer
                 // Getting the players name
                 byte[] buffer = new byte[1024];
                 int bytesRead = await client.GetStream().ReadAsync(buffer, 0, buffer.Length);
+
                 // The message is expected to be in the format "JoinLobby playerName"
                 // That is why we split and take the second part as the player name
-                string playerName = System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRead).Split(" ")[1];
+                string playerName = System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRead).Split(" ")[1].TrimEnd();
 
                 Player newPlayer = new Player(playerName, client);
                 players.Add(newPlayer);
@@ -44,7 +45,7 @@ namespace SkullQueenServer
                         newPlayer.SendMessage(Command.JoinLobby, player.name);
                     }
                 }
-                Console.Write(playerName);
+                Console.WriteLine(playerName);
             }
         }
     }

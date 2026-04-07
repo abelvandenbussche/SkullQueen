@@ -113,6 +113,7 @@ namespace SkullQueenClient
                         }
                         else
                         {
+                            Debug.WriteLine(message);
                             leadSuit = (Shared.Color)Enum.Parse(typeof(Shared.Color), leadSuitString);
                         }
                         gameView.StatusText.Text = $"It's your turn to play a card! Lead suit: {leadSuit.ToString()}";
@@ -125,6 +126,20 @@ namespace SkullQueenClient
                         game.opponents.Add(opponent);
                         DisplayOpponents(game.opponents);
                         DisplayOpponents(game.opponents);
+                        break;
+
+                    case Command.DisplayOpponentCard:
+                        Debug.WriteLine(message);
+                        string opponentName = args[0];
+                        Shared.Color cardSuit = (Shared.Color)Enum.Parse(typeof(Shared.Color), args[1]);
+                        int cardRank = int.Parse(args[2]);
+                        Card playedCard = new(cardSuit, cardRank);
+                        Opponent? opp = game.opponents.FirstOrDefault(o => o.name == opponentName);
+                        if (opp != null)
+                        {
+                            opp.playedCard = playedCard;
+                            DisplayOpponents(game.opponents);
+                        }
                         break;
 
                     case Command.JoinLobby:
@@ -236,6 +251,34 @@ namespace SkullQueenClient
                 gameView.PlayersCanvas.Children.Add(opponent.grid);
             }
         }
+        private void DisplayPlayedCard(Card card)
+        {
+            gameView.PlayedCard.Children.Clear();
+
+            Grid newGrid = new()
+            {
+                Height = 96,
+                Width = 60,
+            };
+
+            Rectangle cardRect = new()
+            {
+                Width = 60,
+                Height = 96,
+                Fill = ColorToBrush[card.suit],
+                Stroke = Brushes.Black,
+            };
+            TextBlock rankText = new()
+            {
+                Text = card.rank.ToString(),
+                Foreground = Brushes.White,
+                FontSize = 16,
+            };
+
+            newGrid.Children.Add(cardRect);
+            newGrid.Children.Add(rankText);
+            gameView.PlayedCard.Children.Add(newGrid);
+        }
 
         private async Task PlayCard(Player player, Shared.Color? suit)
         {
@@ -251,6 +294,8 @@ namespace SkullQueenClient
             
             CardClicked += OnCardclicked;
             Card cardToPlay = await tcs.Task;
+            // Displaying the card on the player's area
+            DisplayPlayedCard(cardToPlay);
             CardClicked -= OnCardclicked;
 
             // Send the card to the server

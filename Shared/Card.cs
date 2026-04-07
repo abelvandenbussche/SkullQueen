@@ -21,8 +21,8 @@ namespace Shared
         public static Card FromString(string cardString)
         {
             string[] parts = cardString.Split(' ');
-            Color suit = (Color)Enum.Parse(typeof(Color), parts[0]);
-            int rank = int.Parse(parts[1]);
+            Color suit = (Color)Enum.Parse(typeof(Color), parts[1]);
+            int rank = int.Parse(parts[2]);
             return new Card(suit, rank);
         }
     }

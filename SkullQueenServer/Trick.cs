@@ -26,7 +26,7 @@ namespace SkullQueenServer
             // Asking players to play their cards in order
             foreach (Player player in playerOrder)
             {
-                player.SendMessage(Command.PlayCard, leadSuit.ToString());
+                player.SendMessage(Command.PlayCard, leadSuit != null ? leadSuit.ToString() : "null");
                 string response = player.WaitOnMessage();
                 Console.WriteLine($"Received response from {player.name}: {response}");
                 // Parsing the response to get the card played
@@ -38,6 +38,15 @@ namespace SkullQueenServer
                     leadSuit = playedCard.suit;
                 }
                 playedCards[playedCard] = player;
+
+                // Display the played card to the other players
+                foreach (Player otherPlayer in players)
+                {
+                    if (otherPlayer != player)
+                    {
+                        otherPlayer.SendMessage(Command.DisplayOpponentCard, $"{player.name} {playedCard}");
+                    }
+                }
             }
             // Determing the scoring of the trick based on the played cards
         }
