@@ -42,9 +42,7 @@ namespace SkullQueenServer
                         newPlayer.SendMessage(Command.JoinLobby.ToString() + " " + player.name);
                     }
                 }
-
-
-                Console.WriteLine(playerName);
+                Console.Write(playerName);
             }
         }
     }
