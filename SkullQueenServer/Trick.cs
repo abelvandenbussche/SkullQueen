@@ -6,7 +6,7 @@ namespace SkullQueenServer
     class Trick
     {
         private List<Player> players;
-        private Dictionary<Player, Card> playedCards = new();
+        private Dictionary<Card, Player> playedCards = new();
         private Player startingPlayer;
         private List<Player> playerOrder = new();
         private readonly Random rand;
@@ -26,11 +26,20 @@ namespace SkullQueenServer
             // Asking players to play their cards in order
             foreach (Player player in playerOrder)
             {
-                leadSuit = Color.Green; // Placeholder for lead suit, should be determined by the first card played
                 player.SendMessage(Command.PlayCard, leadSuit.ToString());
                 string response = player.WaitOnMessage();
                 Console.WriteLine($"Received response from {player.name}: {response}");
+                // Parsing the response to get the card played
+                Card playedCard = Card.FromString(response);
+
+                // Check if this sets the lead suit
+                if (leadSuit == null && playedCard.suit != Color.Black)
+                {
+                    leadSuit = playedCard.suit;
+                }
+                playedCards[playedCard] = player;
             }
+            // Determing the scoring of the trick based on the played cards
         }
         public List<Player> DeterminePlayerOrder()
         {
@@ -42,6 +51,27 @@ namespace SkullQueenServer
                 order.Add(players[(startIndex + i) % players.Count]);
             }
             return order;
+        }
+        public void ScoreTrick()
+        {
+            Dictionary<Shared.Color, List<Card>> sorted = new();
+            // Sorting the cards by suit
+            foreach (Card playedCard in playedCards.Keys)
+            {
+                if (!sorted.ContainsKey(playedCard.suit))
+                {
+                    sorted[playedCard.suit] = new List<Card>();
+                }
+                sorted[playedCard.suit].Add(playedCard);
+            }
+            foreach(List<Card> cards in sorted.Values)
+            {
+                if (cards.Count <= 1) continue;
+                // Sort in descending order of rank
+                cards.Sort((a, b) => b.rank.CompareTo(a.rank));
+                Player firstPlayer = playedCards[cards[0]];
+                Player lastPlayer = playedCards[cards[cards.Count - 1]];
+            }
         }
     }
 }
