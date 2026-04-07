@@ -6,5 +6,6 @@
         StartGame,
         PlayCard,
         DealCard,
+        DisplayOpponentCard,
     }
 }

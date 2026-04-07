@@ -122,7 +122,7 @@ namespace SkullQueenClient
                 return null;
             }
         }
-        public void DisplayHand(List<Card> hand)
+        private void DisplayHand(List<Card> hand)
         {
             if (!Application.Current.Dispatcher.CheckAccess())
             {
@@ -162,6 +162,56 @@ namespace SkullQueenClient
                 Canvas.SetLeft(newGrid, i * spaceBetween);
                 gameView.HandCanvas.Children.Add(newGrid);
             }
+        }
+        private void DisplayOpponents(List<Opponent> opponents)
+        {
+            gameView.PlayersCanvas.Children.Clear();
+
+            for (int i = 0; i < opponents.Count; i++)
+            {
+                Grid opponentGrid = new();
+                Opponent opponent = opponents[i];
+
+                TextBlock opponentBlock = new()
+                {
+                    Text = opponent.name,
+                };
+                opponentGrid.Children.Add(opponentBlock);
+                if (opponent.playedCard != null)
+                {
+                    Rectangle cardRect = new()
+                    {
+                        Width = 60,
+                        Height = 96,
+                        Fill = ColorToBrush[opponent.playedCard.suit],
+                        Stroke = Brushes.Black,
+                    };
+                    TextBlock rankText = new()
+                    {
+                        Text = opponent.playedCard.rank.ToString(),
+                        Foreground = Brushes.White,
+                        FontSize = 16,
+                    };
+                    Grid cardGrid = new();
+                    cardGrid.Children.Add(cardRect);
+                    cardGrid.Children.Add(rankText);
+                    Canvas.SetLeft(cardGrid, 80);
+                    opponentGrid.Children.Add(cardGrid);
+                }
+
+
+                gameView.PlayersCanvas.Children.Add(opponentGrid);
+            }
+        }
+    }
+    class Opponent
+    {
+        public string name;
+        public Card? playedCard;
+        public Plank? plank;
+        public Opponent(string name)
+        {
+            this.name = name;
         }
     }
 }
