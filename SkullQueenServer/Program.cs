@@ -26,7 +26,7 @@ namespace SkullQueenServer
             // Starting the game
             cts.Cancel();
             Game game = lobby.StartGame();
-            Console.WriteLine("Game started");
+            Console.WriteLine("Game Finished!");
             Console.ReadLine();
         }
     }

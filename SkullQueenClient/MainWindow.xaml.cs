@@ -104,7 +104,20 @@ namespace SkullQueenClient
                         break;
 
                     case Command.PlayCard:
-                        await PlayCard(player);
+                        // Getting the leadsuit
+                        string leadSuitString = args[0];
+                        Shared.Color? leadSuit;
+                        if (leadSuitString == "null")
+                        {
+                            leadSuit = null;
+                        }
+                        else
+                        {
+                            leadSuit = (Shared.Color)Enum.Parse(typeof(Shared.Color), leadSuitString);
+                        }
+                        gameView.StatusText.Text = $"It's your turn to play a card! Lead suit: {leadSuit.ToString()}";
+                        await PlayCard(player, leadSuit);
+                        gameView.StatusText.Text = "Waiting on other players to play";
                         break;
 
                     case Command.Displayopponent:
@@ -224,12 +237,16 @@ namespace SkullQueenClient
             }
         }
 
-        private async Task PlayCard(Player player)
+        private async Task PlayCard(Player player, Shared.Color? suit)
         {
             TaskCompletionSource<Card> tcs = new();
             void OnCardclicked(Card card)
             {
-                tcs.SetResult(card);
+                // Check if the card is a valid play
+                if (card.suit == suit || suit == null || card is BlackCard || !game.HasSuit(suit))
+                {
+                    tcs.SetResult(card);
+                }
             }
             
             CardClicked += OnCardclicked;

@@ -15,5 +15,9 @@ namespace SkullQueenClient
         {
             Hand.Add(card);
         }
+        public bool HasSuit(Color? suit)
+        {
+            return Hand.Any(card => card.suit == suit || card.suit == Color.Black);
+        }
     }
 }
