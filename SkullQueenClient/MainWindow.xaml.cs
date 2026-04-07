@@ -37,6 +37,7 @@ namespace SkullQueenClient
             lobbyView = new LobbyView();
             gameView = new GameView();
             gameView.HandCanvas.SizeChanged += (s, e) => DisplayHand(game.Hand);
+            gameView.PlayersCanvas.SizeChanged += (s, e) => DisplayOpponents(game.opponents);
 
             lobbyView.StartGameClicked += StartGame;
             MainContent.Content = lobbyView;
@@ -97,6 +98,13 @@ namespace SkullQueenClient
                         Card newCard = new(suit, rank);
                         game.AddCardToHand(newCard);
                         DisplayHand(game.Hand);
+                        break;
+
+                    case Command.Displayopponent:
+                        Opponent opponent = new(args[0]);
+                        game.opponents.Add(opponent);
+                        DisplayOpponents(game.opponents);
+                        DisplayOpponents(game.opponents);
                         break;
 
                     case Command.JoinLobby:
@@ -167,16 +175,20 @@ namespace SkullQueenClient
         {
             gameView.PlayersCanvas.Children.Clear();
 
+            double spaceBetween = gameView.PlayersCanvas.ActualWidth / (opponents.Count);
+            Debug.WriteLine(opponents.Count);
+
             for (int i = 0; i < opponents.Count; i++)
             {
-                Grid opponentGrid = new();
                 Opponent opponent = opponents[i];
+                opponent.grid.Children.Clear();
 
                 TextBlock opponentBlock = new()
                 {
                     Text = opponent.name,
+                    Background = Brushes.LightGray,
                 };
-                opponentGrid.Children.Add(opponentBlock);
+                opponent.grid.Children.Add(opponentBlock);
                 if (opponent.playedCard != null)
                 {
                     Rectangle cardRect = new()
@@ -196,22 +208,11 @@ namespace SkullQueenClient
                     cardGrid.Children.Add(cardRect);
                     cardGrid.Children.Add(rankText);
                     Canvas.SetLeft(cardGrid, 80);
-                    opponentGrid.Children.Add(cardGrid);
+                    opponent.grid.Children.Add(cardGrid);
                 }
-
-
-                gameView.PlayersCanvas.Children.Add(opponentGrid);
+                Canvas.SetLeft(opponent.grid, i * spaceBetween);
+                gameView.PlayersCanvas.Children.Add(opponent.grid);
             }
-        }
-    }
-    class Opponent
-    {
-        public string name;
-        public Card? playedCard;
-        public Plank? plank;
-        public Opponent(string name)
-        {
-            this.name = name;
         }
     }
 }

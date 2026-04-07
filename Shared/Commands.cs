@@ -7,5 +7,6 @@
         PlayCard,
         DealCard,
         DisplayOpponentCard,
+        Displayopponent,
     }
 }
