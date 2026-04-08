@@ -116,7 +116,7 @@ namespace SkullQueenClient
                             Debug.WriteLine(message);
                             leadSuit = (Shared.Color)Enum.Parse(typeof(Shared.Color), leadSuitString);
                         }
-                        gameView.StatusText.Text = $"It's your turn to play a card! Lead suit: {leadSuit.ToString()}";
+                        gameView.StatusText.Text = $"It's your turn to play a card!" + (leadSuit != null ? " Lead suit: " + leadSuit.ToString() : " No lead suit");
                         await PlayCard(player, leadSuit);
                         gameView.StatusText.Text = "Waiting on other players to play";
                         break;
