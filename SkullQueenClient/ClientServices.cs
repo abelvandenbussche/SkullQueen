@@ -66,6 +66,7 @@ namespace SkullQueenClient
                 {
                     return;
                 }
+                Opponent? opp = game.opponents.FirstOrDefault(o => o.name == args[0]);
                 switch (cmd)
                 {
                     case Command.StartGame:
@@ -106,23 +107,24 @@ namespace SkullQueenClient
                         break;
 
                     case Command.DisplayPlank:
-                        string plankString = string.Join(' ', args);
-                        Plank updatedPlank = Plank.FromString(plankString);
+                        Plank updatedPlank = Plank.FromString(string.Join(' ', args));
                         PlankUpdated?.Invoke(updatedPlank);
                         break;
 
                     case Command.DisplayOpponentCard:
-                        Debug.WriteLine(message);
-                        string opponentName = args[0];
                         Shared.Color cardSuit = (Shared.Color)Enum.Parse(typeof(Shared.Color), args[1]);
                         int cardRank = int.Parse(args[2]);
                         Card playedCard = new(cardSuit, cardRank);
-                        Opponent? opp = game.opponents.FirstOrDefault(o => o.name == opponentName);
                         if (opp != null)
                         {
                             opp.playedCard = playedCard;
                             OpponentsUpdated?.Invoke(game.opponents);
                         }
+                        break;
+
+                    case Command.DisplayOpponentPlank:
+                        opp.plank = Plank.FromString(string.Join(' ', args.Skip(1).ToArray()));
+                        OpponentsUpdated?.Invoke(game.opponents);
                         break;
 
                     case Command.ClearPlayedCards:

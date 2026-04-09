@@ -91,9 +91,12 @@ namespace SkullQueenServer
 
                 firstPlayer.MovePieceOnPlank(firstCard.suit, true);
                 lastPlayer.MovePieceOnPlank(firstCard.suit, false);
-
-                firstPlayer.SendMessage(Command.DisplayPlank, firstPlayer.plank.ToString());
-                lastPlayer.SendMessage(Command.DisplayPlank, lastPlayer.plank.ToString());
+            }
+            // Informing the clients
+            foreach (Player player in players)
+            {
+                player.SendMessage(Command.DisplayPlank, player.plank.ToString());
+                Utility.BroadCast(players, Command.DisplayOpponentPlank, player.name + " " + player.plank.ToString(), player);
             }
         }
         public Player DetermineStartPlayer()

@@ -114,7 +114,6 @@ namespace SkullQueenClient
             gameView.PlayersCanvas.Children.Clear();
 
             double spaceBetween = gameView.PlayersCanvas.ActualWidth / (opponents.Count);
-            Debug.WriteLine(opponents.Count);
 
             for (int i = 0; i < opponents.Count; i++)
             {
@@ -151,8 +150,8 @@ namespace SkullQueenClient
                 if (opponent.plank != null)
                 {
                     Grid plankGrid = MakePlank(opponent.plank);
-                    Canvas.SetTop(plankGrid, 130);
-                    Canvas.SetLeft(plankGrid, 20);
+                    Canvas.SetLeft(plankGrid, 70);
+                    Canvas.SetTop(plankGrid, 20);
                     opponent.canvas.Children.Add(plankGrid);
                 }
                 Canvas.SetLeft(opponent.canvas, i * spaceBetween + (spaceBetween / 2));
