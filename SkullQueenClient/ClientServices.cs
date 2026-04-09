@@ -9,8 +9,9 @@ namespace SkullQueenClient
     public class ClientServices
     {
         private readonly ClientGame game;
-        public event Action<Card>? CardClicked;
 
+        // Game events
+        public event Action<Card>? CardClicked;
         public event Action<List<Card>>? HandUpdated;
         public event Action<List<Opponent>>? OpponentsUpdated;
         public event Action<Card>? PlayedCardUpdated;
@@ -18,6 +19,7 @@ namespace SkullQueenClient
         public event Action? GameStarted;
         public event Action? PlayedCardCleared;
 
+        // Lobby events
         public event Action<string>? PlayerAddedToLobby;
 
         public ClientServices(ClientGame game)
