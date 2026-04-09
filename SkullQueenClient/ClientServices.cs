@@ -18,6 +18,7 @@ namespace SkullQueenClient
         public event Action<string>? StatusUpdated;
         public event Action? GameStarted;
         public event Action? PlayedCardCleared;
+        public event Action<Plank>? PlankUpdated;
 
         // Lobby events
         public event Action<string>? PlayerAddedToLobby;
@@ -98,10 +99,16 @@ namespace SkullQueenClient
                         StatusUpdated?.Invoke("Waiting on other players to play");
                         break;
 
-                    case Command.Displayopponent:
+                    case Command.DisplayOpponent:
                         Opponent opponent = new(args[0]);
                         game.opponents.Add(opponent);
                         OpponentsUpdated?.Invoke(game.opponents);
+                        break;
+
+                    case Command.DisplayPlank:
+                        string plankString = string.Join(' ', args);
+                        Plank updatedPlank = Plank.FromString(plankString);
+                        PlankUpdated?.Invoke(updatedPlank);
                         break;
 
                     case Command.DisplayOpponentCard:

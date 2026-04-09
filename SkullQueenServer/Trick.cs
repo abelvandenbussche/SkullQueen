@@ -51,6 +51,7 @@ namespace SkullQueenServer
                 player.RemoveCardFromHand(playedCard);
             }
             // Determing the scoring of the trick based on the played cards
+            ScoreTrick();
 
             // Determine the next start player
             return DetermineStartPlayer();
@@ -66,7 +67,7 @@ namespace SkullQueenServer
             }
             return order;
         }
-        public void ScoreTrick()
+        private void ScoreTrick()
         {
             Dictionary<Shared.Color, List<Card>> sorted = new();
             // Sorting the cards by suit

@@ -7,7 +7,8 @@
         PlayCard,
         DealCard,
         DisplayOpponentCard,
-        Displayopponent,
+        DisplayOpponentPlank,
+        DisplayOpponent,
         DisplayPlank,
         ClearPlayedCards,
     }

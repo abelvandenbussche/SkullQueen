@@ -11,6 +11,7 @@
         <Canvas x:Name="PlayersCanvas" Margin="0,0,0,300"/>
         <Canvas x:Name="PlayingFieldMiddle" Margin="370,155,30,195"/>
         <Canvas x:Name="PlayedCard" Margin="163,177,577,177" Height="96" Width="60"/>
-        <TextBlock x:Name="StatusText" HorizontalAlignment="Left" Margin="28,150,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+        <TextBlock x:Name="StatusText" HorizontalAlignment="Left" Margin="28,150,0,0" TextWrapping="Wrap" Text="No Activity" VerticalAlignment="Top"/>
+        <Canvas x:Name="PlankCanvas"  Height="100" Width="50" RenderTransformOrigin="0.505,0.294" Margin="28,177,722,173"/>
     </Grid>
 </UserControl>

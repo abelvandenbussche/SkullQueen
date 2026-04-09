@@ -1,4 +1,5 @@
 ﻿using Shared;
+using System.Diagnostics;
 
 namespace Shared
 {
@@ -38,6 +39,16 @@ namespace Shared
         public override string ToString()
         {
             return $"Red: {pawnsOnPlank[Color.Red].position} Green: {pawnsOnPlank[Color.Green].position} Yellow: {pawnsOnPlank[Color.Yellow].position} Blue: {pawnsOnPlank[Color.Blue].position}";
+        }
+        public static Plank FromString(string plankString)
+        {
+            string[] parts = plankString.Split(' ');
+            Debug.WriteLine($"Parsing plank string: {plankString}");
+            int redPos = int.Parse(parts[1]);
+            int greenPos = int.Parse(parts[3]);
+            int yellowPos = int.Parse(parts[5]);
+            int bluePos = int.Parse(parts[7]);
+            return new Plank(redPos, greenPos, yellowPos, bluePos);
         }
     }
 }

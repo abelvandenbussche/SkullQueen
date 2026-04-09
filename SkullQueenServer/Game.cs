@@ -22,7 +22,7 @@ namespace SkullQueenServer
             // Send all players their opponents
             foreach (Player player in players)
             {
-                Utility.BroadCast(players, Command.Displayopponent, player.name, player);
+                Utility.BroadCast(players, Command.DisplayOpponent, player.name, player);
             }
 
             // Start the first round

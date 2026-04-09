@@ -59,9 +59,11 @@ namespace SkullQueenClient
             services.PlayedCardUpdated += card => DisplayPlayedCard(card);
             services.StatusUpdated += status => Dispatcher.Invoke(() => gameView.StatusText.Text = status);
             services.PlayedCardCleared += () => Dispatcher.Invoke(() => gameView.PlayedCard.Children.Clear());
+            services.PlankUpdated += plank => DisplayPlank(plank);
 
-
+            // Lobby events
             lobbyView.StartGameClicked += services.StartGame;
+
             MainContent.Content = lobbyView;
         }
         private void DisplayHand(List<Card> hand)
@@ -146,6 +148,13 @@ namespace SkullQueenClient
                     Canvas.SetTop(cardGrid, 20);
                     opponent.canvas.Children.Add(cardGrid);
                 }
+                if (opponent.plank != null)
+                {
+                    Grid plankGrid = MakePlank(opponent.plank);
+                    Canvas.SetTop(plankGrid, 130);
+                    Canvas.SetLeft(plankGrid, 20);
+                    opponent.canvas.Children.Add(plankGrid);
+                }
                 Canvas.SetLeft(opponent.canvas, i * spaceBetween + (spaceBetween / 2));
                 gameView.PlayersCanvas.Children.Add(opponent.canvas);
             }
@@ -181,6 +190,64 @@ namespace SkullQueenClient
             // Displaying the hand without this card
             game.Hand.Remove(card);
             DisplayHand(game.Hand);
+        }
+        public void DisplayPlank(Plank plank)
+        {
+            Grid plankGrid = MakePlank(plank);
+            gameView.PlankCanvas.Children.Clear();
+            gameView.PlankCanvas.Children.Add(plankGrid);
+        }
+        private Grid MakePlank(Plank plank)
+        {
+            Grid plankGrid = new();
+            plankGrid.ColumnDefinitions.Add(new());
+            
+            // Adding rows
+            for (int i = 0; i < 5; i++)
+            {
+                plankGrid.RowDefinitions.Add(new());
+
+                Rectangle rowRect = new()
+                {
+                    Fill = Brushes.Brown,
+                    Stroke = Brushes.Black,
+                };
+                TextBlock rowText = new()
+                {
+                    Text = Plank.plankScores[i].ToString(),
+                    Foreground = Brushes.White,
+                };
+                Grid.SetRow(rowRect, i);
+                Grid.SetRow(rowText, i);
+                Grid.SetColumnSpan(rowRect, 5);
+                plankGrid.Children.Add(rowRect);
+                plankGrid.Children.Add(rowText);
+            };
+            for (int i = 0; i < 4; i++)
+            {
+                plankGrid.ColumnDefinitions.Add(new() { Width = new GridLength(1, GridUnitType.Star) });
+                Shared.Color color = (Shared.Color)i;
+                int pos = plank.pawnsOnPlank[color].position;
+                Rectangle pieceRect = new()
+                {
+                    Width = 10,
+                    Height = 10,
+                    Margin = new Thickness(2, 0, 2, 0)
+                };
+                if (pos == -1)
+                {
+                    pieceRect.Fill = Brushes.Transparent;
+                    Grid.SetRow(pieceRect, 0);
+                }
+                else
+                {
+                    pieceRect.Fill = ColorToBrush[color];
+                    Grid.SetRow(pieceRect, pos);
+                }
+                Grid.SetColumn(pieceRect, i + 1);
+                plankGrid.Children.Add(pieceRect);
+            }
+            return plankGrid;
         }
     }
 }
