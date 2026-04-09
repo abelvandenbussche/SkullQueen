@@ -11,5 +11,6 @@
         DisplayOpponent,
         DisplayPlank,
         ClearPlayedCards,
+        MakePlank
     }
 }

@@ -18,6 +18,9 @@ namespace SkullQueenServer
             deck = CreateAndShuffleDeck();
             DealCards();
 
+            // Letting the players set up their boards
+            Utility.BroadCast(players, Command.MakePlank);
+
             // Starting the game loop
             GameLoop();
         }

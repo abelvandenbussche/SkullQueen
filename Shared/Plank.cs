@@ -6,9 +6,9 @@ namespace Shared
     public class Plank
     {
         public Dictionary<Color, Pawn> pawnsOnPlank;
-
+        public bool flipped { get; private set; }
         public static readonly int[] plankScores = [1, 2, 3, 5, 8];
-        public Plank(int redStart, int greenStart, int yellowStart, int blueStart)
+        public Plank(int redStart, int greenStart, int yellowStart, int blueStart, bool flipped)
         {
             pawnsOnPlank = new Dictionary<Color, Pawn>()
             {
@@ -17,6 +17,7 @@ namespace Shared
                 { Color.Yellow, new(Color.Yellow, yellowStart) },
                 { Color.Blue, new(Color.Blue, blueStart) }
             };
+            this.flipped = flipped;
         }
         public void MovePiece(Color color, bool forwards, bool doubleMove)
         {
@@ -48,7 +49,7 @@ namespace Shared
             int greenPos = int.Parse(parts[3]);
             int yellowPos = int.Parse(parts[5]);
             int bluePos = int.Parse(parts[7]);
-            return new Plank(redPos, greenPos, yellowPos, bluePos);
+            return new Plank(redPos, greenPos, yellowPos, bluePos, false);
         }
     }
 }

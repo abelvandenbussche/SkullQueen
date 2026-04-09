@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:SkullQueenClient"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid x:Name="MainGrid">
         <Canvas x:Name="HandCanvas" Margin="50,320,50,30" Height="100"/>
         <Canvas x:Name="PlayersCanvas" Margin="0,0,0,300"/>
         <Canvas x:Name="PlayingFieldMiddle" Margin="370,155,30,195"/>

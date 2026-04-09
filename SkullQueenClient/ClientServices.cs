@@ -18,6 +18,7 @@ namespace SkullQueenClient
         public event Action<string>? StatusUpdated;
         public event Action? GameStarted;
         public event Action? PlayedCardCleared;
+        public event Action? MakePlank;
         public event Action<Plank>? PlankUpdated;
 
         // Lobby events
@@ -139,6 +140,9 @@ namespace SkullQueenClient
                     case Command.JoinLobby:
                         Debug.WriteLine(args[0]);
                         PlayerAddedToLobby?.Invoke(args[0]);
+                        break;
+                    case Command.MakePlank:
+                        MakePlank?.Invoke();
                         break;
                 }
 
