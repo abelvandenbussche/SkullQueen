@@ -9,16 +9,26 @@ namespace SkullQueenServer
         private List<Player> players;
         private Trick currentTrick;
         private Queue<Card> deck;
+        private Player startPlayer;
         public Round(List<Player> players)
         {
             this.players = players;
+            this.startPlayer = players[0];
 
             deck = CreateAndShuffleDeck();
             DealCards();
-            currentTrick = new Trick(players);
-            currentTrick.StartTrick(players[0]);
-        }
 
+            // Starting the game loop
+            GameLoop();
+        }
+        private void GameLoop()
+        {
+            while (players[0].GetCardCount() > 0)
+            {
+                currentTrick = new Trick(players);
+                startPlayer = currentTrick.StartTrick(startPlayer);
+            }
+        }
         public void DealCards()
         {
             while (deck.Count >= players.Count)
@@ -30,7 +40,6 @@ namespace SkullQueenServer
                 }
             }
         }
-
         public Queue<Card> CreateAndShuffleDeck()
         {
             List<Card> cards = new();

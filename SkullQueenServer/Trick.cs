@@ -17,7 +17,7 @@ namespace SkullQueenServer
             this.rand = new Random();
             this.players = players;
         }
-        public void StartTrick(Player startingPlayer)
+        public Player StartTrick(Player startingPlayer)
         {
             this.startingPlayer = startingPlayer;
             this.playerOrder = DeterminePlayerOrder();
@@ -47,8 +47,13 @@ namespace SkullQueenServer
                         otherPlayer.SendMessage(Command.DisplayOpponentCard, $"{player.name} {playedCard}");
                     }
                 }
+                // Remove the played card from the player's hand
+                player.RemoveCardFromHand(playedCard);
             }
             // Determing the scoring of the trick based on the played cards
+
+            // Determine the next start player
+            return DetermineStartPlayer();
         }
         public List<Player> DeterminePlayerOrder()
         {
@@ -89,6 +94,20 @@ namespace SkullQueenServer
                 firstPlayer.SendMessage(Command.DisplayPlank, firstPlayer.plank.ToString());
                 lastPlayer.SendMessage(Command.DisplayPlank, lastPlayer.plank.ToString());
             }
+        }
+        public Player DetermineStartPlayer()
+        {
+            int highestRank = -1;
+            Card best = new(Color.Black, 0);
+            foreach (Card card in playedCards.Keys)
+            {
+                if (card.rank > highestRank)
+                {
+                    highestRank = card.rank;
+                    best = card;
+                }
+            }
+            return playedCards[best];
         }
     }
 }

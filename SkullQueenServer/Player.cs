@@ -48,5 +48,13 @@ namespace SkullQueenServer
         {
             plank.MovePiece(piece, moveForward, doubleMove);
         }
+        public void RemoveCardFromHand(Card card)
+        {
+            hand.Remove(card);
+        }
+        public int GetCardCount()
+        {
+            return hand.Count;
+        }
     }
 }

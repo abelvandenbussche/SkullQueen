@@ -278,6 +278,10 @@ namespace SkullQueenClient
             newGrid.Children.Add(cardRect);
             newGrid.Children.Add(rankText);
             gameView.PlayedCard.Children.Add(newGrid);
+
+            // Displaying the hand without this card
+            game.Hand.Remove(card);
+            DisplayHand(game.Hand);
         }
 
         private async Task PlayCard(Player player, Shared.Color? suit)
