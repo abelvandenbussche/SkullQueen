@@ -27,6 +27,8 @@ namespace SkullQueenServer
             {
                 currentTrick = new Trick(players);
                 startPlayer = currentTrick.StartTrick(startPlayer);
+
+                Utility.BroadCast(players, Command.ClearPlayedCards);
             }
         }
         public void DealCards()

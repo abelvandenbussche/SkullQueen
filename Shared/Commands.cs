@@ -9,5 +9,6 @@
         DisplayOpponentCard,
         Displayopponent,
         DisplayPlank,
+        ClearPlayedCards,
     }
 }

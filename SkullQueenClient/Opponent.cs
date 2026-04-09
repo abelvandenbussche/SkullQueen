@@ -6,13 +6,13 @@ namespace SkullQueenClient
     class Opponent
     {
         public string name;
-        public Grid grid;
+        public Canvas canvas;
         public Card? playedCard;
         public Plank? plank;
         public Opponent(string name)
         {
             this.name = name;
-            this.grid = new Grid();
+            this.canvas = new Canvas();
         }
     }
 }

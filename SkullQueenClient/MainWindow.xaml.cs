@@ -142,6 +142,15 @@ namespace SkullQueenClient
                         }
                         break;
 
+                    case Command.ClearPlayedCards:
+                        foreach (Opponent o in game.opponents)
+                        {
+                            o.playedCard = null;
+                        }
+                        DisplayOpponents(game.opponents);
+                        gameView.PlayedCard.Children.Clear();
+                        break;
+
                     case Command.JoinLobby:
                         Debug.WriteLine(args[0]);
                         lobbyView.AddPlayerToLobby(args[0]);
@@ -218,14 +227,14 @@ namespace SkullQueenClient
             for (int i = 0; i < opponents.Count; i++)
             {
                 Opponent opponent = opponents[i];
-                opponent.grid.Children.Clear();
+                opponent.canvas.Children.Clear();
 
                 TextBlock opponentBlock = new()
                 {
                     Text = opponent.name,
                     Background = Brushes.LightGray,
                 };
-                opponent.grid.Children.Add(opponentBlock);
+                opponent.canvas.Children.Add(opponentBlock);
                 if (opponent.playedCard != null)
                 {
                     Rectangle cardRect = new()
@@ -244,11 +253,11 @@ namespace SkullQueenClient
                     Grid cardGrid = new();
                     cardGrid.Children.Add(cardRect);
                     cardGrid.Children.Add(rankText);
-                    Canvas.SetLeft(cardGrid, 80);
-                    opponent.grid.Children.Add(cardGrid);
+                    Canvas.SetTop(cardGrid, 20);
+                    opponent.canvas.Children.Add(cardGrid);
                 }
-                Canvas.SetLeft(opponent.grid, i * spaceBetween + (spaceBetween / 2));
-                gameView.PlayersCanvas.Children.Add(opponent.grid);
+                Canvas.SetLeft(opponent.canvas, i * spaceBetween + (spaceBetween / 2));
+                gameView.PlayersCanvas.Children.Add(opponent.canvas);
             }
         }
         private void DisplayPlayedCard(Card card)
