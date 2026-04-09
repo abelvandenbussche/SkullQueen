@@ -3,7 +3,7 @@ using Shared;
 
 namespace SkullQueenClient
 {
-    class Opponent
+    public class Opponent
     {
         public string name;
         public Canvas canvas;

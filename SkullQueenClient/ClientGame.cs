@@ -2,7 +2,7 @@
 
 namespace SkullQueenClient
 {
-    class ClientGame
+    public class ClientGame
     {
         public List<Card> Hand { get; set; }
         public List<Opponent> opponents;

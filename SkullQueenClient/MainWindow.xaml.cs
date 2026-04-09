@@ -1,6 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Shared;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Diagnostics;
-using System.Net.Sockets;
+using System.Security.Permissions;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Shared;
+using System.Windows.Threading;
 
 namespace SkullQueenClient
 {
@@ -23,8 +25,7 @@ namespace SkullQueenClient
         private LobbyView lobbyView;
         private GameView gameView;
         private ClientGame game;
-
-        private event Action<Card> CardClicked;
+        private ClientServices services;
 
         private Dictionary<Shared.Color, Brush> ColorToBrush = new()
         {
@@ -41,138 +42,27 @@ namespace SkullQueenClient
             gameView = new GameView();
             gameView.HandCanvas.SizeChanged += (s, e) => DisplayHand(game.Hand);
             gameView.PlayersCanvas.SizeChanged += (s, e) => DisplayOpponents(game.opponents);
+            game = new();
 
-            lobbyView.StartGameClicked += StartGame;
+            services = new(game);
+
+            // Lobby events
+            services.PlayerAddedToLobby += playerName => Dispatcher.Invoke(() => lobbyView.AddPlayerToLobby(playerName));
+            services.GameStarted += () =>
+            {
+                Dispatcher.Invoke(() => MainContent.Content = gameView);
+            };
+
+            // Game events
+            services.HandUpdated += hand => DisplayHand(hand);
+            services.OpponentsUpdated += opponents => DisplayOpponents(opponents);
+            services.PlayedCardUpdated += card => DisplayPlayedCard(card);
+            services.StatusUpdated += status => Dispatcher.Invoke(() => gameView.StatusText.Text = status);
+            services.PlayedCardCleared += () => Dispatcher.Invoke(() => gameView.PlayedCard.Children.Clear());
+
+
+            lobbyView.StartGameClicked += services.StartGame;
             MainContent.Content = lobbyView;
-        }
-        public void StartGame(object sender, string playerName)
-        {
-            Player? player = ConnectToServer(playerName);
-            lobbyView.AddPlayerToLobby(playerName);
-
-            if (player == null)
-            {
-                // Connection failure, close the application
-                return;
-            }
-
-            // Start listening for messages from the server
-            Task listener = player.ListenForMessages(async message =>
-            {
-                Debug.WriteLine($"Raw: [{message}] Length: {message?.Length}");
-
-                foreach (char c in message)
-                {
-                    Debug.WriteLine($"Char: {(int)c}");
-                }
-                // Splitting the message
-                // Trying to parse the command
-                Command? cmd = null;
-                try
-                {
-                    string commandStr = message.Split(' ')[0];
-                    cmd = (Command)Enum.Parse(typeof(Command), commandStr);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error parsing message: " + ex.Message);
-                    return;
-                }
-                string[] args = message.Split(' ').Skip(1).ToArray();
-
-                if (cmd == null)
-                {
-                    return;
-                }
-                switch (cmd)
-                {
-                    case Command.StartGame:
-                        // Switch to the game view
-                        Dispatcher.Invoke(() =>
-                        {
-                            MainContent.Content = gameView;
-                        });
-                        game = new();
-                        break;
-
-                    case Command.DealCard:
-                        Shared.Color suit = (Shared.Color)Enum.Parse(typeof(Shared.Color), args[0]);
-                        int rank = int.Parse(args[1]);
-                        Card newCard = new(suit, rank);
-                        game.AddCardToHand(newCard);
-                        DisplayHand(game.Hand);
-                        break;
-
-                    case Command.PlayCard:
-                        // Getting the leadsuit
-                        string leadSuitString = args[0];
-                        Shared.Color? leadSuit;
-                        if (leadSuitString == "null")
-                        {
-                            leadSuit = null;
-                        }
-                        else
-                        {
-                            Debug.WriteLine(message);
-                            leadSuit = (Shared.Color)Enum.Parse(typeof(Shared.Color), leadSuitString);
-                        }
-                        gameView.StatusText.Text = $"It's your turn to play a card!" + (leadSuit != null ? " Lead suit: " + leadSuit.ToString() : " No lead suit");
-                        await PlayCard(player, leadSuit);
-                        gameView.StatusText.Text = "Waiting on other players to play";
-                        break;
-
-                    case Command.Displayopponent:
-                        Opponent opponent = new(args[0]);
-                        game.opponents.Add(opponent);
-                        DisplayOpponents(game.opponents);
-                        DisplayOpponents(game.opponents);
-                        break;
-
-                    case Command.DisplayOpponentCard:
-                        Debug.WriteLine(message);
-                        string opponentName = args[0];
-                        Shared.Color cardSuit = (Shared.Color)Enum.Parse(typeof(Shared.Color), args[1]);
-                        int cardRank = int.Parse(args[2]);
-                        Card playedCard = new(cardSuit, cardRank);
-                        Opponent? opp = game.opponents.FirstOrDefault(o => o.name == opponentName);
-                        if (opp != null)
-                        {
-                            opp.playedCard = playedCard;
-                            DisplayOpponents(game.opponents);
-                        }
-                        break;
-
-                    case Command.ClearPlayedCards:
-                        foreach (Opponent o in game.opponents)
-                        {
-                            o.playedCard = null;
-                        }
-                        DisplayOpponents(game.opponents);
-                        gameView.PlayedCard.Children.Clear();
-                        break;
-
-                    case Command.JoinLobby:
-                        Debug.WriteLine(args[0]);
-                        lobbyView.AddPlayerToLobby(args[0]);
-                        break;
-                }
-
-            });
-        }
-        public Player? ConnectToServer(string playerName)
-        {
-            try
-            {
-                TcpClient client = new TcpClient("localhost", 5050);
-                Player player = new(playerName, client);
-                player.SendMessage(Command.JoinLobby, playerName);
-                return player;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error connecting to server: " + ex.Message);
-                return null;
-            }
         }
         private void DisplayHand(List<Card> hand)
         {
@@ -191,7 +81,7 @@ namespace SkullQueenClient
                     Width = 60,
                     Tag = card,
                 };
-                newGrid.MouseLeftButtonUp += (s, e) => CardClicked?.Invoke((Card)((Grid)s).Tag);
+                newGrid.MouseLeftButtonUp += (s, e) => services.OnCardClicked((Card)((Grid)s).Tag);
 
                 // Creating the rectangle for the card
                 Rectangle cardRect = new()
@@ -291,28 +181,6 @@ namespace SkullQueenClient
             // Displaying the hand without this card
             game.Hand.Remove(card);
             DisplayHand(game.Hand);
-        }
-
-        private async Task PlayCard(Player player, Shared.Color? suit)
-        {
-            TaskCompletionSource<Card> tcs = new();
-            void OnCardclicked(Card card)
-            {
-                // Check if the card is a valid play
-                if (card.suit == suit || suit == null || card.suit == Shared.Color.Black || !game.HasSuit(suit))
-                {
-                    tcs.SetResult(card);
-                }
-            }
-            
-            CardClicked += OnCardclicked;
-            Card cardToPlay = await tcs.Task;
-            // Displaying the card on the player's area
-            DisplayPlayedCard(cardToPlay);
-            CardClicked -= OnCardclicked;
-
-            // Send the card to the server
-            player.SendMessage(Command.PlayCard, cardToPlay.ToString());
         }
     }
 }
