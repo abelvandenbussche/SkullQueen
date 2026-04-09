@@ -49,13 +49,9 @@ namespace SkullQueenServer
                 {
                     continue; // skip black suit for normal cards
                 }
-                for (int rank = 1; rank <= 13; rank++)
+                for (int rank = 1; rank <= 12; rank++)
                 {
-                    if (rank == 0 || rank == 13)
-                    {
-                        cards.Add(new BlackCard(rank == 13));
-                    }
-                    else if (rank == 5 || rank == 8)
+                    if (rank == 5 || rank == 8)
                     {
                         cards.Add(new DoubleCard(suit, rank == 8));
                     }
@@ -65,6 +61,8 @@ namespace SkullQueenServer
                     }
                 }
             }
+            cards.Add(new BlackCard(false));
+            cards.Add(new BlackCard(true));
             // shuffle the deck
             return new Queue<Card>(cards.OrderBy(x => rand.Next()));
         }

@@ -290,7 +290,7 @@ namespace SkullQueenClient
             void OnCardclicked(Card card)
             {
                 // Check if the card is a valid play
-                if (card.suit == suit || suit == null || card is BlackCard || !game.HasSuit(suit))
+                if (card.suit == suit || suit == null || card.suit == Shared.Color.Black || !game.HasSuit(suit))
                 {
                     tcs.SetResult(card);
                 }
