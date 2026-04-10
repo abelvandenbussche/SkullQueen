@@ -14,6 +14,5 @@ it has 3 components:
  - A client that can connect to a server, this handles user input and UI
  - A shared class library that both server and client need
 
-
-## Class Diagram
-![UML](README/SkullQueenClassDiagram.png)
+## Documentation
+[Class diagram](README/SkullQueenClassDiagram.png)
