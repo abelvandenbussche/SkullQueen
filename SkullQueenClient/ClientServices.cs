@@ -20,6 +20,7 @@ namespace SkullQueenClient
         public event Action? PlayedCardCleared;
         public event Action? MakePlank;
         public event Action<Plank>? PlankUpdated;
+        public event Action<Plank>? PlankMade;
 
         // Lobby events
         public event Action<string>? PlayerAddedToLobby;
@@ -141,12 +142,28 @@ namespace SkullQueenClient
                         Debug.WriteLine(args[0]);
                         PlayerAddedToLobby?.Invoke(args[0]);
                         break;
+
                     case Command.MakePlank:
+                        TaskCompletionSource<Plank> tcs = new();
+                        void PlankComplete(Plank plank)
+                        {
+                            tcs.SetResult(plank);
+                        }
                         MakePlank?.Invoke();
+
+                        PlankMade += PlankComplete;
+                        Plank plank = await tcs.Task;
+                        PlankMade -= PlankComplete;
+
+                        player.SendMessage(Command.MakePlank, plank.ToString());
                         break;
                 }
 
             });
+        }
+        public void PlankMadeMethod(Plank plank)
+        {
+            PlankMade?.Invoke(plank);
         }
         public Player? ConnectToServer(string playerName)
         {

@@ -39,7 +39,7 @@ namespace Shared
         }
         public override string ToString()
         {
-            return $"Red: {pawnsOnPlank[Color.Red].position} Green: {pawnsOnPlank[Color.Green].position} Yellow: {pawnsOnPlank[Color.Yellow].position} Blue: {pawnsOnPlank[Color.Blue].position}";
+            return $"Red: {pawnsOnPlank[Color.Red].position} Green: {pawnsOnPlank[Color.Green].position} Yellow: {pawnsOnPlank[Color.Yellow].position} Blue: {pawnsOnPlank[Color.Blue].position} Flipped: {flipped}";
         }
         public static Plank FromString(string plankString)
         {
@@ -49,7 +49,8 @@ namespace Shared
             int greenPos = int.Parse(parts[3]);
             int yellowPos = int.Parse(parts[5]);
             int bluePos = int.Parse(parts[7]);
-            return new Plank(redPos, greenPos, yellowPos, bluePos, false);
+            bool flipped = parts[9] == "true";
+            return new Plank(redPos, greenPos, yellowPos, bluePos, flipped);
         }
     }
 }

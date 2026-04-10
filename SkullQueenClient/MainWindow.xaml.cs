@@ -60,7 +60,11 @@ namespace SkullQueenClient
             services.StatusUpdated += status => Dispatcher.Invoke(() => gameView.StatusText.Text = status);
             services.PlayedCardCleared += () => Dispatcher.Invoke(() => gameView.PlayedCard.Children.Clear());
             services.PlankUpdated += plank => DisplayPlank(plank);
-            services.MakePlank += () => gameView.MakePlank(ColorToBrush);
+            services.MakePlank += async () =>
+            {
+                Plank plank = await gameView.GetPlank(ColorToBrush);
+                services.PlankMadeMethod(plank);
+            };
 
             // Lobby events
             lobbyView.StartGameClicked += services.StartGame;
@@ -207,6 +211,8 @@ namespace SkullQueenClient
             {
                 plankGrid.RowDefinitions.Add(new());
 
+                int pieceNumber = plank.flipped ? i : 4 - i;
+
                 Rectangle rowRect = new()
                 {
                     Fill = Brushes.Brown,
@@ -214,7 +220,7 @@ namespace SkullQueenClient
                 };
                 TextBlock rowText = new()
                 {
-                    Text = Plank.plankScores[i].ToString(),
+                    Text = Plank.plankScores[pieceNumber].ToString(),
                     Foreground = Brushes.White,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,

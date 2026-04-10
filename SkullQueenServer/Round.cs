@@ -16,10 +16,24 @@ namespace SkullQueenServer
             this.startPlayer = players[0];
 
             deck = CreateAndShuffleDeck();
+        }
+        public async Task StartRound()
+        {
             DealCards();
 
             // Letting the players set up their boards
             Utility.BroadCast(players, Command.MakePlank);
+
+            // Waiting on players to send their plank
+            async Task GetAndSetPlank(Player player)
+            {
+                string message = await player.GetMessageAsync();
+                string[] args = message.Split(' ');
+                Plank plank = Plank.FromString(String.Join(' ', args.Skip(1).ToArray()));
+                player.plank = plank;
+            }
+
+            await Task.WhenAll(players.Select(player => GetAndSetPlank(player)));
 
             // Starting the game loop
             GameLoop();

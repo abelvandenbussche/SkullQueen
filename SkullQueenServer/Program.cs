@@ -11,7 +11,7 @@ namespace SkullQueenServer
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             // Creating a new game instance
             Lobby lobby = new();
@@ -26,8 +26,7 @@ namespace SkullQueenServer
             // Starting the game
             cts.Cancel();
             Game game = lobby.StartGame();
-            Console.WriteLine("Game Finished!");
-            Console.ReadLine();
+            await game.NewRound();
         }
     }
 }

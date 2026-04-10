@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
@@ -9,7 +11,7 @@ namespace SkullQueenServer
 {
     public class Player
     {
-        public Plank plank { get; private set; }
+        public Plank plank;
         private List<Card> hand;
         private int score;
         public string name;
@@ -34,6 +36,10 @@ namespace SkullQueenServer
         public string WaitOnMessage()
         {
             return reader.ReadLine();
+        }
+        public async Task<string> GetMessageAsync()
+        {
+            return await reader.ReadLineAsync();
         }
         public void SendMessage(Command cmd, string? message = null)
         {

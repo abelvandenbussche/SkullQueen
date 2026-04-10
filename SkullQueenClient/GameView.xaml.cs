@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -22,14 +23,17 @@ namespace SkullQueenClient
     /// </summary>
     public partial class GameView : UserControl
     {
-        private event Action<int>? plankSectionClicked;
+        private event Action<int>? PlankSectionClicked;
+        private event Action<List<Rectangle>, bool>? ButtonClicked;
+        Grid containmentGrid = new();
         public GameView()
         {
             InitializeComponent();
         }
-        public Plank MakePlank(Dictionary<Shared.Color, Brush> ColorToBrush)
+        private void MakePlank(Dictionary<Shared.Color, Brush> ColorToBrush)
         {
             bool flipped = false;
+            List<Rectangle> pieces = new();
             List<TextBlock> numberTexts = new();
 
             // Making the board in UI
@@ -53,7 +57,7 @@ namespace SkullQueenClient
                 rowRect.Tag = i;
                 rowRect.MouseLeftButtonUp += (s, e) =>
                 {
-                    plankSectionClicked?.Invoke((int)((Rectangle)s).Tag);
+                    PlankSectionClicked?.Invoke((int)((Rectangle)s).Tag);
                 };
                 TextBlock rowText = new()
                 {
@@ -83,6 +87,7 @@ namespace SkullQueenClient
                     Margin = new Thickness(2, 0, 2, 0),
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
+                    Tag = color,
                 };
                 if (pos == -1)
                 {
@@ -100,18 +105,19 @@ namespace SkullQueenClient
 
                 Grid.SetColumn(pieceRect, i + 1);
                 plankGrid.Children.Add(pieceRect);
+                pieces.Add(pieceRect);
             }
 
             // Making a flip button
-            Button btn = new()
+            Button flipButton = new()
             {
                 Content = "Flip board",
                 Width = 60,
                 Height = 30,
                 VerticalAlignment = VerticalAlignment.Top,
-                Margin = new(50),
+                Margin = new(40),
             };
-            btn.Click += (s, e) =>
+            flipButton.Click += (s, e) =>
             {
                 flipped = !flipped;
                 foreach (TextBlock block in numberTexts)
@@ -126,17 +132,51 @@ namespace SkullQueenClient
                 Height = 50,
                 Width = 200,
                 VerticalAlignment = VerticalAlignment.Top,
-                FontSize = 20,
                 TextAlignment = TextAlignment.Center,
+                FontSize = 20,
                 Margin = new(10),
             };
-            MainGrid.Children.Add(title);
-            MainGrid.Children.Add(btn);
-            MainGrid.Children.Add(plankGrid);
+            Button finnishButton = new()
+            {
+                Height = 30,
+                Width = 60,
+                Content = "Ready",
+                VerticalAlignment= VerticalAlignment.Top,
+                Margin = new(70),
+            };
+            finnishButton.Click += (s, e) => ButtonClicked?.Invoke(pieces, flipped);
 
-            return new(0, 0, 0, 0, flipped);
+            containmentGrid.Children.Add(finnishButton);
+            containmentGrid.Children.Add(title);
+            containmentGrid.Children.Add(flipButton);
+            containmentGrid.Children.Add(plankGrid);
+
+            MainGrid.Children.Add(containmentGrid);
         }
+        public async Task<Plank> GetPlank(Dictionary<Shared.Color, Brush> ColorToBrush)
+        {
+            TaskCompletionSource<Plank> tcs = new();
+            void OnFinnish(List<Rectangle> pieces, bool flipped)
+            {
+                int redPos = Grid.GetRow(pieces.Find(rect => (Shared.Color)rect.Tag == Shared.Color.Red));
+                int greenPos = Grid.GetRow(pieces.Find(rect => (Shared.Color)rect.Tag == Shared.Color.Green));
+                int yellowPos = Grid.GetRow(pieces.Find(rect => (Shared.Color)rect.Tag == Shared.Color.Yellow));
+                int bluePos = Grid.GetRow(pieces.Find(rect => (Shared.Color)rect.Tag == Shared.Color.Blue));
 
+                tcs.SetResult(new(redPos, greenPos, yellowPos, bluePos, flipped));
+            }
+
+            MakePlank(ColorToBrush);
+
+            ButtonClicked += OnFinnish;
+            Plank plank = await tcs.Task;
+            ButtonClicked -= OnFinnish;
+
+            // Clearing the UI
+            MainGrid.Children.Remove(containmentGrid);
+
+            return plank;
+        }
         private async void RectangleClick(object sender, EventArgs e)
         {
             // Waiting until a plank is clicked
@@ -148,10 +188,10 @@ namespace SkullQueenClient
             }
 
             // Subscribing to the event
-            plankSectionClicked += OnPlankSectionClicked;
+            PlankSectionClicked += OnPlankSectionClicked;
             int num = await tcs.Task;
             // Unsubscribing from the event
-            plankSectionClicked -= OnPlankSectionClicked;
+            PlankSectionClicked -= OnPlankSectionClicked;
 
             Grid.SetRow((Rectangle)sender, num);
         }
