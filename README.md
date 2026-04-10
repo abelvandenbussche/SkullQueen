@@ -4,7 +4,7 @@ This is a school project for 5th year of highschool
 
 This is a digital remake of the card game Skull Queen
 
-![404 not found](image.png)
+![404 not found](README/mage.png)
 
 It uses Windows Presentation Foundation in the C# language
 the purpose of the project was to show that we understand OOP
@@ -16,4 +16,4 @@ it has 3 components:
 
 
 ## Class Diagram
-![UML](SkullQueenClassDiagram.png)
+![UML](README/SkullQueenClassDiagram.png)
