@@ -76,6 +76,7 @@ namespace SkullQueenClient
         }
         private void DisplayCards(List<Card> hand, Canvas canvas)
         {
+            hand = hand.OrderBy(x => (int)x.suit).ThenBy(x => x.rank).ToList();
             if (!Application.Current.Dispatcher.CheckAccess())
             {
                 Dispatcher.Invoke(() => DisplayCards(hand, canvas));
@@ -106,7 +107,7 @@ namespace SkullQueenClient
                 TextBlock rankText = new()
                 {
                     Text = card.rank.ToString(),
-                    Foreground = Brushes.White,
+                    Foreground = card.suit == Shared.Color.Yellow ? Brushes.Black : Brushes.White,
                     FontSize = 16,
                     FontWeight = FontWeights.Bold,
                 };
