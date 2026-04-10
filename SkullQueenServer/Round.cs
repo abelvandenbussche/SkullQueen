@@ -34,6 +34,8 @@ namespace SkullQueenServer
             }
 
             await Task.WhenAll(players.Select(player => GetAndSetPlank(player)));
+            Utility.DisplayPlanks(players);
+
 
             // Starting the game loop
             GameLoop();

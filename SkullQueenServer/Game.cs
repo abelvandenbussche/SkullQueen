@@ -25,10 +25,13 @@ namespace SkullQueenServer
                 Utility.BroadCast(players, Command.DisplayOpponent, player.name, player);
             }
         }
-        public async Task NewRound()
+        public async Task StartGame()
         {
-            this.currentRound = new Round(players);
-            await currentRound.StartRound();
+            for (int i = 0; i < players.Count; i++)
+            {
+                this.currentRound = new Round(players);
+                await currentRound.StartRound();
+            }
         }
     }
 }

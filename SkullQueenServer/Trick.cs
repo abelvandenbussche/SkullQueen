@@ -115,12 +115,7 @@ namespace SkullQueenServer
                 firstPlayer.MovePieceOnPlank(firstCard.suit != Color.Black ? firstCard.suit : (Color)leadSuit!, true, doubleUp);
                 lastPlayer.MovePieceOnPlank(firstCard.suit != Color.Black ? firstCard.suit : (Color)leadSuit!, false, doubleDown);
             }
-            // Informing the clients
-            foreach (Player player in players)
-            {
-                player.SendMessage(Command.DisplayPlank, player.plank.ToString());
-                Utility.BroadCast(players, Command.DisplayOpponentPlank, player.name + " " + player.plank.ToString(), player);
-            }
+            Utility.DisplayPlanks(players);
         }
         public Player DetermineStartPlayer()
         {

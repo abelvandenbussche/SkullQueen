@@ -14,5 +14,13 @@ namespace SkullQueenServer
                 }
             }
         }
+        public static void DisplayPlanks(List<Player> players)
+        {
+            foreach (Player player in players)
+            {
+                player.SendMessage(Command.DisplayPlank, player.plank.ToString());
+                Utility.BroadCast(players, Command.DisplayOpponentPlank, player.name + " " + player.plank.ToString(), player);
+            }
+        }
     }
 }
