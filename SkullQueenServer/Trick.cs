@@ -123,7 +123,7 @@ namespace SkullQueenServer
             Card best = new(Color.Black, 0);
             foreach (Card card in playedCards.Keys)
             {
-                if (card.rank > highestRank)
+                if (card.rank >= highestRank)
                 {
                     highestRank = card.rank;
                     best = card;
