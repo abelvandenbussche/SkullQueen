@@ -69,6 +69,7 @@ namespace SkullQueenClient
 
             // Lobby events
             lobbyView.StartGameClicked += services.StartGame;
+            lobbyView.ReadyUpClicked += services.ReadyUp;
 
             MainContent.Content = lobbyView;
         }

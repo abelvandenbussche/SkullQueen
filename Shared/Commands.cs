@@ -13,5 +13,6 @@
         ClearPlayedCards,
         MakePlank,
         ScoreUpdate,
+        Ready
     }
 }

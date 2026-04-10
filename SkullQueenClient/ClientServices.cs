@@ -25,6 +25,7 @@ namespace SkullQueenClient
 
         // Lobby events
         public event Action<string>? PlayerAddedToLobby;
+        public event Action? ReadyUpped;
 
         public ClientServices(ClientGame game)
         {
@@ -40,6 +41,8 @@ namespace SkullQueenClient
                 // Connection failure, close the application
                 return;
             }
+
+            ReadyUpped += () => { player.SendMessage(Command.Ready); };
 
             // Start listening for messages from the server
             Task listener = player.ListenForMessages(async message =>
@@ -202,6 +205,10 @@ namespace SkullQueenClient
         public void OnCardClicked(Card card)
         {
             CardClicked?.Invoke(card);
+        }
+        public void ReadyUp()
+        {
+            ReadyUpped?.Invoke();
         }
     }
 }

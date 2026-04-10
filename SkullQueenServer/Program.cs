@@ -16,15 +16,14 @@ namespace SkullQueenServer
             // Creating a new game instance
             Lobby lobby = new();
             CancellationTokenSource cts = new();
-            _ = lobby.ConnectToClients(cts);
-
-            // TEMP: Replace this with client start
-            Console.WriteLine("Press Enter to start the game...");
-            Console.ReadLine();
-            Console.WriteLine("Starting the game...");
+            Task connectTask = lobby.ConnectToClients(cts);
+            await lobby.WaitTillReady();
+            Console.WriteLine("OK?");
 
             // Starting the game
             cts.Cancel();
+            lobby.StopServer();
+            await connectTask;
             Game game = lobby.StartGame();
             await game.StartGame();
         }

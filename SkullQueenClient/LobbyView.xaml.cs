@@ -20,7 +20,8 @@ namespace SkullQueenClient
     /// </summary>
     public partial class LobbyView : UserControl
     {
-        public event EventHandler<string> StartGameClicked;
+        public event EventHandler<string>? StartGameClicked;
+        public event Action ReadyUpClicked;
         public LobbyView()
         {
             InitializeComponent();
@@ -48,6 +49,14 @@ namespace SkullQueenClient
             UsernameTextBox.Visibility = Visibility.Collapsed;
 
             UsernameHeader.Visibility = Visibility.Collapsed;
+
+            ReadyUpButton.Visibility = Visibility.Visible;
+        }
+        private void ReadyUpButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Sending a message to the server
+            ReadyUpButton.IsEnabled = false;
+            ReadyUpClicked?.Invoke();
         }
     }
 }
