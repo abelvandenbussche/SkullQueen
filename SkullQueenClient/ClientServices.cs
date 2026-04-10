@@ -1,6 +1,8 @@
 ﻿using Shared;
 using System.Diagnostics;
+using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -168,9 +170,26 @@ namespace SkullQueenClient
         }
         public Player? ConnectToServer(string playerName)
         {
+            // Getting the server ip
+            UdpClient udpClient = new UdpClient();
+            udpClient.EnableBroadcast = true;
+            IPEndPoint serverEP = new(IPAddress.Any, 0);
+            byte[] message = Encoding.UTF8.GetBytes("DISCOVER_SKULLQUEEN_SERVER");
+            udpClient.Send(message, message.Length, new(IPAddress.Broadcast, 5000));
+
+            // Listening for a response
+            byte[] data = udpClient.Receive(ref serverEP);
+            string response = Encoding.UTF8.GetString(data);
+            if (response != "SKULLQUEEN_SERVER_HERE")
+            {
+                MessageBox.Show("Error connecting to server: Could not find server in network");
+                return null;
+            }
+            Debug.WriteLine("Found server at: " + serverEP.Address.ToString());
+
             try
             {
-                TcpClient client = new TcpClient("localhost", 5050);
+                TcpClient client = new TcpClient(serverEP.Address.ToString(), 5050);
                 Player player = new(playerName, client);
                 player.SendMessage(Command.JoinLobby, playerName);
                 return player;
