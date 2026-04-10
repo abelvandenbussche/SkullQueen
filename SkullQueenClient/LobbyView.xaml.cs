@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Text.RegularExpressions;
 
 namespace SkullQueenClient
 {
@@ -38,7 +39,11 @@ namespace SkullQueenClient
                 MessageBox.Show("Please enter a username.");
                 return;
             }
-            StartGameClicked?.Invoke(this, UsernameTextBox.Text);
+            string name = UsernameTextBox.Text;
+            // Replacing whitespace musing regex
+            name = Regex.Replace(name, @"\s+", "_");
+
+            StartGameClicked?.Invoke(this, name);
 
             // hiding the button and text box after clicking start game
             Button button = sender as Button;
