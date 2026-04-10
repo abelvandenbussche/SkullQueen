@@ -21,6 +21,7 @@ namespace SkullQueenClient
         public event Action? MakePlank;
         public event Action<Plank>? PlankUpdated;
         public event Action<Plank>? PlankMade;
+        public event Action<int>? ScoreUpdated;
 
         // Lobby events
         public event Action<string>? PlayerAddedToLobby;
@@ -44,11 +45,6 @@ namespace SkullQueenClient
             Task listener = player.ListenForMessages(async message =>
             {
                 Debug.WriteLine($"Raw: [{message}] Length: {message?.Length}");
-
-                foreach (char c in message)
-                {
-                    Debug.WriteLine($"Char: {(int)c}");
-                }
                 // Splitting the message
                 // Trying to parse the command
                 Command? cmd = null;
@@ -94,7 +90,6 @@ namespace SkullQueenClient
                         }
                         else
                         {
-                            Debug.WriteLine(message);
                             leadSuit = (Shared.Color)Enum.Parse(typeof(Shared.Color), leadSuitString);
                         }
                         StatusUpdated?.Invoke($"It's your turn to play a card!" + (leadSuit != null ? " Lead suit: " + leadSuit.ToString() : " No lead suit"));
@@ -139,7 +134,6 @@ namespace SkullQueenClient
                         break;
 
                     case Command.JoinLobby:
-                        Debug.WriteLine(args[0]);
                         PlayerAddedToLobby?.Invoke(args[0]);
                         break;
 
@@ -156,6 +150,10 @@ namespace SkullQueenClient
                         PlankMade -= PlankComplete;
 
                         player.SendMessage(Command.MakePlank, plank.ToString());
+                        break;
+
+                    case Command.ScoreUpdate:
+                        ScoreUpdated?.Invoke(int.Parse(args[0]));
                         break;
                 }
 

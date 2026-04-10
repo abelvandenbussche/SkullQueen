@@ -4,12 +4,10 @@ namespace Shared
 {
     public class Pawn
     {
-        Color color;
         // Position on the plank, 0 is the start, 4 is the end
         public int position { get; private set; }
-        public Pawn(Color color, int position)
+        public Pawn(int position)
         {
-            this.color = color;
             this.position = position;
         }
 
@@ -17,7 +15,7 @@ namespace Shared
         {
             if (IsOffPlank()) return;
             int moveAmount = doubleMove ? 2 : 1;
-            moveAmount *= forward ? 1 : -1;
+            moveAmount *= forward ? -1 : 1;
             position += moveAmount;
 
             if (position < 0 || position > 4)

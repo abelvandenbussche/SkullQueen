@@ -13,7 +13,7 @@ namespace SkullQueenServer
     {
         public Plank plank;
         private List<Card> hand;
-        private int score;
+        public int score;
         public string name;
 
         TcpClient connection;
@@ -61,6 +61,11 @@ namespace SkullQueenServer
         public int GetCardCount()
         {
             return hand.Count;
+        }
+        public Card FindCard(Card toFind)
+        {
+            Card found = hand.Find(card => card.suit == toFind.suit && card.rank ==  toFind.rank)!;
+            return found;
         }
     }
 }

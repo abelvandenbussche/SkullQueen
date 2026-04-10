@@ -12,10 +12,10 @@ namespace Shared
         {
             pawnsOnPlank = new Dictionary<Color, Pawn>()
             {
-                { Color.Red, new(Color.Red, redStart) },
-                { Color.Green, new(Color.Green, greenStart) },
-                { Color.Yellow, new(Color.Yellow, yellowStart) },
-                { Color.Blue, new(Color.Blue, blueStart) }
+                { Color.Red, new(redStart) },
+                { Color.Green, new(greenStart) },
+                { Color.Yellow, new(yellowStart) },
+                { Color.Blue, new(blueStart) }
             };
             this.flipped = flipped;
         }
@@ -49,7 +49,8 @@ namespace Shared
             int greenPos = int.Parse(parts[3]);
             int yellowPos = int.Parse(parts[5]);
             int bluePos = int.Parse(parts[7]);
-            bool flipped = parts[9] == "true";
+            Debug.WriteLine(parts[9]);
+            bool flipped = parts[9] == "True";
             return new Plank(redPos, greenPos, yellowPos, bluePos, flipped);
         }
     }

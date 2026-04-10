@@ -30,7 +30,7 @@ namespace SkullQueenServer
                 string response = player.WaitOnMessage();
                 Console.WriteLine($"Received response from {player.name}: {response}");
                 // Parsing the response to get the card played
-                Card playedCard = Card.FromString(response);
+                Card playedCard = player.FindCard(Card.FromString(response));
 
                 // Check if this sets the lead suit
                 if (leadSuit == null && playedCard.suit != Color.Black)
@@ -73,11 +73,22 @@ namespace SkullQueenServer
             // Sorting the cards by suit
             foreach (Card playedCard in playedCards.Keys)
             {
-                if (!sorted.ContainsKey(playedCard.suit))
+                if (!sorted.ContainsKey(playedCard.suit) && playedCard.suit != Color.Black)
                 {
                     sorted[playedCard.suit] = new();
                 }
-                sorted[playedCard.suit].Add(playedCard);
+                if (playedCard.suit != Color.Black)
+                {
+                    sorted[playedCard.suit].Add(playedCard);
+                }
+                else if (leadSuit != null)
+                {
+                    if (!sorted.ContainsKey((Color)leadSuit))
+                    {
+                        sorted[(Color)leadSuit] = new();
+                    }
+                    sorted[(Color)leadSuit].Add(playedCard);
+                }
             }
             foreach(List<Card> cards in sorted.Values)
             {
@@ -89,8 +100,20 @@ namespace SkullQueenServer
                 Player firstPlayer = playedCards[firstCard];
                 Player lastPlayer = playedCards[lastCard];
 
-                firstPlayer.MovePieceOnPlank(firstCard.suit, true);
-                lastPlayer.MovePieceOnPlank(firstCard.suit, false);
+                // Checking for doubles
+                bool doubleUp = false;
+                bool doubleDown = false;
+                foreach (Card card in cards)
+                {
+                    if (card is DoubleCard doubleCard)
+                    {
+                        if (doubleCard.up) { doubleUp = true; }
+                        else {  doubleDown = true; }
+                    }
+                }
+
+                firstPlayer.MovePieceOnPlank(firstCard.suit != Color.Black ? firstCard.suit : (Color)leadSuit!, true, doubleUp);
+                lastPlayer.MovePieceOnPlank(firstCard.suit != Color.Black ? firstCard.suit : (Color)leadSuit!, false, doubleDown);
             }
             // Informing the clients
             foreach (Player player in players)

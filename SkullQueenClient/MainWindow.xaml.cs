@@ -65,6 +65,7 @@ namespace SkullQueenClient
                 Plank plank = await gameView.GetPlank(ColorToBrush);
                 services.PlankMadeMethod(plank);
             };
+            services.ScoreUpdated += newScore => Dispatcher.Invoke(() => gameView.ScoreText.Text = "Score: " + newScore.ToString());
 
             // Lobby events
             lobbyView.StartGameClicked += services.StartGame;
@@ -211,7 +212,7 @@ namespace SkullQueenClient
             {
                 plankGrid.RowDefinitions.Add(new());
 
-                int pieceNumber = plank.flipped ? i : 4 - i;
+                int pieceNumber = plank.flipped ? 4 - i : i;
 
                 Rectangle rowRect = new()
                 {

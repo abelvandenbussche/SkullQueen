@@ -2,6 +2,10 @@
 {
     public class DoubleCard : Card
     {
-        public DoubleCard(Color suit, bool up) : base(suit, up ? 8 : 5) { }
+        public bool up { get; private set; }
+        public DoubleCard(Color suit, bool up) : base(suit, up ? 8 : 5)
+        {
+            this.up = up;
+        }
     }
 }

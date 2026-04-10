@@ -37,11 +37,24 @@ namespace SkullQueenServer
 
             // Starting the game loop
             GameLoop();
+
+            // Calculating the scores of each player
+            foreach (Player player in players)
+            {
+                foreach (Color color in player.plank.pawnsOnPlank.Keys)
+                {
+                    Pawn pawn = player.plank.pawnsOnPlank[color];
+                    if (pawn.position == -1) { continue; }
+                    player.score += player.plank.flipped ? Plank.plankScores[4 - pawn.position] : Plank.plankScores[pawn.position];
+                }
+                player.SendMessage(Command.ScoreUpdate, player.score.ToString());
+            }
         }
         private void GameLoop()
         {
             while (players[0].GetCardCount() > 0)
             {
+                Console.WriteLine(players[0].GetCardCount());
                 currentTrick = new Trick(players);
                 startPlayer = currentTrick.StartTrick(startPlayer);
 
