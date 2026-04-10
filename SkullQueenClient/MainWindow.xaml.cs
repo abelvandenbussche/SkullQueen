@@ -40,7 +40,7 @@ namespace SkullQueenClient
             InitializeComponent();
             lobbyView = new LobbyView();
             gameView = new GameView();
-            gameView.HandCanvas.SizeChanged += (s, e) => DisplayHand(game.Hand);
+            gameView.HandCanvas.SizeChanged += (s, e) => DisplayCards(game.Hand, gameView.HandCanvas);
             gameView.PlayersCanvas.SizeChanged += (s, e) => DisplayOpponents(game.opponents);
             game = new();
 
@@ -54,12 +54,13 @@ namespace SkullQueenClient
             };
 
             // Game events
-            services.HandUpdated += hand => DisplayHand(hand);
+            services.HandUpdated += hand => DisplayCards(hand, gameView.HandCanvas);
             services.OpponentsUpdated += opponents => DisplayOpponents(opponents);
             services.PlayedCardUpdated += card => DisplayPlayedCard(card);
             services.StatusUpdated += status => Dispatcher.Invoke(() => gameView.StatusText.Text = status);
             services.PlayedCardCleared += () => Dispatcher.Invoke(() => gameView.PlayedCard.Children.Clear());
             services.PlankUpdated += plank => DisplayPlank(plank);
+            services.CenterCardsUpdated += cards => DisplayCards(cards, gameView.PlayingFieldMiddle);
             services.MakePlank += async () =>
             {
                 Plank plank = await gameView.GetPlank(ColorToBrush);
@@ -73,14 +74,14 @@ namespace SkullQueenClient
 
             MainContent.Content = lobbyView;
         }
-        private void DisplayHand(List<Card> hand)
+        private void DisplayCards(List<Card> hand, Canvas canvas)
         {
             if (!Application.Current.Dispatcher.CheckAccess())
             {
-                Dispatcher.Invoke(() => DisplayHand(hand));
+                Dispatcher.Invoke(() => DisplayCards(hand, canvas));
             }
-            gameView.HandCanvas.Children.Clear();
-            double spaceBetween = gameView.HandCanvas.ActualWidth / (hand.Count + 1);
+            canvas.Children.Clear();
+            double spaceBetween = canvas.ActualWidth / (hand.Count + 1);
             for (int i = 0; i < hand.Count; i++)
             {
                 Card card = hand[i];
@@ -113,7 +114,7 @@ namespace SkullQueenClient
                 newGrid.Children.Add(rankText);
 
                 Canvas.SetLeft(newGrid, i * spaceBetween);
-                gameView.HandCanvas.Children.Add(newGrid);
+                canvas.Children.Add(newGrid);
             }
         }
         private void DisplayOpponents(List<Opponent> opponents)
@@ -195,7 +196,7 @@ namespace SkullQueenClient
 
             // Displaying the hand without this card
             game.Hand.Remove(card);
-            DisplayHand(game.Hand);
+            DisplayCards(game.Hand, gameView.HandCanvas);
         }
         public void DisplayPlank(Plank plank)
         {

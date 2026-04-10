@@ -13,6 +13,7 @@
         ClearPlayedCards,
         MakePlank,
         ScoreUpdate,
-        Ready
+        Ready,
+        DisplayMiddleCards
     }
 }

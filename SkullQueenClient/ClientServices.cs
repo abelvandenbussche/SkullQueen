@@ -24,6 +24,7 @@ namespace SkullQueenClient
         public event Action<Plank>? PlankUpdated;
         public event Action<Plank>? PlankMade;
         public event Action<int>? ScoreUpdated;
+        public event Action<List<Card>>? CenterCardsUpdated;
 
         // Lobby events
         public event Action<string>? PlayerAddedToLobby;
@@ -40,7 +41,7 @@ namespace SkullQueenClient
             {
                 // Connection failure, close the application
                 throw (new("Shit crashed"));
-                return;
+                //return;
             }
             PlayerAddedToLobby?.Invoke(playerName);
 
@@ -50,6 +51,7 @@ namespace SkullQueenClient
             // Start listening for messages from the server
             Task listener = player.ListenForMessages(async message =>
             {
+                message = message.Trim();
                 Debug.WriteLine($"Raw: [{message}] Length: {message?.Length}");
                 // Splitting the message
                 // Trying to parse the command
@@ -70,7 +72,18 @@ namespace SkullQueenClient
                 {
                     return;
                 }
-                Opponent? opp = game.opponents.FirstOrDefault(o => o.name == args[0]);
+
+                // Try to get the Opponent
+                Opponent? opp;
+                try
+                {
+                    opp = game.opponents.FirstOrDefault(o => o.name == args[0]);
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    opp = null;
+                }
+
                 switch (cmd)
                 {
                     case Command.StartGame:
@@ -160,6 +173,26 @@ namespace SkullQueenClient
 
                     case Command.ScoreUpdate:
                         ScoreUpdated?.Invoke(int.Parse(args[0]));
+                        break;
+
+                    case Command.DisplayMiddleCards:
+                        // Generating the cards
+                        List<Card> centerCards = new();
+                        foreach (string str in args)
+                        {
+                            Debug.Write(str + " ");
+                        }
+                        if (args.Count() % 2 == 1)
+                        {
+                            throw new("We are fucked, shit not even");
+                        }
+
+                        for (int i = 0; i < args.Count(); i += 2)
+                        {
+                            string combo = string.Join(' ', new List<string>() { args[i], args[i + 1] });
+                            centerCards.Add(Card.FromString(combo));
+                        }
+                        CenterCardsUpdated?.Invoke(centerCards);
                         break;
                 }
 

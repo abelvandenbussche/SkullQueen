@@ -10,10 +10,12 @@ namespace SkullQueenServer
         private Trick currentTrick;
         private Queue<Card> deck;
         private Player startPlayer;
+        private List<Card> centerCards;
         public Round(List<Player> players)
         {
             this.players = players;
             this.startPlayer = players[0];
+            centerCards = new();
 
             deck = CreateAndShuffleDeck();
         }
@@ -57,8 +59,20 @@ namespace SkullQueenServer
             while (players[0].GetCardCount() > 0)
             {
                 Console.WriteLine(players[0].GetCardCount());
-                currentTrick = new Trick(players);
+                currentTrick = new Trick(players, centerCards);
                 startPlayer = currentTrick.StartTrick(startPlayer);
+                centerCards = currentTrick.centerCards;
+
+                // Sending middle cards to client
+                string message = "";
+                foreach (Card card in centerCards)
+                {
+                    message += card.ToString() + " ";
+                }
+                Debug.WriteLine("Message: " + message);
+
+                Utility.BroadCast(players, Command.DisplayMiddleCards, message);
+
 
                 Utility.BroadCast(players, Command.ClearPlayedCards);
             }
@@ -97,7 +111,7 @@ namespace SkullQueenServer
             }
             cards.Add(new BlackCard(false));
             cards.Add(new BlackCard(true));
-            // shuffle the deck
+            // Shuffle the deck
             return new Queue<Card>(cards.OrderBy(x => rand.Next()));
         }
     }

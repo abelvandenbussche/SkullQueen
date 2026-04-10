@@ -11,11 +11,13 @@ namespace SkullQueenServer
         private List<Player> playerOrder = new();
         private readonly Random rand;
         private Color? leadSuit;
+        public List<Card> centerCards;
 
-        public Trick(List<Player> players)
+        public Trick(List<Player> players, List<Card> center)
         {
             this.rand = new Random();
             this.players = players;
+            this.centerCards = center;
         }
         public Player StartTrick(Player startingPlayer)
         {
@@ -30,6 +32,7 @@ namespace SkullQueenServer
                 string response = player.WaitOnMessage();
                 Console.WriteLine($"Received response from {player.name}: {response}");
                 // Parsing the response to get the card played
+                response = string.Join(' ', response.Split(" ").Skip(1));
                 Card playedCard = player.FindCard(Card.FromString(response));
 
                 // Check if this sets the lead suit
@@ -90,15 +93,25 @@ namespace SkullQueenServer
                     sorted[(Color)leadSuit].Add(playedCard);
                 }
             }
+            // Adding the center cards
+            for (int i = centerCards.Count - 1; i >= 0; i--)
+            {
+                Card centerCard = centerCards[i];
+                if (sorted.ContainsKey(centerCard.suit))
+                {
+                    sorted[centerCard.suit].Add(centerCard);
+                    centerCards.Remove(centerCard);
+                }
+            }
             foreach(List<Card> cards in sorted.Values)
             {
-                if (cards.Count <= 1) continue;
+                // Adding the card to the center if it is the only card in its suit
+                if (cards.Count == 1) { centerCards.Add(cards[0]); }
+
                 // Sort in descending order of rank
                 cards.Sort((a, b) => b.rank.CompareTo(a.rank));
                 Card firstCard = cards[0];
                 Card lastCard = cards[cards.Count - 1];
-                Player firstPlayer = playedCards[firstCard];
-                Player lastPlayer = playedCards[lastCard];
 
                 // Checking for doubles
                 bool doubleUp = false;
@@ -112,8 +125,18 @@ namespace SkullQueenServer
                     }
                 }
 
-                firstPlayer.MovePieceOnPlank(firstCard.suit != Color.Black ? firstCard.suit : (Color)leadSuit!, true, doubleUp);
-                lastPlayer.MovePieceOnPlank(firstCard.suit != Color.Black ? firstCard.suit : (Color)leadSuit!, false, doubleDown);
+                if (playedCards.ContainsKey(firstCard))
+                {
+                    Player firstPlayer = playedCards[firstCard];
+                    firstPlayer.MovePieceOnPlank(firstCard.suit != Color.Black ? firstCard.suit : (Color)leadSuit!, true, doubleUp);
+                }
+                if (playedCards.ContainsKey(lastCard))
+                {
+                    Player lastPlayer = playedCards[lastCard];
+                    lastPlayer.MovePieceOnPlank(firstCard.suit != Color.Black ? firstCard.suit : (Color)leadSuit!, false, doubleDown);
+                }
+
+
             }
             Utility.DisplayPlanks(players);
         }
