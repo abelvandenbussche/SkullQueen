@@ -36,13 +36,14 @@ namespace SkullQueenClient
         public void StartGame(object sender, string playerName)
         {
             Player? player = ConnectToServer(playerName);
-            PlayerAddedToLobby?.Invoke(playerName);
-
             if (player == null)
             {
                 // Connection failure, close the application
+                throw (new("Shit crashed"));
                 return;
             }
+            PlayerAddedToLobby?.Invoke(playerName);
+
 
             ReadyUpped += () => { player.SendMessage(Command.Ready); };
 

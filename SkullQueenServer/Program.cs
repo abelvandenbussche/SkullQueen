@@ -45,6 +45,7 @@ namespace SkullQueenServer
             {
                 byte[] data = server.Receive(ref remoteEP);
                 string msg = Encoding.UTF8.GetString(data);
+                Console.WriteLine(msg);
                 if (msg == "DISCOVER_SKULLQUEEN_SERVER")
                 {
                     byte[] response = Encoding.UTF8.GetBytes("SKULLQUEEN_SERVER_HERE");
