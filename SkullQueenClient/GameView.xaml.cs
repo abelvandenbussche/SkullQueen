@@ -165,7 +165,7 @@ namespace SkullQueenClient
 
                 tcs.SetResult(new(redPos, greenPos, yellowPos, bluePos, flipped));
             }
-
+            StatusText.Text = "Setup you plank based on the cards you have\nPress ready when finished";
             MakePlank(ColorToBrush);
 
             ButtonClicked += OnFinnish;
@@ -174,7 +174,7 @@ namespace SkullQueenClient
 
             // Clearing the UI
             MainGrid.Children.Remove(containmentGrid);
-
+            StatusText.Text = "Waiting on other players";
             return plank;
         }
         private async void RectangleClick(object sender, EventArgs e)

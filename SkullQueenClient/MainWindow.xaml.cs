@@ -74,6 +74,56 @@ namespace SkullQueenClient
 
             MainContent.Content = lobbyView;
         }
+        public Grid MakeCardUI(Card card)
+        {
+            Grid newGrid = new()
+            {
+                Height = 96,
+                Width = 60,
+                Tag = card,
+            };
+            newGrid.MouseLeftButtonUp += (s, e) => services.OnCardClicked((Card)((Grid)s).Tag);
+
+            // Creating the rectangle for the card
+            Rectangle cardRect = new()
+            {
+                Width = 60,
+                Height = 96,
+                Fill = ColorToBrush[card.suit],
+                Stroke = Brushes.Black,
+            };
+
+            // Creating the text for the rank
+            TextBlock rankText = new()
+            {
+                Text = card.rank.ToString(),
+                Foreground = card.suit == Shared.Color.Yellow ? Brushes.Black : Brushes.White,
+                FontSize = 16,
+                FontWeight = FontWeights.Bold,
+            };
+            TextBlock flippedRankText = new()
+            {
+                Text = card.rank.ToString(),
+                Foreground = card.suit == Shared.Color.Yellow ? Brushes.Black : Brushes.White,
+                FontSize = 16,
+                FontWeight = FontWeights.Bold,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+            };
+            flippedRankText.RenderTransform = new RotateTransform(180);
+            flippedRankText.RenderTransformOrigin = new(0.5, 0.5);
+
+            if (card is DoubleCard)
+            {
+                rankText.Text += "\n↑";
+                flippedRankText.Text += "\n↑";
+            }
+
+            newGrid.Children.Add(cardRect);
+            newGrid.Children.Add(flippedRankText);
+            newGrid.Children.Add(rankText);
+            return newGrid;
+        }
         private void DisplayCards(List<Card> hand, Canvas canvas)
         {
             hand = hand.OrderBy(x => (int)x.suit).ThenBy(x => x.rank).ToList();
@@ -199,56 +249,6 @@ namespace SkullQueenClient
                 plankGrid.Children.Add(pieceRect);
             }
             return plankGrid;
-        }
-        public Grid MakeCardUI(Card card)
-        {
-            Grid newGrid = new()
-            {
-                Height = 96,
-                Width = 60,
-                Tag = card,
-            };
-            newGrid.MouseLeftButtonUp += (s, e) => services.OnCardClicked((Card)((Grid)s).Tag);
-
-            // Creating the rectangle for the card
-            Rectangle cardRect = new()
-            {
-                Width = 60,
-                Height = 96,
-                Fill = ColorToBrush[card.suit],
-                Stroke = Brushes.Black,
-            };
-
-            // Creating the text for the rank
-            TextBlock rankText = new()
-            {
-                Text = card.rank.ToString(),
-                Foreground = card.suit == Shared.Color.Yellow ? Brushes.Black : Brushes.White,
-                FontSize = 16,
-                FontWeight = FontWeights.Bold,
-            };
-            TextBlock flippedRankText = new()
-            {
-                Text = card.rank.ToString(),
-                Foreground = card.suit == Shared.Color.Yellow ? Brushes.Black : Brushes.White,
-                FontSize = 16,
-                FontWeight = FontWeights.Bold,
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
-            };
-            flippedRankText.RenderTransform = new RotateTransform(180);
-            flippedRankText.RenderTransformOrigin = new(0.5, 0.5);
-
-            if (card is DoubleCard)
-            {
-                rankText.Text += "\n↑";
-                flippedRankText.Text += "\n↑";
-            }
-
-            newGrid.Children.Add(cardRect);
-            newGrid.Children.Add(flippedRankText);
-            newGrid.Children.Add(rankText);
-            return newGrid;
         }
     }
 }
