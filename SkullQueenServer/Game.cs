@@ -32,6 +32,14 @@ namespace SkullQueenServer
                 this.currentRound = new Round(players);
                 await currentRound.StartRound();
             }
+            // Sending the scores of the players for the end of the game
+            string message = "";
+            foreach (Player player in players)
+            {
+                message += player.name + " ";
+                message += player.score + " ";
+            }
+            Utility.BroadCast(players, Command.EndScoring, message);
         }
     }
 }

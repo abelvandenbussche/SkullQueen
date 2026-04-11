@@ -14,6 +14,7 @@
         MakePlank,
         ScoreUpdate,
         Ready,
-        DisplayMiddleCards
+        DisplayMiddleCards,
+        EndScoring
     }
 }

@@ -25,6 +25,7 @@ namespace SkullQueenClient
         public event Action<Plank>? PlankMade;
         public event Action<int>? ScoreUpdated;
         public event Action<List<Card>>? CenterCardsUpdated;
+        public event Action<int, Dictionary<Opponent, int>>? EndGameScoring;
 
         // Lobby events
         public event Action<string>? PlayerAddedToLobby;
@@ -185,6 +186,31 @@ namespace SkullQueenClient
                             centerCards.Add(Card.FromString(combo));
                         }
                         CenterCardsUpdated?.Invoke(centerCards);
+                        break;
+
+                    case Command.EndScoring:
+                        // Getting the scoring
+                        Dictionary<Opponent, int> opponentScores = new();
+                        int playerScore = 0;
+                        for (int i = 0; i < args.Length; i += 2)
+                        {
+                            int score = int.Parse(args[i + 1]);
+                            if (args[i] == player.name)
+                            {
+                                playerScore = score;
+                            }
+                            else
+                            {
+                                // Finding the opponent
+                                Opponent? localOpp = game.opponents.FirstOrDefault(x => x.name == args[i]);
+                                if (localOpp == null)
+                                {
+                                    continue;
+                                }
+                                opponentScores[localOpp] = score;
+                            }
+                        }
+                        EndGameScoring?.Invoke(playerScore, opponentScores);
                         break;
                 }
 

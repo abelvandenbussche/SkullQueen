@@ -63,10 +63,22 @@ namespace SkullQueenClient
             services.CenterCardsUpdated += cards => DisplayCards(cards, gameView.PlayingFieldMiddle);
             services.MakePlank += async () =>
             {
+                // Clearing the leftovers from the previous round
+                gameView.PlayingFieldMiddle.Children.Clear();
+                foreach (Opponent opp in game.opponents)
+                {
+                    opp.plank = null;
+                }
+                DisplayOpponents(game.opponents);
+
                 Plank plank = await gameView.GetPlank(ColorToBrush);
                 services.PlankMadeMethod(plank);
             };
             services.ScoreUpdated += newScore => Dispatcher.Invoke(() => gameView.ScoreText.Text = "Score: " + newScore.ToString());
+            services.EndGameScoring += (int playerScore, Dictionary<Opponent, int> opponentScores) =>
+            {
+                MainContent.Content = new EndScreen(playerScore, opponentScores);
+            };
 
             // Lobby events
             lobbyView.StartGameClicked += services.StartGame;
