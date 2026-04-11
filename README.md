@@ -1,6 +1,6 @@
 # SkullQueen
 
-This is a school project for 5th year of highschool
+This is a school project for (equivalent) 5th year of highschool
 
 This is a digital remake of the card game Skull Queen
 
@@ -13,6 +13,15 @@ it has 3 components:
  - A server that clients can connect to, this handles the game logic
  - A client that can connect to a server, this handles user input and UI
  - A shared class library that both server and client need
+
+## some functionalities
+ - Multiplayer
+    - Usernames
+    - lobbies
+ - Game
+    - Setting up your plank
+    - Playing tricks
+    - Automatic scoring
 
 ## Documentation
 [Class diagram](README/SkullQueenClassDiagram.png)
