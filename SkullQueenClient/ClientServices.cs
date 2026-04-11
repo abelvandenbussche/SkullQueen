@@ -176,10 +176,6 @@ namespace SkullQueenClient
                     case Command.DisplayMiddleCards:
                         // Generating the cards
                         List<Card> centerCards = new();
-                        foreach (string str in args)
-                        {
-                            Debug.Write(str + " ");
-                        }
                         if (args.Count() % 2 == 1)
                         {
                             throw new("We are fucked, shit not even");

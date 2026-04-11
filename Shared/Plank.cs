@@ -44,12 +44,10 @@ namespace Shared
         public static Plank FromString(string plankString)
         {
             string[] parts = plankString.Split(' ');
-            Debug.WriteLine($"Parsing plank string: {plankString}");
             int redPos = int.Parse(parts[1]);
             int greenPos = int.Parse(parts[3]);
             int yellowPos = int.Parse(parts[5]);
             int bluePos = int.Parse(parts[7]);
-            Debug.WriteLine(parts[9]);
             bool flipped = parts[9] == "True";
             return new Plank(redPos, greenPos, yellowPos, bluePos, flipped);
         }

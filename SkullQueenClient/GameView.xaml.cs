@@ -25,6 +25,7 @@ namespace SkullQueenClient
     {
         private event Action<int>? PlankSectionClicked;
         private event Action<List<Rectangle>, bool>? ButtonClicked;
+        public bool classicCards = true;
         Grid containmentGrid = new();
         public GameView()
         {
@@ -194,6 +195,11 @@ namespace SkullQueenClient
             PlankSectionClicked -= OnPlankSectionClicked;
 
             Grid.SetRow((Rectangle)sender, num);
+        }
+        private void radioButton_Checked(object sender,  RoutedEventArgs e)
+        {
+            RadioButton selected = (RadioButton)sender;
+            classicCards = selected == ClassicRadioButton;
         }
     }
 }
