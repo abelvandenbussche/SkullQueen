@@ -202,7 +202,7 @@ namespace SkullQueenClient
             try
             {
                 // Getting the server ip
-                UdpClient udpClient = new UdpClient();
+                UdpClient udpClient = new UdpClient(5001);
                 udpClient.EnableBroadcast = true;
                 udpClient.Client.ReceiveTimeout = 3000;
                 IPEndPoint serverEP = new(IPAddress.Any, 0);
