@@ -100,6 +100,7 @@ namespace SkullQueenClient
                 Foreground = card.suit == Shared.Color.Yellow ? Brushes.Black : Brushes.White,
                 FontSize = 16,
                 FontWeight = FontWeights.Bold,
+                Margin = new(2),
             };
             TextBlock flippedRankText = new()
             {
@@ -107,16 +108,18 @@ namespace SkullQueenClient
                 Foreground = card.suit == Shared.Color.Yellow ? Brushes.Black : Brushes.White,
                 FontSize = 16,
                 FontWeight = FontWeights.Bold,
+                Margin = new(2),
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
             };
             flippedRankText.RenderTransform = new RotateTransform(180);
             flippedRankText.RenderTransformOrigin = new(0.5, 0.5);
 
-            if (card is DoubleCard)
+            if (card is DoubleCard doubleCard)
             {
-                rankText.Text += "\n↑";
-                flippedRankText.Text += "\n↑";
+                string arrow = doubleCard.up ? "↑" : "↓";
+                rankText.Text += "\n" + arrow;
+                flippedRankText.Text += "\n" + arrow;
             }
 
             newGrid.Children.Add(cardRect);
@@ -166,7 +169,7 @@ namespace SkullQueenClient
                 }
                 if (opponent.plank != null)
                 {
-                    Grid plankGrid = MakePlank(opponent.plank);
+                    Grid plankGrid = MakePlank(opponent.plank, 100, 70);
                     Canvas.SetLeft(plankGrid, 70);
                     Canvas.SetTop(plankGrid, 20);
                     opponent.canvas.Children.Add(plankGrid);
@@ -188,11 +191,11 @@ namespace SkullQueenClient
         }
         public void DisplayPlank(Plank plank)
         {
-            Grid plankGrid = MakePlank(plank);
+            Grid plankGrid = MakePlank(plank, 100, 70);
             gameView.PlankCanvas.Children.Clear();
             gameView.PlankCanvas.Children.Add(plankGrid);
         }
-        private Grid MakePlank(Plank plank)
+        private Grid MakePlank(Plank plank, double height, double width)
         {
             Grid plankGrid = new();
             plankGrid.ColumnDefinitions.Add(new());
@@ -208,6 +211,8 @@ namespace SkullQueenClient
                 {
                     Fill = Brushes.Brown,
                     Stroke = Brushes.Black,
+                    Height = height / 5,
+                    Width = width,
                 };
                 TextBlock rowText = new()
                 {
@@ -215,6 +220,7 @@ namespace SkullQueenClient
                     Foreground = Brushes.White,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(5, 0, 0, 0),
                 };
                 Grid.SetRow(rowRect, i);
                 Grid.SetRow(rowText, i);
