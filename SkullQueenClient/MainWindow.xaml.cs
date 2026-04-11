@@ -86,33 +86,7 @@ namespace SkullQueenClient
             for (int i = 0; i < hand.Count; i++)
             {
                 Card card = hand[i];
-                Grid newGrid = new()
-                {
-                    Height = 96,
-                    Width = 60,
-                    Tag = card,
-                };
-                newGrid.MouseLeftButtonUp += (s, e) => services.OnCardClicked((Card)((Grid)s).Tag);
-
-                // Creating the rectangle for the card
-                Rectangle cardRect = new()
-                {
-                    Width = 60,
-                    Height = 96,
-                    Fill = ColorToBrush[card.suit],
-                    Stroke = Brushes.Black,
-                };
-
-                // Creating the text for the rank
-                TextBlock rankText = new()
-                {
-                    Text = card.rank.ToString(),
-                    Foreground = card.suit == Shared.Color.Yellow ? Brushes.Black : Brushes.White,
-                    FontSize = 16,
-                    FontWeight = FontWeights.Bold,
-                };
-                newGrid.Children.Add(cardRect);
-                newGrid.Children.Add(rankText);
+                Grid newGrid = MakeCardUI(card);
 
                 Canvas.SetLeft(newGrid, i * spaceBetween);
                 canvas.Children.Add(newGrid);
@@ -137,23 +111,7 @@ namespace SkullQueenClient
                 opponent.canvas.Children.Add(opponentBlock);
                 if (opponent.playedCard != null)
                 {
-                    Rectangle cardRect = new()
-                    {
-                        Width = 60,
-                        Height = 96,
-                        Fill = ColorToBrush[opponent.playedCard.suit],
-                        Stroke = Brushes.Black,
-                    };
-                    TextBlock rankText = new()
-                    {
-                        Text = opponent.playedCard.rank.ToString(),
-                        Foreground = Brushes.White,
-                        FontSize = 16,
-                    };
-                    Grid cardGrid = new();
-                    cardGrid.Children.Add(cardRect);
-                    cardGrid.Children.Add(rankText);
-                    Canvas.SetTop(cardGrid, 20);
+                    Grid cardGrid = MakeCardUI(opponent.playedCard);
                     opponent.canvas.Children.Add(cardGrid);
                 }
                 if (opponent.plank != null)
@@ -171,28 +129,7 @@ namespace SkullQueenClient
         {
             gameView.PlayedCard.Children.Clear();
 
-            Grid newGrid = new()
-            {
-                Height = 96,
-                Width = 60,
-            };
-
-            Rectangle cardRect = new()
-            {
-                Width = 60,
-                Height = 96,
-                Fill = ColorToBrush[card.suit],
-                Stroke = Brushes.Black,
-            };
-            TextBlock rankText = new()
-            {
-                Text = card.rank.ToString(),
-                Foreground = Brushes.White,
-                FontSize = 16,
-            };
-
-            newGrid.Children.Add(cardRect);
-            newGrid.Children.Add(rankText);
+            Grid newGrid = MakeCardUI(card);
             gameView.PlayedCard.Children.Add(newGrid);
 
             // Displaying the hand without this card
@@ -262,6 +199,50 @@ namespace SkullQueenClient
                 plankGrid.Children.Add(pieceRect);
             }
             return plankGrid;
+        }
+        public Grid MakeCardUI(Card card)
+        {
+            Grid newGrid = new()
+            {
+                Height = 96,
+                Width = 60,
+                Tag = card,
+            };
+            newGrid.MouseLeftButtonUp += (s, e) => services.OnCardClicked((Card)((Grid)s).Tag);
+
+            // Creating the rectangle for the card
+            Rectangle cardRect = new()
+            {
+                Width = 60,
+                Height = 96,
+                Fill = ColorToBrush[card.suit],
+                Stroke = Brushes.Black,
+            };
+
+            // Creating the text for the rank
+            TextBlock rankText = new()
+            {
+                Text = card.rank.ToString(),
+                Foreground = card.suit == Shared.Color.Yellow ? Brushes.Black : Brushes.White,
+                FontSize = 16,
+                FontWeight = FontWeights.Bold,
+            };
+            TextBlock flippedRankText = new()
+            {
+                Text = card.rank.ToString(),
+                Foreground = card.suit == Shared.Color.Yellow ? Brushes.Black : Brushes.White,
+                FontSize = 16,
+                FontWeight = FontWeights.Bold,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+            };
+            flippedRankText.RenderTransform = new RotateTransform(180);
+            flippedRankText.RenderTransformOrigin = new(0.5, 0.5);
+
+            newGrid.Children.Add(cardRect);
+            newGrid.Children.Add(flippedRankText);
+            newGrid.Children.Add(rankText);
+            return newGrid;
         }
     }
 }
