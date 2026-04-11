@@ -239,6 +239,12 @@ namespace SkullQueenClient
             flippedRankText.RenderTransform = new RotateTransform(180);
             flippedRankText.RenderTransformOrigin = new(0.5, 0.5);
 
+            if (card is DoubleCard)
+            {
+                rankText.Text += "\n↑";
+                flippedRankText.Text += "\n↑";
+            }
+
             newGrid.Children.Add(cardRect);
             newGrid.Children.Add(flippedRankText);
             newGrid.Children.Add(rankText);

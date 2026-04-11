@@ -92,9 +92,7 @@ namespace SkullQueenClient
                         break;
 
                     case Command.DealCard:
-                        Shared.Color suit = (Shared.Color)Enum.Parse(typeof(Shared.Color), args[0]);
-                        int rank = int.Parse(args[1]);
-                        Card newCard = new(suit, rank);
+                        Card newCard = Card.FromString(string.Join(' ', args));
                         game.AddCardToHand(newCard);
                         HandUpdated?.Invoke(game.Hand);
                         break;
