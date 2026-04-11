@@ -126,9 +126,7 @@ namespace SkullQueenClient
                         break;
 
                     case Command.DisplayOpponentCard:
-                        Shared.Color cardSuit = (Shared.Color)Enum.Parse(typeof(Shared.Color), args[1]);
-                        int cardRank = int.Parse(args[2]);
-                        Card playedCard = new(cardSuit, cardRank);
+                        Card playedCard = Card.FromString(string.Join(' ', args.Skip(1)));
                         if (opp != null)
                         {
                             opp.playedCard = playedCard;
