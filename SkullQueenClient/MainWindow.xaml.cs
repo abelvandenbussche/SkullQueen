@@ -127,16 +127,27 @@ namespace SkullQueenClient
             flippedRankText.RenderTransform = new RotateTransform(180);
             flippedRankText.RenderTransformOrigin = new(0.5, 0.5);
 
+            TextBlock centerText = new()
+            {
+                Text = card.rank.ToString(),
+                Foreground = card.suit == Shared.Color.Yellow ? Brushes.Black : Brushes.White,
+                FontWeight = FontWeights.Bold,
+                FontSize = 30,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Center,
+                TextAlignment = TextAlignment.Center,
+            };
+
             if (card is DoubleCard doubleCard)
             {
                 string arrow = doubleCard.up ? "↑" : "↓";
                 rankText.Text += "\n" + arrow;
                 flippedRankText.Text += "\n" + arrow;
             }
-
             newGrid.Children.Add(cardRect);
             newGrid.Children.Add(flippedRankText);
             newGrid.Children.Add(rankText);
+            newGrid.Children.Add(centerText);
             return newGrid;
         }
         private void DisplayCards(List<Card> hand, Canvas canvas)
