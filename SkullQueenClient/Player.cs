@@ -8,7 +8,7 @@ namespace SkullQueenClient
     public class Player
     {
         public string name;
-        private TcpClient connection;
+        private readonly TcpClient connection;
 
         private StreamWriter writer;
         private StreamReader reader;
@@ -23,11 +23,6 @@ namespace SkullQueenClient
         {
             writer.WriteLine(cmd.ToString() + " " + message);
         }
-        private string GetMessage()
-        {
-            return reader.ReadLine() ?? "";
-        }
-
         public async Task ListenForMessages(Action<string> onMessageReceived)
         {
             try
