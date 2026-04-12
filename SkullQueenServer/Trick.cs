@@ -62,7 +62,12 @@ namespace SkullQueenServer
         public List<Player> DeterminePlayerOrder()
         {
             List<Player> order = new List<Player>();
+            // Checking if there is a pirate king present
             int startIndex = players.IndexOf(startingPlayer);
+            if (players[players.Count - 1] is PirateKing)
+            {
+                startIndex = players.Count - 1;
+            }
             for (int i = 0; i < players.Count; i++)
             {
                 // Modulo to wrap around the list of players

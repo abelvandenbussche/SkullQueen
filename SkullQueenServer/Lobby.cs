@@ -19,6 +19,11 @@ namespace SkullQueenServer
         }
         public Game StartGame()
         {
+            // Adding a pirate king if there are only 2 players
+            if (players.Count <= 2)
+            {
+                players.Add(new PirateKing());
+            }
             // Creating a new game instance with the players in the lobby
             Game game = new Game(players);
             return game;

@@ -12,19 +12,22 @@ namespace SkullQueenServer
     public class Player
     {
         public Plank plank;
-        private List<Card> hand;
+        protected List<Card> hand;
         public int score;
         public string name;
 
-        TcpClient connection;
-        StreamWriter writer;
-        StreamReader reader;
+        readonly TcpClient? connection;
+        StreamWriter? writer = null;
+        StreamReader? reader = null;
 
-        public Player(string name, TcpClient connection)
+        public Player(string name, TcpClient? connection)
         {
             this.connection = connection;
-            this.writer = new StreamWriter(connection.GetStream(), Encoding.UTF8) { AutoFlush = true };
-            this.reader = new StreamReader(connection.GetStream(), Encoding.UTF8);
+            if (connection != null)
+            {
+                this.writer = new StreamWriter(connection.GetStream(), Encoding.UTF8) { AutoFlush = true };
+                this.reader = new StreamReader(connection.GetStream(), Encoding.UTF8);
+            }
 
             this.name = name;
 
@@ -33,17 +36,28 @@ namespace SkullQueenServer
             this.hand = new List<Card>();
         }
 
-        public string WaitOnMessage()
+        public virtual string WaitOnMessage()
         {
-            return reader.ReadLine();
+            if (reader != null)
+            {
+                return reader.ReadLine();
+            }
+            return "";
         }
-        public async Task<string> GetMessageAsync()
+        public virtual async Task<string> GetMessageAsync()
         {
-            return await reader.ReadLineAsync();
+            if (reader != null)
+            {
+                return await reader.ReadLineAsync();
+            }
+            return "";
         }
-        public void SendMessage(Command cmd, string? message = null)
+        public virtual void SendMessage(Command cmd, string? message = null)
         {
-            writer.WriteLine(cmd.ToString() + " " + message);
+            if ( writer != null)
+            {
+                writer.WriteLine(cmd.ToString() + " " + message);
+            }
         }
         public void ReceiveCard(Card card)
         {
