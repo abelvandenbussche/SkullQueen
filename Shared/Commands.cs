@@ -15,6 +15,7 @@
         ScoreUpdate,
         Ready,
         DisplayMiddleCards,
-        EndScoring
+        EndScoring,
+        AddBot
     }
 }

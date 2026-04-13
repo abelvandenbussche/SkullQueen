@@ -13,5 +13,6 @@
         <TextBox x:Name="UsernameTextBox" HorizontalAlignment="Left" Margin="201,115,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" AcceptsReturn="False"/>
         <Button Content="Find game" HorizontalAlignment="Left" Margin="400,225,0,0" VerticalAlignment="Top" FontSize="50" Click="Button_Click"/>
         <Button x:Name="ReadyUpButton" Content="READY?" HorizontalAlignment="Left" Margin="583,350,0,0" VerticalAlignment="Top" Height="48" Width="166" FontSize="20" Visibility="Hidden" Click="ReadyUpButton_Click"/>
+        <Button x:Name="BotButton" Content="Add Bot" HorizontalAlignment="Left" Margin="57,273,0,0" VerticalAlignment="Top" Height="50" Width="90" FontSize="20" Visibility="Hidden" Click="BotButton_Click"/>
     </Grid>
 </UserControl>

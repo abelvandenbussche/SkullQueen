@@ -30,6 +30,7 @@ namespace SkullQueenServer
             async Task GetAndSetPlank(Player player)
             {
                 string message = await player.GetMessageAsync();
+                Console.WriteLine(message);
                 string[] args = message.Split(' ');
                 Plank plank = Plank.FromString(String.Join(' ', args.Skip(1).ToArray()));
                 player.plank = plank;

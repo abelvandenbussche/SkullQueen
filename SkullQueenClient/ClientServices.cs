@@ -29,7 +29,9 @@ namespace SkullQueenClient
 
         // Lobby events
         public event Action<string>? PlayerAddedToLobby;
-        public event Action? ReadyUpped;
+        private event Action? ReadyUpped;
+        private event Action? BotAdded;
+
 
         public ClientServices(ClientGame game)
         {
@@ -48,6 +50,7 @@ namespace SkullQueenClient
 
 
             ReadyUpped += () => { player.SendMessage(Command.Ready); };
+            BotAdded += () => { player.SendMessage(Command.AddBot); };
 
             // Start listening for messages from the server
             Task listener = player.ListenForMessages(async message =>
@@ -283,6 +286,10 @@ namespace SkullQueenClient
         public void ReadyUp()
         {
             ReadyUpped?.Invoke();
+        }
+        public void AddBot()
+        {
+            BotAdded?.Invoke();
         }
     }
 }

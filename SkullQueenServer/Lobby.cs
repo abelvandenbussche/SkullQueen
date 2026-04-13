@@ -93,6 +93,13 @@ namespace SkullQueenServer
                     }
                     return;
                 }
+                else if (message == Command.AddBot.ToString())
+                {
+                    // Adding a bot
+                    RoboPlayer bot = new(new());
+                    Utility.BroadCast(players, Command.JoinLobby, bot.name);
+                    players.Add(bot);
+                }
             }
         }
         private bool Ready()
