@@ -22,5 +22,17 @@ namespace SkullQueenServer
                 Utility.BroadCast(players, Command.DisplayOpponentPlank, player.name + " " + player.plank.ToString(), player);
             }
         }
+        public static void BroadCastMiddleCards(List<Player> players, List<Card> centerCards)
+        {
+            // Sending middle cards to client
+            string message = "";
+            foreach (Card card in centerCards)
+            {
+                message += card.ToString() + " ";
+            }
+
+            Utility.BroadCast(players, Command.DisplayMiddleCards, message);
+
+        }
     }
 }

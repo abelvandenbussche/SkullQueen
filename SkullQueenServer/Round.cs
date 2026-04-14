@@ -37,6 +37,7 @@ namespace SkullQueenServer
             await Task.WhenAll(players.Select(player => GetAndSetPlank(player)));
             Utility.DisplayPlanks(players);
 
+            Utility.BroadCastMiddleCards(players, centerCards);
 
             // Starting the game loop
             GameLoop();
@@ -62,17 +63,7 @@ namespace SkullQueenServer
                 startPlayer = currentTrick.StartTrick(startPlayer);
                 centerCards = currentTrick.centerCards;
 
-                // Sending middle cards to client
-                string message = "";
-                foreach (Card card in centerCards)
-                {
-                    message += card.ToString() + " ";
-                }
-                Debug.WriteLine("Message: " + message);
-
-                Utility.BroadCast(players, Command.DisplayMiddleCards, message);
-
-
+                Utility.BroadCastMiddleCards(players, centerCards);
                 Utility.BroadCast(players, Command.ClearPlayedCards);
             }
         }
@@ -86,6 +77,10 @@ namespace SkullQueenServer
                     player.ReceiveCard(card);
                 }
             }
+            Console.WriteLine(deck.Count);
+
+            // Adding any remaining cards to the middle
+            centerCards.AddRange(deck);
         }
         public Queue<Card> CreateAndShuffleDeck()
         {
