@@ -1,4 +1,5 @@
 ﻿using Shared;
+using System.Diagnostics;
 
 namespace SkullQueenServer
 {
@@ -28,6 +29,10 @@ namespace SkullQueenServer
             };
             foreach (Card card in hand)
             {
+                if (card.suit == Color.Black)
+                {
+                    continue;
+                }
                 piecePositions[card.suit] += card.rank > 6.5 ? 1 : -1;
             }
             bool flipped = piecePositions.Values.Sum() > 0;
@@ -51,6 +56,10 @@ namespace SkullQueenServer
         private Card PlayCard(Color? leadSuit)
         {
             List<Card> possible = hand.FindAll(card => card.suit == leadSuit || card.suit == Color.Black || leadSuit == null);
+            if (possible.Count == 0)
+            {
+                possible = hand;
+            }
 
             switch (difficulty)
             {
