@@ -190,7 +190,7 @@ namespace SkullQueenClient
         {
             gameView.PlayersCanvas.Children.Clear();
 
-            double spaceBetween = gameView.PlayersCanvas.ActualWidth / (opponents.Count);
+            double spaceBetween = gameView.PlayersCanvas.ActualWidth / (opponents.Count + 1);
 
             for (int i = 0; i < opponents.Count; i++)
             {

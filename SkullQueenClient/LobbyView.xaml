@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <ListBox x:Name="LobbyList" d:ItemsSource="{d:SampleData ItemCount=8}" Margin="26,72,622,196"/>
+        <ListBox x:Name="LobbyList" d:ItemsSource="{d:SampleData ItemCount=8}" Margin="26,72,622,130"/>
         <TextBlock HorizontalAlignment="Left" Margin="61,27,0,0" TextWrapping="Wrap" Text="Lobby" VerticalAlignment="Top" FontSize="30"/>
         <TextBlock x:Name="UsernameHeader" HorizontalAlignment="Left" Margin="201,79,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" FontSize="20"/>
         <TextBox x:Name="UsernameTextBox" HorizontalAlignment="Left" Margin="201,115,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" AcceptsReturn="False"/>

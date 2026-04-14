@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using Shared;
 
 namespace SkullQueenServer
@@ -81,6 +82,15 @@ namespace SkullQueenServer
 
             // Adding any remaining cards to the middle
             centerCards.AddRange(deck);
+
+            if (centerCards.Count == 2)
+            {
+                if (centerCards[0].suit == centerCards[1].suit)
+                {
+                    centerCards = new();
+                }
+                centerCards.RemoveAll(x => x.suit == Color.Black);
+            }
         }
         public Queue<Card> CreateAndShuffleDeck()
         {
