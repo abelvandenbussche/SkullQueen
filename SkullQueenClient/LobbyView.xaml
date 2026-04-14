@@ -7,12 +7,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <ListBox x:Name="LobbyList" d:ItemsSource="{d:SampleData ItemCount=8}" Margin="26,72,622,130"/>
+        <ListBox x:Name="LobbyList" d:ItemsSource="{d:SampleData ItemCount=8}" Margin="26,72,622,170"/>
         <TextBlock HorizontalAlignment="Left" Margin="61,27,0,0" TextWrapping="Wrap" Text="Lobby" VerticalAlignment="Top" FontSize="30"/>
         <TextBlock x:Name="UsernameHeader" HorizontalAlignment="Left" Margin="201,79,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" FontSize="20"/>
         <TextBox x:Name="UsernameTextBox" HorizontalAlignment="Left" Margin="201,115,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" AcceptsReturn="False"/>
         <Button Content="Find game" HorizontalAlignment="Left" Margin="400,225,0,0" VerticalAlignment="Top" FontSize="50" Click="Button_Click"/>
         <Button x:Name="ReadyUpButton" Content="READY?" HorizontalAlignment="Left" Margin="583,350,0,0" VerticalAlignment="Top" Height="48" Width="166" FontSize="20" Visibility="Hidden" Click="ReadyUpButton_Click"/>
-        <Button x:Name="BotButton" Content="Add Bot" HorizontalAlignment="Left" Margin="57,273,0,0" VerticalAlignment="Top" Height="50" Width="90" FontSize="20" Visibility="Hidden" Click="BotButton_Click"/>
+        <Button x:Name="BotButton" Content="Add Bot" HorizontalAlignment="Left" Margin="26,333,0,0" VerticalAlignment="Top" Height="50" Width="90" FontSize="20" Visibility="Hidden" Click="BotButton_Click"/>
+        <Button x:Name="BotRemovalButton" Content="Remove Bot" HorizontalAlignment="Left" Margin="127,333,0,0" VerticalAlignment="Top" Height="50" Width="118" FontSize="20" Visibility="Hidden" Click="BotRemovalButton_Click"/>
     </Grid>
 </UserControl>

@@ -48,6 +48,7 @@ namespace SkullQueenClient
 
             // Lobby events
             services.PlayerAddedToLobby += playerName => Dispatcher.Invoke(() => lobbyView.AddPlayerToLobby(playerName));
+            services.PlayerLeftLobby += playerName => Dispatcher.Invoke(() => lobbyView.RemovePlayerFromLobby(playerName));
             services.GameStarted += () =>
             {
                 Dispatcher.Invoke(() => MainContent.Content = gameView);
@@ -84,6 +85,7 @@ namespace SkullQueenClient
             lobbyView.StartGameClicked += services.StartGame;
             lobbyView.ReadyUpClicked += services.ReadyUp;
             lobbyView.AddBot += services.AddBot;
+            lobbyView.RemoveBot += services.RemoveBot;
             gameView.HandUpdated += () => { DisplayCards(game.Hand, gameView.HandCanvas); };
 
             MainContent.Content = lobbyView;

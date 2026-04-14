@@ -100,6 +100,19 @@ namespace SkullQueenServer
                     Utility.BroadCast(players, Command.JoinLobby, bot.name);
                     players.Add(bot);
                 }
+                else if (message == Command.RemoveBot.ToString())
+                {
+                    // Removing a bot
+                    for (int i = 0; i < players.Count; i++)
+                    {
+                        if (players[i] is RoboPlayer)
+                        {
+                            Utility.BroadCast(players, Command.RemoveBot, players[i].name);
+                            players.RemoveAt(i);
+                            break;
+                        }
+                    }
+                }
             }
         }
         private bool Ready()

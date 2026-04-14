@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace SkullQueenClient
 {
@@ -24,6 +25,7 @@ namespace SkullQueenClient
         public event EventHandler<string>? StartGameClicked;
         public event Action? ReadyUpClicked;
         public event Action? AddBot;
+        public event Action? RemoveBot;
         public LobbyView()
         {
             InitializeComponent();
@@ -31,6 +33,17 @@ namespace SkullQueenClient
         public void AddPlayerToLobby(string playerName)
         {
             LobbyList.Items.Add(playerName);
+        }
+        public void RemovePlayerFromLobby(string playerName)
+        {
+            for (int i = 0;  i < LobbyList.Items.Count; i++)
+            {
+                if (LobbyList.Items[i].ToString() == playerName)
+                {
+                    LobbyList.Items.RemoveAt(i);
+                    break;
+                }
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -58,6 +71,7 @@ namespace SkullQueenClient
 
             ReadyUpButton.Visibility = Visibility.Visible;
             BotButton.Visibility = Visibility.Visible;
+            BotRemovalButton.Visibility = Visibility.Visible;
         }
         private void ReadyUpButton_Click(object sender, RoutedEventArgs e)
         {
@@ -68,6 +82,10 @@ namespace SkullQueenClient
         private void BotButton_Click(object sender, RoutedEventArgs e)
         {
             AddBot?.Invoke();
+        }
+        private void BotRemovalButton_Click(object sender, RoutedEventArgs e)
+        {
+            RemoveBot?.Invoke();
         }
     }
 }

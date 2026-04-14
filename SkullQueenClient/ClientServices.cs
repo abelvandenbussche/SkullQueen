@@ -29,8 +29,10 @@ namespace SkullQueenClient
 
         // Lobby events
         public event Action<string>? PlayerAddedToLobby;
+        public event Action<string>? PlayerLeftLobby;
         private event Action? ReadyUpped;
         private event Action? BotAdded;
+        private event Action? BotRemoved;
 
 
         public ClientServices(ClientGame game)
@@ -51,6 +53,7 @@ namespace SkullQueenClient
 
             ReadyUpped += () => { player.SendMessage(Command.Ready); };
             BotAdded += () => { player.SendMessage(Command.AddBot); };
+            BotRemoved += () => { player.SendMessage(Command.RemoveBot); };
 
             // Start listening for messages from the server
             Task listener = player.ListenForMessages(async message =>
@@ -154,6 +157,10 @@ namespace SkullQueenClient
 
                     case Command.JoinLobby:
                         PlayerAddedToLobby?.Invoke(args[0]);
+                        break;
+
+                    case Command.RemoveBot:
+                        PlayerLeftLobby?.Invoke(args[0]);
                         break;
 
                     case Command.MakePlank:
@@ -290,6 +297,10 @@ namespace SkullQueenClient
         public void AddBot()
         {
             BotAdded?.Invoke();
+        }
+        public void RemoveBot()
+        {
+            BotRemoved?.Invoke();
         }
     }
 }
