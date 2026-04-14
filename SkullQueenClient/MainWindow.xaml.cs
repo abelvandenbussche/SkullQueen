@@ -84,11 +84,16 @@ namespace SkullQueenClient
             lobbyView.StartGameClicked += services.StartGame;
             lobbyView.ReadyUpClicked += services.ReadyUp;
             lobbyView.AddBot += services.AddBot;
+            gameView.HandUpdated += () => { DisplayCards(game.Hand, gameView.HandCanvas); };
 
             MainContent.Content = lobbyView;
         }
         public Grid MakeCardUI(Card card)
         {
+            if (!gameView.classicCards)
+            {
+                return MakeCardImageUI(card);
+            }
             Grid newGrid = new()
             {
                 Height = 96,
@@ -150,6 +155,18 @@ namespace SkullQueenClient
             newGrid.Children.Add(rankText);
             newGrid.Children.Add(centerText);
             return newGrid;
+        }
+        private Grid MakeCardImageUI(Card card)
+        {
+            Grid grid = new();
+            Image cardImage = new();
+            cardImage.Width = 60;
+            cardImage.Height = 96;
+            cardImage.Source = new BitmapImage(new Uri($"pack://application:,,,/CardImages/{card.suit.ToString()} {card.rank}.png"));
+            grid.Children.Add(cardImage);
+            grid.Tag = card;
+            grid.MouseLeftButtonUp += (s, e) => services.OnCardClicked((Card)((Grid)s).Tag);
+            return grid;
         }
         private void DisplayCards(List<Card> hand, Canvas canvas)
         {

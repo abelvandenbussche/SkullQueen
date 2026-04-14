@@ -261,7 +261,7 @@ namespace SkullQueenClient
         private async Task PlayCard(Player player, Shared.Color? suit)
         {
             TaskCompletionSource<Card> tcs = new();
-            void OnCardclicked(Card card)
+            void OnCardClickedButBetter(Card card)
             {
                 // Check if the card is a valid play
                 if (card.suit == suit || suit == null || card.suit == Shared.Color.Black || !game.HasSuit(suit))
@@ -270,11 +270,11 @@ namespace SkullQueenClient
                 }
             }
 
-            CardClicked += OnCardclicked;
+            CardClicked += OnCardClickedButBetter;
             Card cardToPlay = await tcs.Task;
             // Displaying the card on the player's area
             PlayedCardUpdated?.Invoke(cardToPlay);
-            CardClicked -= OnCardclicked;
+            CardClicked -= OnCardClickedButBetter;
 
             // Send the card to the server
             player.SendMessage(Command.PlayCard, cardToPlay.ToString());
