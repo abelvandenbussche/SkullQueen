@@ -101,6 +101,9 @@ namespace SkullQueenServer
                         pendingResponse.SetResult(Command.PlayCard.ToString() + " " + PlayCard(leadSuit).ToString());
                     }
                     break;
+                case Command.DisplayOpponentCard:
+                    Thread.Sleep(500);
+                    break;
             }
         }
         public override string WaitOnMessage()

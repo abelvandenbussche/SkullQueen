@@ -189,6 +189,7 @@ namespace SkullQueenClient
                 if (opponent.playedCard != null)
                 {
                     Grid cardGrid = MakeCardUI(opponent.playedCard);
+                    Canvas.SetTop(cardGrid, 20);
                     opponent.canvas.Children.Add(cardGrid);
                 }
                 if (opponent.plank != null)
