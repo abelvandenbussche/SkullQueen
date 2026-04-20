@@ -230,13 +230,13 @@ namespace SkullQueenClient
         {
             PlankMade?.Invoke(plank);
         }
-        public Player? ConnectToServer(string playerName)
+        public static Player? ConnectToServer(string playerName)
         {
 
             try
             {
                 // Getting the server ip
-                UdpClient udpClient = new UdpClient();
+                UdpClient udpClient = new();
                 udpClient.EnableBroadcast = true;
                 udpClient.Client.ReceiveTimeout = 3000;
                 IPEndPoint serverEP = new(IPAddress.Any, 0);
@@ -262,7 +262,12 @@ namespace SkullQueenClient
             catch (Exception ex)
             {
                 MessageBox.Show("Error connecting to server: " + ex.Message);
-                return null;
+                // Trying to connect to the server on local host (for testing purposes without network access)
+                TcpClient client = new TcpClient("localhost", 5050);
+                Player player = new(playerName, client);
+                player.SendMessage(Command.JoinLobby, playerName);
+                Debug.WriteLine(client != null);
+                return player;
             }
         }
         private async Task PlayCard(Player player, Shared.Color? suit)
