@@ -38,11 +38,8 @@ namespace SkullQueenServer
         }
         private static async Task UdpListener()
         {
-            Console.WriteLine("1");
             UdpClient server = new(5000);
-            Console.WriteLine("2");
             IPEndPoint remoteEP = new IPEndPoint(IPAddress.Any, 0);
-            Console.WriteLine("3");
 
             while (true)
             {

@@ -30,8 +30,8 @@ namespace SkullQueenServer
             }
 
             this.name = name;
-
-            this.plank = new Plank(0, 0, 0, 0, false); // This will need to be set by the user later, but for now we can just initialize it with dummy values
+            // Initializes a dummy value for the plank that will later be overwriten by the players choice
+            this.plank = new Plank(0, 0, 0, 0, false);
             this.score = 0;
             this.hand = new List<Card>();
         }
