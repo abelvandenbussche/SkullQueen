@@ -15,7 +15,14 @@ namespace SkullQueenServer
 
         public static string GenerateName(Random rand)
         {
-            return "robot_captain_v" + rand.Next(10000);
+            List<string> prefixes = new List<string>() { "Cap", "Blk", "OneEye", "Red", "Iron", "Salt", "Mad", "Blood", "Storm", "Grim" };
+            List<string> cores = new List<string>() { "Jack", "Morg", "Flint", "Rack", "Silv", "Vane", "Drak", "Bon", "Kidd", "Teach" };
+            List<string> appendixes = new List<string>() { "Ruth", "Curse", "Seven", "Dread", "Kraken", "Ghost", "Storm", "Tide", "Wolf", "Hook" };
+
+            string prefix = prefixes[rand.Next(prefixes.Count)];
+            string core = cores[rand.Next(cores.Count)];
+            string appendix = appendixes[rand.Next(appendixes.Count)];
+            return prefix + core + appendix;
         }
 
         private Plank SetupPlank()
