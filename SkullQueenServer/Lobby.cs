@@ -95,10 +95,14 @@ namespace SkullQueenServer
                 }
                 else if (message == Command.AddBot.ToString())
                 {
-                    // Adding a bot
-                    RoboPlayer bot = new(new());
-                    Utility.BroadCast(players, Command.JoinLobby, bot.name);
-                    players.Add(bot);
+                    // Checking the player count 
+                    if (players.Count < 8)
+                    {
+                        // Adding a bot
+                        RoboPlayer bot = new(new());
+                        Utility.BroadCast(players, Command.JoinLobby, bot.name);
+                        players.Add(bot);
+                    }
                 }
                 else if (message == Command.RemoveBot.ToString())
                 {
