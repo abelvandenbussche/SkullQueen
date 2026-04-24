@@ -7,14 +7,20 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid x:Name="MainGrid">
-        <Canvas x:Name="HandCanvas" Margin="20,320,20,00" Height="100"/>
+        <Canvas x:Name="HandCanvas" Margin="20,0,65,0" Height="100" VerticalAlignment="Bottom"/>
         <Canvas x:Name="PlayersCanvas" Margin="0,0,0,300"/>
-        <Canvas x:Name="PlayingFieldMiddle" Margin="300,155,130,195"/>
-        <Canvas x:Name="PlayedCard" Margin="163,177,577,177" Height="96" Width="60"/>
-        <TextBlock x:Name="StatusText" HorizontalAlignment="Left" Margin="28,150,0,0" TextWrapping="Wrap" Text="No Activity" VerticalAlignment="Top"/>
-        <Canvas x:Name="PlankCanvas"  Height="100" Width="70" RenderTransformOrigin="0.505,0.294" Margin="28,177,722,173"/>
-        <TextBlock x:Name="ScoreText" HorizontalAlignment="Left" Margin="714,175,0,0" TextWrapping="Wrap" Text="Score: 0" VerticalAlignment="Top"/>
-        <RadioButton x:Name="RealRadioButton" Content="Real" HorizontalAlignment="Left" Margin="708,205,0,0" VerticalAlignment="Top" GroupName="HandStyle" IsChecked="True" Checked="radioButton_Checked"/>
-        <RadioButton x:Name="ClassicRadioButton" Content="Classic" HorizontalAlignment="Left" Margin="708,225,0,0" VerticalAlignment="Top" GroupName="HandStyle" Checked="radioButton_Checked"/>
+        <Canvas x:Name="PlayingFieldMiddle" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" Height="100"/>
+        <Canvas x:Name="PlayedCard" Margin="135,0,605,149" Height="96" Width="60" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+        <Canvas x:Name="PlankCanvas"  Height="100" Width="70" RenderTransformOrigin="0.505,0.294" Margin="28,0,702,145" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+        <TextBlock x:Name="StatusText" HorizontalAlignment="Left" Margin="30,0,0,260" TextWrapping="Wrap" Text="No Activity" VerticalAlignment="Bottom"/>
+        <TextBlock x:Name="ScoreText" HorizontalAlignment="Right" Margin="0,180,20,0" TextWrapping="Wrap" Text="Score: 0" VerticalAlignment="Top"/>
+        <Grid HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0, 0, 5, 5">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <RadioButton x:Name="RealRadioButton" Grid.Row="0" Content="Real" HorizontalAlignment="Left" VerticalAlignment="Top" GroupName="HandStyle" IsChecked="True" Checked="radioButton_Checked"/>
+            <RadioButton x:Name="ClassicRadioButton" Grid.Row="1" Content="Classic" HorizontalAlignment="Left" VerticalAlignment="Top" GroupName="HandStyle" Checked="radioButton_Checked"/>
+        </Grid>
     </Grid>
 </UserControl>
