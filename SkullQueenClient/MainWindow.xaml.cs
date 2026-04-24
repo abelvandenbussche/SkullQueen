@@ -180,13 +180,14 @@ namespace SkullQueenClient
             canvas.Children.Clear();
             double spaceBetween = canvas.ActualWidth / (hand.Count + 1);
             double middle = canvas.ActualWidth / 2;
+            // This avoids the cards being to spaced out
             spaceBetween = Math.Min(spaceBetween, 60);
             for (int i = 0; i < hand.Count; i++)
             {
                 Card card = hand[i];
                 Grid newGrid = MakeCardUI(card);
-
-                Canvas.SetLeft(newGrid, i * spaceBetween + middle);
+                // This places the cards in the middle of the canvas
+                Canvas.SetLeft(newGrid, (i - hand.Count / 2) * spaceBetween + middle);
                 canvas.Children.Add(newGrid);
             }
         }
