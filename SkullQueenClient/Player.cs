@@ -38,7 +38,7 @@ namespace SkullQueenClient
                     {
                         onMessageReceived(message);
                     }
-                    catch (Exception ex)
+                    catch
                     {
                     }
                 }

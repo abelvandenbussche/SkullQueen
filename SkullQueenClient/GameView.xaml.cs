@@ -27,10 +27,18 @@ namespace SkullQueenClient
         private event Action<List<Rectangle>, bool>? ButtonClicked;
         public event Action? HandUpdated;
         public bool classicCards = false;
-        Grid containmentGrid = new();
+        Grid containmentGrid = new()
+        {
+            Margin = new(0, 20, 0, 100),
+        };
+        
         public GameView()
         {
             InitializeComponent();
+            containmentGrid.RowDefinitions.Add(new() { Height = new(1, GridUnitType.Auto) });
+            containmentGrid.RowDefinitions.Add(new() { Height = new(1, GridUnitType.Auto) });
+            containmentGrid.RowDefinitions.Add(new() { Height = new(1, GridUnitType.Auto) });
+            containmentGrid.RowDefinitions.Add(new() { Height = new(1, GridUnitType.Auto) });
         }
         private void MakePlank(Dictionary<Shared.Color, Brush> ColorToBrush)
         {
@@ -41,8 +49,9 @@ namespace SkullQueenClient
             // Making the board in UI
             Grid plankGrid = new()
             {
-                Height = 200,
-                Width = 100
+                Height =  160,
+                Width = 80,
+                Margin = new(10)
             };
             plankGrid.ColumnDefinitions.Add(new());
 
@@ -84,8 +93,8 @@ namespace SkullQueenClient
                 int pos = 0;
                 Rectangle pieceRect = new()
                 {
-                    Width = 15,
-                    Height = 15,
+                    Width = 12,
+                    Height = 12,
                     Margin = new Thickness(2, 0, 2, 0),
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
@@ -116,8 +125,6 @@ namespace SkullQueenClient
                 Content = "Flip board",
                 Width = 60,
                 Height = 30,
-                VerticalAlignment = VerticalAlignment.Top,
-                Margin = new(40),
             };
             flipButton.Click += (s, e) =>
             {
@@ -133,20 +140,21 @@ namespace SkullQueenClient
                 Text = "Setup you board",
                 Height = 50,
                 Width = 200,
-                VerticalAlignment = VerticalAlignment.Top,
                 TextAlignment = TextAlignment.Center,
                 FontSize = 20,
-                Margin = new(10),
             };
             Button finnishButton = new()
             {
                 Height = 30,
                 Width = 60,
                 Content = "Ready",
-                VerticalAlignment= VerticalAlignment.Top,
-                Margin = new(70),
             };
             finnishButton.Click += (s, e) => ButtonClicked?.Invoke(pieces, flipped);
+
+            Grid.SetRow(title, 0);
+            Grid.SetRow(flipButton, 1);
+            Grid.SetRow(finnishButton, 2);
+            Grid.SetRow(plankGrid, 3);
 
             containmentGrid.Children.Add(finnishButton);
             containmentGrid.Children.Add(title);
