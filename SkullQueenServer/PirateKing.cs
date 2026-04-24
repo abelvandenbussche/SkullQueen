@@ -4,8 +4,11 @@ namespace SkullQueenServer
 {
     class PirateKing : Player
     {
-        private string nextMessage = "";
-        public PirateKing() : base("PirateKing", null) { }
+        private TaskCompletionSource<string> messageTcs;
+        public PirateKing() : base("PirateKing", null)
+        {
+                messageTcs = new TaskCompletionSource<string>();
+        }
 
         public override void SendMessage(Command cmd, string? message = null)
         {
@@ -13,20 +16,25 @@ namespace SkullQueenServer
             switch (cmd)
             {
                 case Command.MakePlank:
-                    nextMessage = Command.MakePlank.ToString() + " " + new Plank(-1, -1, -1, -1, false).ToString();
+                    messageTcs.SetResult(Command.MakePlank.ToString() + " " + new Plank(-1, -1, -1, -1, false).ToString());
                     break;
                 case Command.PlayCard:
-                    nextMessage = Command.PlayCard.ToString() + " " + hand[0].ToString();
+                    messageTcs.SetResult(Command.PlayCard.ToString() + " " + hand[0].ToString());
                     break;
             }
         }
         public override string WaitOnMessage()
         {
-            return nextMessage;
+            messageTcs.Task.Wait();
+            string result = messageTcs.Task.Result;
+            messageTcs = new TaskCompletionSource<string>();
+            return result;
         }
         public override Task<string> GetMessageAsync()
         {
-            return Task.FromResult(nextMessage);
+            Task<string> task = messageTcs.Task;
+            messageTcs = new TaskCompletionSource<string>();
+            return task;
         }
     }
 }
