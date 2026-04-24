@@ -22,7 +22,7 @@ namespace SkullQueenClient
     /// </summary>
     public partial class LobbyView : UserControl
     {
-        public event EventHandler<string>? StartGameClicked;
+        public event Action<string>? StartGameClicked;
         public event Action? ReadyUpClicked;
         public event Action? AddBot;
         public event Action? RemoveBot;
@@ -57,10 +57,10 @@ namespace SkullQueenClient
             // Replacing whitespace musing regex
             name = Regex.Replace(name, @"\s+", "_");
 
-            StartGameClicked?.Invoke(this, name);
+            StartGameClicked?.Invoke(name);
 
             // hiding the button and text box after clicking start game
-            Button button = sender as Button;
+            Button button = (sender as Button)!;
             button.IsEnabled = false;
             button.Visibility = Visibility.Collapsed;
 

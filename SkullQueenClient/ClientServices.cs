@@ -39,7 +39,7 @@ namespace SkullQueenClient
         {
             this.game = game;
         }
-        public void StartGame(object sender, string playerName)
+        public void StartGame(string playerName)
         {
             Player? player = ConnectToServer(playerName);
             if (player == null)
@@ -59,7 +59,6 @@ namespace SkullQueenClient
             Task listener = player.ListenForMessages(async message =>
             {
                 message = message.Trim();
-                Debug.WriteLine($"Raw: [{message}] Length: {message?.Length}");
                 // Splitting the message
                 // Trying to parse the command
                 Command? cmd = null;
@@ -142,7 +141,7 @@ namespace SkullQueenClient
                         break;
 
                     case Command.DisplayOpponentPlank:
-                        opp.plank = Plank.FromString(string.Join(' ', args.Skip(1).ToArray()));
+                        opp!.plank = Plank.FromString(string.Join(' ', args.Skip(1).ToArray()));
                         OpponentsUpdated?.Invoke(game.opponents);
                         break;
 

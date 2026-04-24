@@ -38,11 +38,11 @@ namespace SkullQueenClient
         public MainWindow()
         {
             InitializeComponent();
+            game = new();
             lobbyView = new LobbyView();
             gameView = new GameView();
             gameView.HandCanvas.SizeChanged += (s, e) => DisplayCards(game.Hand, gameView.HandCanvas);
             gameView.PlayersCanvas.SizeChanged += (s, e) => DisplayOpponents(game.opponents);
-            game = new();
 
             services = new(game);
 
