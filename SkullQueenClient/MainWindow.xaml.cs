@@ -208,16 +208,29 @@ namespace SkullQueenClient
                     Background = Brushes.LightGray,
                 };
                 opponent.canvas.Children.Add(opponentBlock);
+
+                // Calculating the amount of space this would take up and deciding if it should be displayed simpler
+                double space = (60 + 70 + 30) * opponents.Count; // 60 for the card, 70 for the plank, 30 for spacing
+                bool simple = space > gameView.PlayersCanvas.ActualWidth;
+
                 if (opponent.playedCard != null)
                 {
                     Grid cardGrid = MakeCardUI(opponent.playedCard);
+                    if (!simple && opponent.plank != null)
+                    {
+                        Canvas.SetLeft(cardGrid, -35); // Move the card to the left if the plank is also being displayed, otherwise it can be centered
+                    }
                     Canvas.SetTop(cardGrid, 20);
                     opponent.canvas.Children.Add(cardGrid);
                 }
-                if (opponent.plank != null)
+                if (opponent.plank != null && (!simple || opponent.playedCard == null))
                 {
                     Grid plankGrid = MakePlank(opponent.plank, 100, 70);
-                    Canvas.SetLeft(plankGrid, 70);
+                    // Only move the plank to the right if the card is also being displayed, otherwise it can be centered
+                    if (!simple && opponent.playedCard != null)
+                    {
+                        Canvas.SetLeft(plankGrid, 35);
+                    }
                     Canvas.SetTop(plankGrid, 20);
                     opponent.canvas.Children.Add(plankGrid);
                 }
