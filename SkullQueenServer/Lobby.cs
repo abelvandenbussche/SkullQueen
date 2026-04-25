@@ -112,7 +112,18 @@ namespace SkullQueenServer
                     {
                         if (p is RoboPlayer bot)
                         {
-                            bot.difficulty = (bot.difficulty + 1) % 3; // Cycle through difficulties 0, 1, 2
+                            switch (message.Split(' ')[1])
+                            {
+                                case "Easy":
+                                    bot.difficulty = 0;
+                                    break;
+                                case "Medium":
+                                    bot.difficulty = 1;
+                                    break;
+                                case "Hard":
+                                    bot.difficulty = 2;
+                                    break;
+                            }
                             Utility.BroadCast(players, Command.ChangeBotDifficulty, $"{bot.name}:{bot.difficulty}");
                             break;
                         }
