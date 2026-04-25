@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid x:Name="MainGrid">
-        <Canvas x:Name="HandCanvas" Margin="20,0,65,0" Height="100" VerticalAlignment="Bottom"/>
+        <Canvas x:Name="HandCanvas" Margin="20,0,80,0" Height="100" VerticalAlignment="Bottom"/>
         <Canvas x:Name="PlayersCanvas" Margin="0,0,0,300"/>
         <Canvas x:Name="PlayingFieldMiddle" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" Height="100"/>
         <Canvas x:Name="PlayedCard" Margin="135,0,605,149" Height="96" Width="60" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
