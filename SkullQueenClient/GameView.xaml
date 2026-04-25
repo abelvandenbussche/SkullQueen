@@ -19,8 +19,8 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <RadioButton x:Name="RealRadioButton" Grid.Row="0" Content="Real" HorizontalAlignment="Left" VerticalAlignment="Top" GroupName="HandStyle" IsChecked="True" Checked="radioButton_Checked"/>
-            <RadioButton x:Name="ClassicRadioButton" Grid.Row="1" Content="Classic" HorizontalAlignment="Left" VerticalAlignment="Top" GroupName="HandStyle" Checked="radioButton_Checked"/>
+            <RadioButton x:Name="RealRadioButton" Grid.Row="0" Content="Real" HorizontalAlignment="Left" VerticalAlignment="Top" GroupName="HandStyle" IsChecked="True" Checked="RadioButton_Checked"/>
+            <RadioButton x:Name="ClassicRadioButton" Grid.Row="1" Content="Classic" HorizontalAlignment="Left" VerticalAlignment="Top" GroupName="HandStyle" Checked="RadioButton_Checked"/>
         </Grid>
     </Grid>
 </UserControl>

@@ -72,6 +72,7 @@ namespace SkullQueenClient
             ReadyUpButton.Visibility = Visibility.Visible;
             BotButton.Visibility = Visibility.Visible;
             BotRemovalButton.Visibility = Visibility.Visible;
+            DifficultyButtonGrid.Visibility = Visibility.Visible;
         }
         private void ReadyUpButton_Click(object sender, RoutedEventArgs e)
         {
@@ -86,6 +87,24 @@ namespace SkullQueenClient
         private void BotRemovalButton_Click(object sender, RoutedEventArgs e)
         {
             RemoveBot?.Invoke();
+        }
+        private void BotDifficultyRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton button = (sender as RadioButton)!;
+            switch (button.Name)
+            {
+                case "EasyBotRadioButton":
+                    DifficultyButtonGrid.Tag = "Easy";
+                    break;
+
+                case "MediumBotRadioButton":
+                    DifficultyButtonGrid.Tag = "Medium";
+                    break;
+
+                case "HardBotRadioButton":
+                    DifficultyButtonGrid.Tag = "Hard";
+                    break;
+            }
         }
     }
 }

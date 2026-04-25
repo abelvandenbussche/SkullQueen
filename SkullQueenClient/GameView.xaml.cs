@@ -205,7 +205,7 @@ namespace SkullQueenClient
 
             Grid.SetRow((Rectangle)sender, num);
         }
-        private void radioButton_Checked(object sender,  RoutedEventArgs e)
+        private void RadioButton_Checked(object sender,  RoutedEventArgs e)
         {
             RadioButton selected = (RadioButton)sender;
             classicCards = selected == ClassicRadioButton;
