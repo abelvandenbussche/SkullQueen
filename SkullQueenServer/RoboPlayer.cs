@@ -6,7 +6,7 @@ namespace SkullQueenServer
     class RoboPlayer : Player
     {
         private TaskCompletionSource<string>? pendingResponse;
-        private int difficulty = 1;
+        public int difficulty = 1;
         private Random rand;
         public RoboPlayer(Random rand) : base(RoboPlayer.GenerateName(rand), null)
         {

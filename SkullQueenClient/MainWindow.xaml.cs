@@ -62,6 +62,7 @@ namespace SkullQueenClient
             services.PlayedCardCleared += () => Dispatcher.Invoke(() => gameView.PlayedCard.Children.Clear());
             services.PlankUpdated += plank => DisplayPlank(plank);
             services.CenterCardsUpdated += cards => DisplayCards(cards, gameView.PlayingFieldMiddle);
+            services.BotDifficultyChangedIn += difficulty => Dispatcher.Invoke(() => lobbyView.ChangeDifficulty(difficulty));
             services.MakePlank += async () =>
             {
                 // Clearing the leftovers from the previous round
@@ -86,6 +87,7 @@ namespace SkullQueenClient
             lobbyView.ReadyUpClicked += services.ReadyUp;
             lobbyView.AddBot += services.AddBot;
             lobbyView.RemoveBot += services.RemoveBot;
+            lobbyView.BotDifficultyChanged += (difficulty) => services.ChangeBotDifficulty(difficulty);
             gameView.HandUpdated += () => { DisplayCards(game.Hand, gameView.HandCanvas); };
 
             MainContent.Content = lobbyView;

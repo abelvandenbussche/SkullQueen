@@ -26,6 +26,7 @@ namespace SkullQueenClient
         public event Action<int>? ScoreUpdated;
         public event Action<List<Card>>? CenterCardsUpdated;
         public event Action<int, Dictionary<Opponent, int>>? EndGameScoring;
+        public event Action<string>? BotDifficultyChangedIn;
 
         // Lobby events
         public event Action<string>? PlayerAddedToLobby;
@@ -33,6 +34,7 @@ namespace SkullQueenClient
         private event Action? ReadyUpped;
         private event Action? BotAdded;
         private event Action? BotRemoved;
+        private event Action<string>? BotDifficultyChangedOut;
 
 
         public ClientServices(ClientGame game)
@@ -54,6 +56,7 @@ namespace SkullQueenClient
             ReadyUpped += () => { player.SendMessage(Command.Ready); };
             BotAdded += () => { player.SendMessage(Command.AddBot); };
             BotRemoved += () => { player.SendMessage(Command.RemoveBot); };
+            BotDifficultyChangedOut += (difficulty) => { player.SendMessage(Command.ChangeBotDifficulty, difficulty); };
 
             // Start listening for messages from the server
             Task listener = player.ListenForMessages(async message =>
@@ -156,6 +159,10 @@ namespace SkullQueenClient
 
                     case Command.JoinLobby:
                         PlayerAddedToLobby?.Invoke(args[0]);
+                        break;
+
+                    case Command.ChangeBotDifficulty:
+                        BotDifficultyChangedIn?.Invoke(args[0]);
                         break;
 
                     case Command.RemoveBot:
@@ -290,6 +297,7 @@ namespace SkullQueenClient
             // Send the card to the server
             player.SendMessage(Command.PlayCard, cardToPlay.ToString());
         }
+        // These methods move Events to the thread that has a connection to the server
         public void OnCardClicked(Card card)
         {
             CardClicked?.Invoke(card);
@@ -305,6 +313,10 @@ namespace SkullQueenClient
         public void RemoveBot()
         {
             BotRemoved?.Invoke();
+        }
+        public void ChangeBotDifficulty(string difficulty)
+        {
+            BotDifficultyChangedOut?.Invoke(difficulty);
         }
     }
 }

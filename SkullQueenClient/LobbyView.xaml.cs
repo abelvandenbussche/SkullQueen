@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.DirectoryServices;
 
 namespace SkullQueenClient
 {
@@ -23,6 +24,7 @@ namespace SkullQueenClient
     public partial class LobbyView : UserControl
     {
         public event Action<string>? StartGameClicked;
+        public event Action<string>? BotDifficultyChanged;
         public event Action? ReadyUpClicked;
         public event Action? AddBot;
         public event Action? RemoveBot;
@@ -88,23 +90,41 @@ namespace SkullQueenClient
         {
             RemoveBot?.Invoke();
         }
+        public void ChangeDifficulty(string difficulty)
+        {
+            switch (difficulty)
+            {
+                case "Easy":
+                    EasyBotRadioButton.IsChecked = true;
+                    break;
+                case "Medium":
+                    MediumBotRadioButton.IsChecked = true;
+                    break;
+                case "Hard":
+                    HardBotRadioButton.IsChecked = true;
+                    break;
+            }
+        }
         private void BotDifficultyRadioButton_Checked(object sender, RoutedEventArgs e)
         {
+            // Defaults to easy if for some reason the name of the button is not recognized
+            string diff = "Easy";
             RadioButton button = (sender as RadioButton)!;
             switch (button.Name)
             {
                 case "EasyBotRadioButton":
-                    DifficultyButtonGrid.Tag = "Easy";
+                    diff = "Easy";
                     break;
 
                 case "MediumBotRadioButton":
-                    DifficultyButtonGrid.Tag = "Medium";
+                    diff = "Medium";
                     break;
 
                 case "HardBotRadioButton":
-                    DifficultyButtonGrid.Tag = "Hard";
+                    diff = "Hard";
                     break;
             }
+            BotDifficultyChanged?.Invoke(diff);
         }
     }
 }

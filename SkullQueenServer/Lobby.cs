@@ -61,7 +61,7 @@ namespace SkullQueenServer
             Player newPlayer = new Player(playerName, client);
             players.Add(newPlayer);
             isReady[newPlayer] = false;
-            Task.Run(() => ListenToPlayer(newPlayer));
+            _ = Task.Run(() => ListenToPlayer(newPlayer));
 
             // Updating all players
             foreach (Player player in players)
@@ -102,6 +102,20 @@ namespace SkullQueenServer
                         RoboPlayer bot = new(new());
                         Utility.BroadCast(players, Command.JoinLobby, bot.name);
                         players.Add(bot);
+                    }
+                }
+                else if (message.Contains(Command.ChangeBotDifficulty.ToString()))
+                {
+                    Console.WriteLine(message.Split(' ')[1]);
+                    // Changing the difficulty of a bot
+                    foreach (Player p in players)
+                    {
+                        if (p is RoboPlayer bot)
+                        {
+                            bot.difficulty = (bot.difficulty + 1) % 3; // Cycle through difficulties 0, 1, 2
+                            Utility.BroadCast(players, Command.ChangeBotDifficulty, $"{bot.name}:{bot.difficulty}");
+                            break;
+                        }
                     }
                 }
                 else if (message == Command.RemoveBot.ToString())

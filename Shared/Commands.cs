@@ -17,6 +17,7 @@
         DisplayMiddleCards,
         EndScoring,
         AddBot,
-        RemoveBot
+        RemoveBot,
+        ChangeBotDifficulty,
     }
 }
