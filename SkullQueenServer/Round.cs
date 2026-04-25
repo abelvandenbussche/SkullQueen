@@ -8,7 +8,7 @@ namespace SkullQueenServer
     {
         private Random rand = new();
         private List<Player> players;
-        private Trick currentTrick;
+        private Trick? currentTrick;
         private Queue<Card> deck;
         private Player startPlayer;
         private List<Card> centerCards;

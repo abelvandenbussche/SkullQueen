@@ -106,13 +106,14 @@ namespace SkullQueenServer
                 }
                 else if (message.Contains(Command.ChangeBotDifficulty.ToString()))
                 {
-                    Console.WriteLine(message.Split(' ')[1]);
+                    string diff = message.Split(' ')[1];
+                    Console.WriteLine(diff);
                     // Changing the difficulty of a bot
                     foreach (Player p in players)
                     {
                         if (p is RoboPlayer bot)
                         {
-                            switch (message.Split(' ')[1])
+                            switch (diff)
                             {
                                 case "Easy":
                                     bot.difficulty = 0;
@@ -124,9 +125,9 @@ namespace SkullQueenServer
                                     bot.difficulty = 2;
                                     break;
                             }
-                            Utility.BroadCast(players, Command.ChangeBotDifficulty, $"{bot.name}:{bot.difficulty}");
                             break;
                         }
+                            Utility.BroadCast(players, Command.ChangeBotDifficulty, diff);
                     }
                 }
                 else if (message == Command.RemoveBot.ToString())

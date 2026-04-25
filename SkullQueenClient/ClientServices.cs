@@ -162,6 +162,7 @@ namespace SkullQueenClient
                         break;
 
                     case Command.ChangeBotDifficulty:
+                        // WTF, breaks when line under here is uncommented
                         BotDifficultyChangedIn?.Invoke(args[0]);
                         break;
 
@@ -272,7 +273,6 @@ namespace SkullQueenClient
                 TcpClient client = new TcpClient("localhost", 5050);
                 Player player = new(playerName, client);
                 player.SendMessage(Command.JoinLobby, playerName);
-                Debug.WriteLine(client != null);
                 return player;
             }
         }
