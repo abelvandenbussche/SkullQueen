@@ -6,7 +6,7 @@ namespace SkullQueenServer
     class RoboPlayer : Player
     {
         private TaskCompletionSource<string>? pendingResponse;
-        private int difficulty = 0;
+        private int difficulty = 1;
         private Random rand;
         public RoboPlayer(Random rand) : base(RoboPlayer.GenerateName(rand), null)
         {
@@ -70,6 +70,38 @@ namespace SkullQueenServer
 
             switch (difficulty)
             {
+                // Difficulty 1 is where the bot tries to play cards based on where the color of the leadSuit. 
+                // Does not take into account wich way the plank is facing, just if the piece is above or below the middle
+                case 1:
+
+                    // Checking wich cards fits best
+                    // Calculating the scoring of the cards
+                    Dictionary<Card, int> cardScores = new();
+                    if (leadSuit == null)
+                    {
+                        // Finding the piece most in the middle
+                        Pawn middlePiece = plank.pawnsOnPlank.OrderBy(kv => Math.Abs(kv.Value.position - 2)).First().Value;
+                        leadSuit = plank.GetColorOfPawn(middlePiece);
+                    }
+                    bool moveUp = plank.pawnsOnPlank[leadSuit.Value].position > 2;
+                    foreach(Card card in possible)
+                    {
+                        int score = 0;
+                        if (moveUp)
+                        {
+                            score += (int)(card.rank - 6.5);
+                        }
+                        else
+                        {
+                            score += (int)(6.5 - card.rank);
+                        }
+                        cardScores[card] = score;
+                    }
+
+                    // Finding the best scoring card
+                    Card bestCard = cardScores.OrderByDescending(kv => kv.Value).First().Key;
+                    return bestCard;
+
                 // Default and difficulty 0
                 default:
                     // Just play a random card

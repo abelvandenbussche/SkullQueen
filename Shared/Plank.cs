@@ -28,6 +28,14 @@ namespace Shared
             if (pawn.IsOffPlank()) return 0;
             return plankScores[pawn.position];
         }
+        public Color GetColorOfPawn(Pawn pawn)
+        {
+            foreach (var kv in pawnsOnPlank)
+            {
+                if (kv.Value == pawn) return kv.Key;
+            }
+            throw new Exception("Pawn not found on plank");
+        }
         public int GetTotalScore()
         {
             int sum = 0;
