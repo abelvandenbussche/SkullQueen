@@ -42,7 +42,7 @@ namespace SkullQueenClient
             game = new();
             lobbyView = new LobbyView();
             gameView = new GameView();
-            gameView.HandCanvas.SizeChanged += (s, e) => DisplayCards(game.Hand, gameView.HandCanvas);
+            gameView.HandCanvas.SizeChanged += (s, e) => DisplayCards(game.Hand, gameView.HandCanvas, true);
             gameView.PlayersCanvas.SizeChanged += (s, e) => DisplayOpponents(game.opponents);
 
             services = new(game);
@@ -56,7 +56,7 @@ namespace SkullQueenClient
             };
 
             // Game events
-            services.HandUpdated += hand => DisplayCards(hand, gameView.HandCanvas);
+            services.HandUpdated += hand => DisplayCards(hand, gameView.HandCanvas, true);
             services.OpponentsUpdated += opponents => DisplayOpponents(opponents);
             services.PlayedCardUpdated += card => DisplayPlayedCard(card);
             services.StatusUpdated += status => Dispatcher.Invoke(() => gameView.StatusText.Text = status);
@@ -89,15 +89,18 @@ namespace SkullQueenClient
             lobbyView.AddBot += services.AddBot;
             lobbyView.RemoveBot += services.RemoveBot;
             lobbyView.BotDifficultyChanged += (difficulty) => services.ChangeBotDifficulty(difficulty);
-            gameView.HandUpdated += () => { DisplayCards(game.Hand, gameView.HandCanvas); };
+            gameView.HandUpdated += () => { DisplayCards(game.Hand, gameView.HandCanvas, true); };
 
             MainContent.Content = lobbyView;
         }
-        public Grid MakeCardUI(Card card, bool hover=false)
+        public Grid MakeCardUI(Card card, bool hover = false)
         {
             void EditCard(Grid cardGrid)
             {
-                if (!hover) return;
+                if (!hover)
+                {
+                    return;
+                }
                 cardGrid.MouseEnter += (s, e) =>
                 {
 
@@ -192,12 +195,12 @@ namespace SkullQueenClient
             grid.MouseLeftButtonUp += (s, e) => services.OnCardClicked((Card)((Grid)s).Tag);
             return grid;
         }
-        private void DisplayCards(List<Card> hand, Canvas canvas)
+        private void DisplayCards(List<Card> hand, Canvas canvas, bool hoverable = false)
         {
             hand = hand.OrderBy(x => (int)x.suit).ThenBy(x => x.rank).ToList();
             if (!Application.Current.Dispatcher.CheckAccess())
             {
-                Dispatcher.Invoke(() => DisplayCards(hand, canvas));
+                Dispatcher.Invoke(() => DisplayCards(hand, canvas, hoverable));
             }
             canvas.Children.Clear();
             double spaceBetween = canvas.ActualWidth / (hand.Count + 1);
@@ -207,7 +210,7 @@ namespace SkullQueenClient
             for (int i = 0; i < hand.Count; i++)
             {
                 Card card = hand[i];
-                Grid newGrid = MakeCardUI(card, true);
+                Grid newGrid = MakeCardUI(card, hoverable);
                 // This places the cards in the middle of the canvas
                 Canvas.SetLeft(newGrid, (i - hand.Count / 2) * spaceBetween + middle);
                 canvas.Children.Add(newGrid);
@@ -269,7 +272,7 @@ namespace SkullQueenClient
 
             // Displaying the hand without this card
             game.Hand.Remove(card);
-            DisplayCards(game.Hand, gameView.HandCanvas);
+            DisplayCards(game.Hand, gameView.HandCanvas, true);
         }
         public void DisplayPlank(Plank plank)
         {
