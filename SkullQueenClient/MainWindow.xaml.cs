@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Xml.Serialization;
 
 namespace SkullQueenClient
 {
@@ -92,11 +93,29 @@ namespace SkullQueenClient
 
             MainContent.Content = lobbyView;
         }
-        public Grid MakeCardUI(Card card)
+        public Grid MakeCardUI(Card card, bool hover=false)
         {
+            void EditCard(Grid cardGrid)
+            {
+                if (!hover) return;
+                cardGrid.MouseEnter += (s, e) =>
+                {
+
+                    TransformGroup transformGroup = new();
+                    transformGroup.Children.Add(new ScaleTransform(1.2, 1.2, cardGrid.ActualWidth / 2, cardGrid.ActualHeight / 2));
+                    transformGroup.Children.Add(new TranslateTransform(0, -cardGrid.ActualHeight / 4));
+                    cardGrid.RenderTransform = transformGroup;
+                };
+                cardGrid.MouseLeave += (s, e) =>
+                {
+                    cardGrid.RenderTransform = null;
+                };
+            }
             if (!gameView.classicCards)
             {
-                return MakeCardImageUI(card);
+                Grid cardGrid = MakeCardImageUI(card);
+                EditCard(cardGrid);
+                return cardGrid;
             }
             Grid newGrid = new()
             {
@@ -158,6 +177,7 @@ namespace SkullQueenClient
             newGrid.Children.Add(flippedRankText);
             newGrid.Children.Add(rankText);
             newGrid.Children.Add(centerText);
+            EditCard(newGrid);
             return newGrid;
         }
         private Grid MakeCardImageUI(Card card)
@@ -187,7 +207,7 @@ namespace SkullQueenClient
             for (int i = 0; i < hand.Count; i++)
             {
                 Card card = hand[i];
-                Grid newGrid = MakeCardUI(card);
+                Grid newGrid = MakeCardUI(card, true);
                 // This places the cards in the middle of the canvas
                 Canvas.SetLeft(newGrid, (i - hand.Count / 2) * spaceBetween + middle);
                 canvas.Children.Add(newGrid);
