@@ -59,12 +59,24 @@ namespace SkullQueenClient
             // Game events
             services.HandUpdated += hand => DisplayCards(hand, gameView.HandCanvas, true);
             services.OpponentsUpdated += opponents => DisplayOpponents(opponents);
-            services.PlayedCardUpdated += card => DisplayPlayedCard(card);
             services.StatusUpdated += status => Dispatcher.Invoke(() => gameView.StatusText.Text = status);
-            services.PlayedCardCleared += () => Dispatcher.Invoke(() => gameView.PlayedCard.Children.Clear());
             services.PlankUpdated += plank => DisplayPlank(plank);
-            services.CenterCardsUpdated += cards => DisplayCards(cards, gameView.PlayingFieldMiddle);
             services.BotDifficultyChangedIn += difficulty => Dispatcher.Invoke(() => lobbyView.ChangeDifficulty(difficulty));
+            services.PlayedCardCleared += () =>
+            {
+                Dispatcher.Invoke(() => gameView.PlayedCard.Children.Clear());
+                game.playedCard = null;
+            };
+            services.PlayedCardUpdated += card =>
+            {
+                DisplayPlayedCard(card);
+                game.playedCard = card;
+            };
+            services.CenterCardsUpdated += cards =>
+            {
+                DisplayCards(cards, gameView.PlayingFieldMiddle);
+                game.middleCards = cards;
+            };
             services.CardSelection += leadsuit =>
             {
                 game.currentLeadSuit = leadsuit;
@@ -95,7 +107,13 @@ namespace SkullQueenClient
             lobbyView.AddBot += services.AddBot;
             lobbyView.RemoveBot += services.RemoveBot;
             lobbyView.BotDifficultyChanged += (difficulty) => services.ChangeBotDifficulty(difficulty);
-            gameView.HandUpdated += () => { DisplayCards(game.Hand, gameView.HandCanvas, true); };
+            gameView.HandUpdated += () =>
+            { 
+                DisplayCards(game.Hand, gameView.HandCanvas, true);
+                DisplayOpponents(game.opponents);
+                DisplayPlayedCard(game.playedCard);
+                DisplayCards(game.middleCards, gameView.PlayingFieldMiddle);
+            };
 
             MainContent.Content = lobbyView;
         }
@@ -294,8 +312,12 @@ namespace SkullQueenClient
                 gameView.PlayersCanvas.Children.Add(opponent.canvas);
             }
         }
-        private void DisplayPlayedCard(Card card)
+        private void DisplayPlayedCard(Card? card)
         {
+            if (card == null)
+            {
+                return;
+            }
             gameView.PlayedCard.Children.Clear();
 
             Grid newGrid = MakeCardUI(card);
