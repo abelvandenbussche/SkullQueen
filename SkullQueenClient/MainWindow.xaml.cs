@@ -122,16 +122,7 @@ namespace SkullQueenClient
             }
             if (!gameView.classicCards)
             {
-                Grid cardGrid = MakeCardImageUI(card);
-                if (card.suit != game.currentLeadSuit && card.suit != Shared.Color.Black && game.currentLeadSuit != null && hover)
-                {
-                    Border border = new Border()
-                    {
-                        Background = Brushes.Black,
-                        Opacity = 0.6,
-                    };
-                    cardGrid.Children.Add(border);
-                }
+                Grid cardGrid = MakeCardImageUI(card, card.suit != game.currentLeadSuit && card.suit != Shared.Color.Black && game.currentLeadSuit != null && hover);
                 EditCard(cardGrid);
                 return cardGrid;
             }
@@ -207,7 +198,7 @@ namespace SkullQueenClient
             }
             return newGrid;
         }
-        private Grid MakeCardImageUI(Card card)
+        private Grid MakeCardImageUI(Card card, bool darken = false)
         {
             Grid grid = new();
             Image cardImage = new();
@@ -217,6 +208,22 @@ namespace SkullQueenClient
             grid.Children.Add(cardImage);
             grid.Tag = card;
             grid.MouseLeftButtonUp += (s, e) => services.OnCardClicked((Card)((Grid)s).Tag);
+            
+            if (darken)
+            {
+                Border border = new Border()
+                {
+                    Background = Brushes.Black,
+                    Opacity = 0.6,
+                };
+                border.OpacityMask = new ImageBrush()
+                {
+                    ImageSource = cardImage.Source,
+                    Stretch = Stretch.Fill,
+                };
+                grid.Children.Add(border);
+            }
+
             return grid;
         }
         private void DisplayCards(List<Card> hand, Canvas canvas, bool hoverable = false)
