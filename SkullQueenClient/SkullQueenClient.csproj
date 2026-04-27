@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\skullQueenIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -111,6 +112,10 @@
     <None Remove="CardImages\ZWART 0.png" />
     <None Remove="CardImages\ZWART 13.png" />
     <None Remove="ROOD 1.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\skullQueenIcon.ico" />
   </ItemGroup>
 
   <ItemGroup>
