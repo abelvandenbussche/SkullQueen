@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Diagnostics;
+using System.Reflection;
 using System.Security.Permissions;
 using System.Text;
 using System.Windows;
@@ -64,6 +65,11 @@ namespace SkullQueenClient
             services.PlankUpdated += plank => DisplayPlank(plank);
             services.CenterCardsUpdated += cards => DisplayCards(cards, gameView.PlayingFieldMiddle);
             services.BotDifficultyChangedIn += difficulty => Dispatcher.Invoke(() => lobbyView.ChangeDifficulty(difficulty));
+            services.CardSelection += leadsuit =>
+            {
+                game.currentLeadSuit = leadsuit;
+                DisplayCards(game.Hand, gameView.HandCanvas, true);
+            };
             services.MakePlank += async () =>
             {
                 // Clearing the leftovers from the previous round
@@ -93,7 +99,7 @@ namespace SkullQueenClient
 
             MainContent.Content = lobbyView;
         }
-        public Grid MakeCardUI(Card card, bool hover = false)
+        public Grid MakeCardUI(Card card, bool hover = false, Shared.Color? leadsuit = null)
         {
             void EditCard(Grid cardGrid)
             {
@@ -117,6 +123,15 @@ namespace SkullQueenClient
             if (!gameView.classicCards)
             {
                 Grid cardGrid = MakeCardImageUI(card);
+                if (card.suit != game.currentLeadSuit && card.suit != Shared.Color.Black && game.currentLeadSuit != null && hover)
+                {
+                    Border border = new Border()
+                    {
+                        Background = Brushes.Black,
+                        Opacity = 0.6,
+                    };
+                    cardGrid.Children.Add(border);
+                }
                 EditCard(cardGrid);
                 return cardGrid;
             }
@@ -181,6 +196,15 @@ namespace SkullQueenClient
             newGrid.Children.Add(rankText);
             newGrid.Children.Add(centerText);
             EditCard(newGrid);
+            if (card.suit != game.currentLeadSuit && card.suit != Shared.Color.Black && game.currentLeadSuit != null && hover)
+            {
+                Border border = new Border()
+                {
+                    Background = Brushes.Black,
+                    Opacity = 0.6,
+                };
+                newGrid.Children.Add(border);
+            }
             return newGrid;
         }
         private Grid MakeCardImageUI(Card card)

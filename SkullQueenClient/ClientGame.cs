@@ -6,6 +6,7 @@ namespace SkullQueenClient
     {
         public List<Card> Hand { get; set; }
         public List<Opponent> opponents;
+        public Color? currentLeadSuit;
         public ClientGame()
         {
             Hand = new List<Card>();

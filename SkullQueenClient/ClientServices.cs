@@ -27,6 +27,7 @@ namespace SkullQueenClient
         public event Action<List<Card>>? CenterCardsUpdated;
         public event Action<int, Dictionary<Opponent, int>>? EndGameScoring;
         public event Action<string>? BotDifficultyChangedIn;
+        public event Action<Color?>? CardSelection;
 
         // Lobby events
         public event Action<string>? PlayerAddedToLobby;
@@ -118,6 +119,7 @@ namespace SkullQueenClient
                         {
                             leadSuit = (Shared.Color)Enum.Parse(typeof(Shared.Color), leadSuitString);
                         }
+                        CardSelection?.Invoke(leadSuit);
                         StatusUpdated?.Invoke($"It's your turn to play a card!" + (leadSuit != null ? " Lead suit: " + leadSuit.ToString() : " No lead suit"));
                         await PlayCard(player, leadSuit);
                         StatusUpdated?.Invoke("Waiting on other players to play");
