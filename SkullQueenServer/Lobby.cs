@@ -72,7 +72,7 @@ namespace SkullQueenServer
                     newPlayer.SendMessage(Command.JoinLobby, player.name);
                 }
             }
-            Console.WriteLine(playerName);
+            Console.WriteLine(playerName  + " Joined lobby!");
         }
         public Task WaitTillReady()
         {
@@ -107,7 +107,6 @@ namespace SkullQueenServer
                 else if (message.Contains(Command.ChangeBotDifficulty.ToString()))
                 {
                     string diff = message.Split(' ')[1];
-                    Console.WriteLine(diff);
                     // Changing the difficulty of a bot
                     foreach (Player p in players)
                     {

@@ -38,7 +38,6 @@ namespace SkullQueenServer
                 string[] args = message.Split(' ');
                 Plank plank = Plank.FromString(String.Join(' ', args.Skip(1).ToArray()));
                 player.plank = plank;
-                Console.WriteLine($"Players: {player.name} sent their plank");
             }
             await Task.WhenAll(players.Select(player => GetAndSetPlank(player)));
             Utility.DisplayPlanks(players);
@@ -64,7 +63,6 @@ namespace SkullQueenServer
         {
             while (players[0].GetCardCount() > 0)
             {
-                Console.WriteLine(players[0].GetCardCount());
                 currentTrick = new Trick(players, centerCards);
                 startPlayer = currentTrick.StartTrick(startPlayer);
                 centerCards = currentTrick.centerCards;
@@ -83,7 +81,6 @@ namespace SkullQueenServer
                     player.ReceiveCard(card);
                 }
             }
-            Console.WriteLine(deck.Count);
 
             // Adding any remaining cards to the middle
             centerCards.AddRange(deck);

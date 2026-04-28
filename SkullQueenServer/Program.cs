@@ -22,6 +22,7 @@ namespace SkullQueenServer
             while (true)
             {
                 // Creating a new game instance
+                Console.WriteLine("New lobby created!");
                 Lobby lobby = new();
                 CancellationTokenSource cts = new();
                 Task connectTask = lobby.ConnectToClients(cts);
@@ -45,7 +46,6 @@ namespace SkullQueenServer
             {
                 byte[] data = server.Receive(ref remoteEP);
                 string msg = Encoding.UTF8.GetString(data);
-                Console.WriteLine(msg);
                 if (msg == "DISCOVER_SKULLQUEEN_SERVER")
                 {
                     byte[] response = Encoding.UTF8.GetBytes("SKULLQUEEN_SERVER_HERE");
