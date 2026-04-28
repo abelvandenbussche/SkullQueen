@@ -11,7 +11,7 @@
         <TextBlock HorizontalAlignment="Left" Margin="61,27,0,0" TextWrapping="Wrap" Text="Lobby" VerticalAlignment="Top" FontSize="30"/>
         <TextBlock x:Name="UsernameHeader" HorizontalAlignment="Left" Margin="201,79,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" FontSize="20"/>
         <TextBox x:Name="UsernameTextBox" HorizontalAlignment="Left" Margin="201,115,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" AcceptsReturn="False"/>
-        <Button Content="Find game" HorizontalAlignment="Right" Margin="0,0,30,30" VerticalAlignment="Bottom" FontSize="50" Click="Button_Click"/>
+        <Button Content="Find game" HorizontalAlignment="Right" Margin="0,0,30,30" VerticalAlignment="Bottom" FontSize="50" Click="FindGameButton_Click"/>
         <Button x:Name="ReadyUpButton" Content="READY?" HorizontalAlignment="Right" Margin="0,0,30,30" VerticalAlignment="Bottom" FontSize="50" Visibility="Hidden" Click="ReadyUpButton_Click"/>
         <Button x:Name="BotButton" Content="Add Bot" HorizontalAlignment="Left" Margin="26,0,0,30" VerticalAlignment="Bottom" Height="50" Width="90" FontSize="20" Visibility="Hidden" Click="BotButton_Click"/>
         <Button x:Name="BotRemovalButton" Content="Remove Bot" HorizontalAlignment="Left" Margin="127,0,0,30" VerticalAlignment="Bottom" Height="50" Width="118" FontSize="20" Visibility="Hidden" Click="BotRemovalButton_Click"/>
@@ -28,5 +28,8 @@
             <RadioButton x:Name="MediumBotRadioButton" Grid.Row="2" Content="Medium" HorizontalAlignment="Left" VerticalAlignment="Top" GroupName="BotDifficulty" IsChecked="False" Checked="BotDifficultyRadioButton_Checked"/>
             <RadioButton x:Name="HardBotRadioButton" Grid.Row="3" Content="Hard" HorizontalAlignment="Left" VerticalAlignment="Top" GroupName="BotDifficulty" IsChecked="False" Checked="BotDifficultyRadioButton_Checked"/>
         </Grid>
+        <TextBlock x:Name="LobbyCodeFieldText" HorizontalAlignment="Right" Margin="0,0,160,160" TextWrapping="Wrap" Text="Lobby Code" VerticalAlignment="Bottom" FontSize="20"/>
+        <TextBox x:Name="LobbyCodeTextBox" HorizontalAlignment="Right" Margin="0,0,146,137" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="120"/>
+        <TextBlock x:Name="LobbyCodeText" HorizontalAlignment="Right" Margin="0,14,22,0" TextWrapping="Wrap" Text="LobbyCode: ******" VerticalAlignment="Top" Visibility="Collapsed"/>
     </Grid>
 </UserControl>

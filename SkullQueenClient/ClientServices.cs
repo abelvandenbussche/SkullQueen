@@ -32,6 +32,7 @@ namespace SkullQueenClient
         // Lobby events
         public event Action<string>? PlayerAddedToLobby;
         public event Action<string>? PlayerLeftLobby;
+        public event Action<string>? LobbyCodeReceived;
         private event Action? ReadyUpped;
         private event Action? BotAdded;
         private event Action? BotRemoved;
@@ -42,9 +43,9 @@ namespace SkullQueenClient
         {
             this.game = game;
         }
-        public void StartGame(string playerName)
+        public void StartGame(string playerName, string lobbyCode)
         {
-            Player? player = ConnectToServer(playerName);
+            Player? player = ConnectToServer(playerName, lobbyCode);
             if (player == null)
             {
                 // Connection failure, close the application
@@ -62,176 +63,179 @@ namespace SkullQueenClient
             // Start listening for messages from the server
             Task listener = player.ListenForMessages(async message =>
             {
-                message = message.Trim();
-                Debug.WriteLine(message);
-                // Splitting the message
-                // Trying to parse the command
-                Command? cmd = null;
-                try
-                {
-                    string commandStr = message.Split(' ')[0];
-                    cmd = (Command)Enum.Parse(typeof(Command), commandStr);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error parsing message: " + ex.Message);
-                    return;
-                }
-                string[] args = message.Split(' ').Skip(1).ToArray();
+            message = message.Trim();
+            Debug.WriteLine(message);
+            // Splitting the message
+            // Trying to parse the command
+            Command? cmd = null;
+            try
+            {
+                string commandStr = message.Split(' ')[0];
+                cmd = (Command)Enum.Parse(typeof(Command), commandStr);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error parsing message: " + ex.Message);
+                return;
+            }
+            string[] args = message.Split(' ').Skip(1).ToArray();
 
-                if (cmd == null)
-                {
-                    return;
-                }
+            if (cmd == null)
+            {
+                return;
+            }
 
-                // Try to get the Opponent
-                Opponent? opp;
-                try
-                {
-                    opp = game.opponents.FirstOrDefault(o => o.name == args[0]);
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    opp = null;
-                }
+            // Try to get the Opponent
+            Opponent? opp;
+            try
+            {
+                opp = game.opponents.FirstOrDefault(o => o.name == args[0]);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                opp = null;
+            }
 
-                switch (cmd)
-                {
-                    case Command.StartGame:
-                        // Switch to the game view
-                        GameStarted?.Invoke();
-                        break;
+            switch (cmd)
+            {
+                case Command.StartGame:
+                    // Switch to the game view
+                    GameStarted?.Invoke();
+                    break;
 
-                    case Command.DealCard:
-                        Card newCard = Card.FromString(string.Join(' ', args));
-                        game.AddCardToHand(newCard);
-                        HandUpdated?.Invoke(game.Hand);
-                        break;
+                case Command.DealCard:
+                    Card newCard = Card.FromString(string.Join(' ', args));
+                    game.AddCardToHand(newCard);
+                    HandUpdated?.Invoke(game.Hand);
+                    break;
 
-                    case Command.PlayCard:
-                        // Getting the leadsuit
-                        string leadSuitString = args[0];
-                        Shared.Color? leadSuit;
-                        if (leadSuitString == "null")
+                case Command.PlayCard:
+                    // Getting the leadsuit
+                    string leadSuitString = args[0];
+                    Shared.Color? leadSuit;
+                    if (leadSuitString == "null")
+                    {
+                        leadSuit = null;
+                    }
+                    else
+                    {
+                        leadSuit = (Shared.Color)Enum.Parse(typeof(Shared.Color), leadSuitString);
+                    }
+                    CardSelection?.Invoke(leadSuit);
+                    StatusUpdated?.Invoke($"It's your turn to play a card!" + (leadSuit != null ? " Lead suit: " + leadSuit.ToString() : " No lead suit"));
+                    await PlayCard(player, leadSuit);
+                    StatusUpdated?.Invoke("Waiting on other players to play");
+                    break;
+
+                case Command.DisplayOpponent:
+                    Opponent opponent = new(args[0]);
+                    game.opponents.Add(opponent);
+                    OpponentsUpdated?.Invoke(game.opponents);
+                    break;
+
+                case Command.DisplayPlank:
+                    Plank updatedPlank = Plank.FromString(string.Join(' ', args));
+                    PlankUpdated?.Invoke(updatedPlank);
+                    break;
+
+                case Command.DisplayOpponentCard:
+                    Card playedCard = Card.FromString(string.Join(' ', args.Skip(1)));
+                    if (opp != null)
+                    {
+                        opp.playedCard = playedCard;
+                        OpponentsUpdated?.Invoke(game.opponents);
+                    }
+                    break;
+
+                case Command.DisplayOpponentPlank:
+                    opp!.plank = Plank.FromString(string.Join(' ', args.Skip(1).ToArray()));
+                    OpponentsUpdated?.Invoke(game.opponents);
+                    break;
+
+                case Command.ClearPlayedCards:
+                    foreach (Opponent o in game.opponents)
+                    {
+                        o.playedCard = null;
+                    }
+                    OpponentsUpdated?.Invoke(game.opponents);
+                    PlayedCardCleared?.Invoke();
+                    break;
+
+                case Command.JoinLobby:
+                    PlayerAddedToLobby?.Invoke(args[0]);
+                    break;
+
+                case Command.SendLobbyCode:
+                    LobbyCodeReceived?.Invoke(args[0]);
+                    break;
+
+                case Command.ChangeBotDifficulty:
+                    BotDifficultyChangedIn?.Invoke(args[0]);
+                    break;
+
+                case Command.RemoveBot:
+                    PlayerLeftLobby?.Invoke(args[0]);
+                    break;
+
+                case Command.MakePlank:
+                    TaskCompletionSource<Plank> tcs = new();
+                    void PlankComplete(Plank plank)
+                    {
+                        tcs.SetResult(plank);
+                    }
+                    MakePlank?.Invoke();
+
+                    PlankMade += PlankComplete;
+                    Plank plank = await tcs.Task;
+                    PlankMade -= PlankComplete;
+
+                    player.SendMessage(Command.MakePlank, plank.ToString());
+                    break;
+
+                case Command.ScoreUpdate:
+                    ScoreUpdated?.Invoke(int.Parse(args[0]));
+                    break;
+
+                case Command.DisplayMiddleCards:
+                    // Generating the cards
+                    List<Card> centerCards = new();
+                    if (args.Count() % 2 == 1)
+                    {
+                        throw new("We are fucked, shit not even");
+                    }
+
+                    for (int i = 0; i < args.Count(); i += 2)
+                    {
+                        string combo = string.Join(' ', new List<string>() { args[i], args[i + 1] });
+                        centerCards.Add(Card.FromString(combo));
+                    }
+                    CenterCardsUpdated?.Invoke(centerCards);
+                    break;
+
+                case Command.EndScoring:
+                    // Getting the scoring
+                    Dictionary<Opponent, int> opponentScores = new();
+                    int playerScore = 0;
+                    for (int i = 0; i < args.Length; i += 2)
+                    {
+                        int score = int.Parse(args[i + 1]);
+                        if (args[i] == player.name)
                         {
-                            leadSuit = null;
+                            playerScore = score;
                         }
                         else
                         {
-                            leadSuit = (Shared.Color)Enum.Parse(typeof(Shared.Color), leadSuitString);
-                        }
-                        CardSelection?.Invoke(leadSuit);
-                        StatusUpdated?.Invoke($"It's your turn to play a card!" + (leadSuit != null ? " Lead suit: " + leadSuit.ToString() : " No lead suit"));
-                        await PlayCard(player, leadSuit);
-                        StatusUpdated?.Invoke("Waiting on other players to play");
-                        break;
-
-                    case Command.DisplayOpponent:
-                        Opponent opponent = new(args[0]);
-                        game.opponents.Add(opponent);
-                        OpponentsUpdated?.Invoke(game.opponents);
-                        break;
-
-                    case Command.DisplayPlank:
-                        Plank updatedPlank = Plank.FromString(string.Join(' ', args));
-                        PlankUpdated?.Invoke(updatedPlank);
-                        break;
-
-                    case Command.DisplayOpponentCard:
-                        Card playedCard = Card.FromString(string.Join(' ', args.Skip(1)));
-                        if (opp != null)
-                        {
-                            opp.playedCard = playedCard;
-                            OpponentsUpdated?.Invoke(game.opponents);
-                        }
-                        break;
-
-                    case Command.DisplayOpponentPlank:
-                        opp!.plank = Plank.FromString(string.Join(' ', args.Skip(1).ToArray()));
-                        OpponentsUpdated?.Invoke(game.opponents);
-                        break;
-
-                    case Command.ClearPlayedCards:
-                        foreach (Opponent o in game.opponents)
-                        {
-                            o.playedCard = null;
-                        }
-                        OpponentsUpdated?.Invoke(game.opponents);
-                        PlayedCardCleared?.Invoke();
-                        break;
-
-                    case Command.JoinLobby:
-                        PlayerAddedToLobby?.Invoke(args[0]);
-                        break;
-
-                    case Command.ChangeBotDifficulty:
-                        // WTF, breaks when line under here is uncommented
-                        BotDifficultyChangedIn?.Invoke(args[0]);
-                        break;
-
-                    case Command.RemoveBot:
-                        PlayerLeftLobby?.Invoke(args[0]);
-                        break;
-
-                    case Command.MakePlank:
-                        TaskCompletionSource<Plank> tcs = new();
-                        void PlankComplete(Plank plank)
-                        {
-                            tcs.SetResult(plank);
-                        }
-                        MakePlank?.Invoke();
-
-                        PlankMade += PlankComplete;
-                        Plank plank = await tcs.Task;
-                        PlankMade -= PlankComplete;
-
-                        player.SendMessage(Command.MakePlank, plank.ToString());
-                        break;
-
-                    case Command.ScoreUpdate:
-                        ScoreUpdated?.Invoke(int.Parse(args[0]));
-                        break;
-
-                    case Command.DisplayMiddleCards:
-                        // Generating the cards
-                        List<Card> centerCards = new();
-                        if (args.Count() % 2 == 1)
-                        {
-                            throw new("We are fucked, shit not even");
-                        }
-
-                        for (int i = 0; i < args.Count(); i += 2)
-                        {
-                            string combo = string.Join(' ', new List<string>() { args[i], args[i + 1] });
-                            centerCards.Add(Card.FromString(combo));
-                        }
-                        CenterCardsUpdated?.Invoke(centerCards);
-                        break;
-
-                    case Command.EndScoring:
-                        // Getting the scoring
-                        Dictionary<Opponent, int> opponentScores = new();
-                        int playerScore = 0;
-                        for (int i = 0; i < args.Length; i += 2)
-                        {
-                            int score = int.Parse(args[i + 1]);
-                            if (args[i] == player.name)
+                            // Finding the opponent
+                            Opponent? localOpp = game.opponents.FirstOrDefault(x => x.name == args[i]);
+                            if (localOpp == null)
                             {
-                                playerScore = score;
+                                continue;
                             }
-                            else
-                            {
-                                // Finding the opponent
-                                Opponent? localOpp = game.opponents.FirstOrDefault(x => x.name == args[i]);
-                                if (localOpp == null)
-                                {
-                                    continue;
-                                }
-                                opponentScores[localOpp] = score;
-                            }
+                            opponentScores[localOpp] = score;
                         }
-                        EndGameScoring?.Invoke(playerScore, opponentScores);
-                        break;
+                    }
+                    EndGameScoring?.Invoke(playerScore, opponentScores);
+                    break;
                 }
 
             });
@@ -240,7 +244,7 @@ namespace SkullQueenClient
         {
             PlankMade?.Invoke(plank);
         }
-        public static Player? ConnectToServer(string playerName)
+        public static Player? ConnectToServer(string playerName, string lobbyCode)
         {
 
             try
@@ -266,7 +270,7 @@ namespace SkullQueenClient
                 // Connecting to the server
                 TcpClient client = new TcpClient(serverEP.Address.ToString(), 5050);
                 Player player = new(playerName, client);
-                player.SendMessage(Command.JoinLobby, playerName);
+                player.SendMessage(Command.JoinLobby, $"{playerName} {lobbyCode}");
                 return player;
             }
             catch (Exception ex)

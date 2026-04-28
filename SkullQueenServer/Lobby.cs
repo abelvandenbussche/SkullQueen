@@ -9,13 +9,22 @@ namespace SkullQueenServer
 {
     public class Lobby
     {
+        public string? lobbyCode;
         private List<Player> players = new List<Player>();
-        private TcpListener server;
         private ConcurrentDictionary<Player, bool> isReady = new();
         private TaskCompletionSource readyTcs = new();
         public Lobby()
         {
-            server = new TcpListener(IPAddress.Any, 5050);
+            lobbyCode = GenerateLobbyCode();
+        }
+        private string GenerateLobbyCode()
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            Random random = new Random();
+            // How this works:
+            // Makes a enumerable of 6 times "chars" and then selects a random character for each item
+            return new string(Enumerable.Repeat(chars, 6)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
         }
         public Game StartGame()
         {
@@ -28,40 +37,13 @@ namespace SkullQueenServer
             Game game = new Game(players);
             return game;
         }
-        public async Task ConnectToClients(CancellationTokenSource cts)
+        public void HandleClient(TcpClient client, string playerName)
         {
-            server.Start();
-            while (!cts.IsCancellationRequested && players.Count < 8)
-            {
-                try
-                {
-                    TcpClient client = await server.AcceptTcpClientAsync();
-                    await HandleClient(client);
-                }
-                catch (ObjectDisposedException)
-                {
-                    // Expected when server stops
-                }
-                catch (SocketException)
-                {
-                    // Also expected when server stops
-                }
-            }
-        }
-        private async Task HandleClient(TcpClient client)
-        {
-            // Getting the players name
-            byte[] buffer = new byte[1024];
-            int bytesRead = await client.GetStream().ReadAsync(buffer, 0, buffer.Length);
-
-            // The message is expected to be in the format "JoinLobby playerName"
-            // That is why we split and take the second part as the player name
-            string playerName = System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRead).Split(" ")[1].TrimEnd();
-
             Player newPlayer = new Player(playerName, client);
             players.Add(newPlayer);
             isReady[newPlayer] = false;
             _ = Task.Run(() => ListenToPlayer(newPlayer));
+            newPlayer.SendMessage(Command.SendLobbyCode, this.lobbyCode);
 
             // Updating all players
             foreach (Player player in players)
@@ -72,7 +54,6 @@ namespace SkullQueenServer
                     newPlayer.SendMessage(Command.JoinLobby, player.name);
                 }
             }
-            Console.WriteLine(playerName  + " Joined lobby!");
         }
         public Task WaitTillReady()
         {
@@ -156,6 +137,5 @@ namespace SkullQueenServer
             }
             return true;
         }
-        public void StopServer() { server.Stop(); }
     }
 }

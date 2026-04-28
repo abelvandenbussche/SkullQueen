@@ -23,7 +23,7 @@ namespace SkullQueenClient
     /// </summary>
     public partial class LobbyView : UserControl
     {
-        public event Action<string>? StartGameClicked;
+        public event Action<string, string>? StartGameClicked;
         public event Action<string>? BotDifficultyChanged;
         public event Action? ReadyUpClicked;
         public event Action? AddBot;
@@ -48,7 +48,7 @@ namespace SkullQueenClient
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void FindGameButton_Click(object sender, RoutedEventArgs e)
         {
             if (UsernameTextBox.Text.Length == 0)
             {
@@ -56,25 +56,30 @@ namespace SkullQueenClient
                 return;
             }
             string name = UsernameTextBox.Text;
+            string lobbyCode = LobbyCodeTextBox.Text;
             // Replacing whitespace musing regex
             name = Regex.Replace(name, @"\s+", "_");
 
-            StartGameClicked?.Invoke(name);
+            StartGameClicked?.Invoke(name, lobbyCode);
 
             // hiding the button and text box after clicking start game
             Button button = (sender as Button)!;
             button.IsEnabled = false;
             button.Visibility = Visibility.Collapsed;
 
+            // Making elements invisible that should not be visible in the lobby
             UsernameTextBox.IsEnabled = false;
             UsernameTextBox.Visibility = Visibility.Collapsed;
-
             UsernameHeader.Visibility = Visibility.Collapsed;
+            LobbyCodeTextBox.Visibility = Visibility.Collapsed;
+            LobbyCodeFieldText.Visibility = Visibility.Collapsed;
 
+            // Making elements visible that should only be visible in the lobby
             ReadyUpButton.Visibility = Visibility.Visible;
             BotButton.Visibility = Visibility.Visible;
             BotRemovalButton.Visibility = Visibility.Visible;
             DifficultyButtonGrid.Visibility = Visibility.Visible;
+            LobbyCodeText.Visibility = Visibility.Visible;
         }
         private void ReadyUpButton_Click(object sender, RoutedEventArgs e)
         {
@@ -125,6 +130,11 @@ namespace SkullQueenClient
                     break;
             }
             BotDifficultyChanged?.Invoke(diff);
+        }
+        public void SetLobbyCode(string code)
+        {
+            Debug.WriteLine("Setting lobby code to " + code);
+            LobbyCodeText.Text = "LobbyCode:  " + code;
         }
     }
 }

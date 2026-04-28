@@ -3,6 +3,7 @@
     public enum Command
     {
         JoinLobby,
+        SendLobbyCode,
         StartGame,
         PlayCard,
         DealCard,
