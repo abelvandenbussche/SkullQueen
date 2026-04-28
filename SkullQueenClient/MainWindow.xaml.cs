@@ -71,6 +71,8 @@ namespace SkullQueenClient
             {
                 DisplayPlayedCard(card);
                 game.playedCard = card;
+                game.currentLeadSuit = null;
+                DisplayCards(game.Hand, gameView.HandCanvas, true);
             };
             services.CenterCardsUpdated += cards =>
             {
@@ -138,9 +140,10 @@ namespace SkullQueenClient
                     cardGrid.RenderTransform = null;
                 };
             }
+            game.CheckChoice();
             if (!gameView.classicCards)
             {
-                Grid cardGrid = MakeCardImageUI(card, card.suit != game.currentLeadSuit && card.suit != Shared.Color.Black && game.currentLeadSuit != null && hover);
+                Grid cardGrid = MakeCardImageUI(card, card.suit != game.currentLeadSuit && card.suit != Shared.Color.Black && game.currentLeadSuit != null && hover && !game.freeChoice);
                 EditCard(cardGrid);
                 return cardGrid;
             }
@@ -205,7 +208,7 @@ namespace SkullQueenClient
             newGrid.Children.Add(rankText);
             newGrid.Children.Add(centerText);
             EditCard(newGrid);
-            if (card.suit != game.currentLeadSuit && card.suit != Shared.Color.Black && game.currentLeadSuit != null && hover)
+            if (card.suit != game.currentLeadSuit && card.suit != Shared.Color.Black && game.currentLeadSuit != null && hover && !game.freeChoice)
             {
                 Border border = new Border()
                 {
