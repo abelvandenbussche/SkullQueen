@@ -30,6 +30,7 @@
         </Grid>
         <TextBlock x:Name="LobbyCodeFieldText" HorizontalAlignment="Right" Margin="0,0,160,160" TextWrapping="Wrap" Text="Lobby Code" VerticalAlignment="Bottom" FontSize="20"/>
         <TextBox x:Name="LobbyCodeTextBox" HorizontalAlignment="Right" Margin="0,0,146,137" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="120"/>
-        <TextBlock x:Name="LobbyCodeText" HorizontalAlignment="Right" Margin="0,14,22,0" TextWrapping="Wrap" Text="LobbyCode: ******" VerticalAlignment="Top" Visibility="Collapsed"/>
+        <TextBlock x:Name="LobbyCodeText" HorizontalAlignment="Right" Margin="0,14,55,0" TextWrapping="Wrap" Text="LobbyCode: ******" VerticalAlignment="Top" Visibility="Hidden"/>
+        <Button x:Name="CopyButton" Click="CopyButton_Click" Content="⧉" HorizontalAlignment="Right" Margin="0,12,26,0" VerticalAlignment="Top" Visibility="Hidden"/>
     </Grid>
 </UserControl>

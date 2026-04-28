@@ -80,6 +80,7 @@ namespace SkullQueenClient
             BotRemovalButton.Visibility = Visibility.Visible;
             DifficultyButtonGrid.Visibility = Visibility.Visible;
             LobbyCodeText.Visibility = Visibility.Visible;
+            CopyButton.Visibility = Visibility.Visible;
         }
         private void ReadyUpButton_Click(object sender, RoutedEventArgs e)
         {
@@ -94,6 +95,10 @@ namespace SkullQueenClient
         private void BotRemovalButton_Click(object sender, RoutedEventArgs e)
         {
             RemoveBot?.Invoke();
+        }
+        private void CopyButton_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(LobbyCodeText.Text.Split("  ")[1]);
         }
         public void ChangeDifficulty(string difficulty)
         {
