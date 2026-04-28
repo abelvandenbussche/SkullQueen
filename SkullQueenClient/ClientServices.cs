@@ -63,6 +63,7 @@ namespace SkullQueenClient
             Task listener = player.ListenForMessages(async message =>
             {
                 message = message.Trim();
+                Debug.WriteLine(message);
                 // Splitting the message
                 // Trying to parse the command
                 Command? cmd = null;

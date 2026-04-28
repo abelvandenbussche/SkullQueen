@@ -30,10 +30,15 @@ namespace SkullQueenServer
             // Waiting on players to send their plank
             async Task GetAndSetPlank(Player player)
             {
-                string message = await player.GetMessageAsync();
+                string message = "";
+                while (!message.StartsWith(Command.MakePlank.ToString()))
+                {
+                    message = await player.GetMessageAsync();
+                }
                 string[] args = message.Split(' ');
                 Plank plank = Plank.FromString(String.Join(' ', args.Skip(1).ToArray()));
                 player.plank = plank;
+                Console.WriteLine($"Players: {player.name} sent their plank");
             }
             await Task.WhenAll(players.Select(player => GetAndSetPlank(player)));
             Utility.DisplayPlanks(players);
