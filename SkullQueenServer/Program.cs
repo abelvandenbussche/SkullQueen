@@ -62,6 +62,15 @@ namespace SkullQueenServer
                             _ = Task.Run(() => WaitOnLobby(lobby));
                         }
                     }
+                    if (lobby.IsFull())
+                    {
+                        Console.WriteLine("New lobby created!");
+                        lobby = new();
+                        lock (lobbyLock)
+                        {
+                            lobbies.Add(lobby);
+                        }
+                    }
                     lobby.HandleClient(client, playerName);
 
                 }

@@ -26,6 +26,10 @@ namespace SkullQueenServer
             return new string(Enumerable.Repeat(chars, 6)
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
+        public bool IsFull()
+        {
+            return players.Count >= 6;
+        }
         public Game StartGame()
         {
             // Adding a pirate king if there are only 2 players
@@ -77,7 +81,7 @@ namespace SkullQueenServer
                 else if (message == Command.AddBot.ToString())
                 {
                     // Checking the player count 
-                    if (players.Count < 8)
+                    if (players.Count < 6)
                     {
                         // Adding a bot
                         RoboPlayer bot = new(new());
