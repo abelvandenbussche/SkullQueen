@@ -76,6 +76,7 @@ namespace SkullQueenServer
                     {
                         readyTcs.SetResult();
                     }
+                    Utility.BroadCast(players, Command.Ready, player.name);
                     return;
                 }
                 else if (message == Command.AddBot.ToString())

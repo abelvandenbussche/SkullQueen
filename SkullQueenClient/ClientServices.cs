@@ -33,6 +33,7 @@ namespace SkullQueenClient
         public event Action<string>? PlayerAddedToLobby;
         public event Action<string>? PlayerLeftLobby;
         public event Action<string>? LobbyCodeReceived;
+        public event Action<string>? SomebodyReadyUpped;
         private event Action? ReadyUpped;
         private event Action? BotAdded;
         private event Action? BotRemoved;
@@ -164,6 +165,10 @@ namespace SkullQueenClient
                 case Command.JoinLobby:
                     PlayerAddedToLobby?.Invoke(args[0]);
                     break;
+
+                case Command.Ready:
+                    SomebodyReadyUpped?.Invoke(args[0]);
+                        break;
 
                 case Command.SendLobbyCode:
                     LobbyCodeReceived?.Invoke(args[0]);

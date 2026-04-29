@@ -36,6 +36,17 @@ namespace SkullQueenClient
         {
             LobbyList.Items.Add(playerName);
         }
+        public void ChangeReadyStatus(string playerName)
+        {
+            foreach (string item in LobbyList.Items)
+            {
+                if (item.StartsWith(playerName))
+                {
+                    LobbyList.Items[LobbyList.Items.IndexOf(item)] = playerName + " (Ready)";
+                    break;
+                }
+            }
+        }
         public void RemovePlayerFromLobby(string playerName)
         {
             for (int i = 0;  i < LobbyList.Items.Count; i++)

@@ -63,6 +63,7 @@ namespace SkullQueenClient
             services.StatusUpdated += status => Dispatcher.Invoke(() => gameView.StatusText.Text = status);
             services.PlankUpdated += plank => DisplayPlank(plank);
             services.BotDifficultyChangedIn += difficulty => Dispatcher.Invoke(() => lobbyView.ChangeDifficulty(difficulty));
+            services.SomebodyReadyUpped += playerName => Dispatcher.Invoke(() => lobbyView.ChangeReadyStatus(playerName));
             services.PlayedCardCleared += () =>
             {
                 Dispatcher.Invoke(() => gameView.PlayedCard.Children.Clear());
