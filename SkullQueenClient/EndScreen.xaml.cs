@@ -24,6 +24,7 @@ namespace SkullQueenClient
         {
             InitializeComponent();
             SetScore(score, opponentScores);
+            OpponentCanvas.SizeChanged += (s, e) => SetScore(score, opponentScores);
         }
         public void SetScore(int score, Dictionary<Opponent, int> opponentScores)
         {
