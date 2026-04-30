@@ -43,7 +43,15 @@ namespace SkullQueenServer
 
                     Console.WriteLine("Message end");
                     string playerName = message[1].TrimEnd();
-                    string lobbyCode = message[2].TrimEnd();
+                    string lobbyCode;
+                    try
+                    {
+                        lobbyCode = message[2].TrimEnd();
+                    }
+                    catch
+                    {
+                        lobbyCode = "";
+                    }
 
                     // Finding a lobby with the given lobby code
                     Lobby? lobby;
