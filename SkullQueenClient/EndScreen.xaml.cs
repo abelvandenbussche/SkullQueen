@@ -18,13 +18,13 @@ namespace SkullQueenClient
     /// <summary>
     /// Interaction logic for EndScreen.xaml
     /// </summary>
+    /// 
     public partial class EndScreen : UserControl
     {
         public EndScreen(int score, Dictionary<Opponent, int> opponentScores)
         {
             InitializeComponent();
             SetScore(score, opponentScores);
-            OpponentCanvas.SizeChanged += (s, e) => SetScore(score, opponentScores);
         }
         public void SetScore(int score, Dictionary<Opponent, int> opponentScores)
         {
@@ -42,18 +42,16 @@ namespace SkullQueenClient
             ScoreText.Text = $"You scored {score}\nThis caused you to place {placing}" + (score == 1 ? "st" : "nd");
 
             // Displaying the opponents
-            double spaceBetween = (OpponentCanvas.ActualWidth / opponentPlaces.Count + 1);
             for (int i = 0; i < opponentPlaces.Count; i++)
             {
                 Opponent opp = opponentPlaces[i];
-                int placement = opponentScores[opp];
-                TextBlock textBlock = new TextBlock()
+                int oppScore = opponentScores[opp];
+                if (i + 1 == placing)
                 {
-                    Text = $"{opp.name} placed {placing}" + (placement == 1 ? "st" : "nd"),
-                };
-                Canvas.SetLeft(textBlock, spaceBetween * i);
-
-                OpponentCanvas.Children.Add(textBlock);
+                    // Adding the player
+                    ScoringList.Items.Add(new { Place = placing, Name = "You", Score = score });
+                }
+                ScoringList.Items.Add(new { Place = i + 1 >= placing ? i + 1 : i + 2, Name = opp.name, Score = oppScore });
             }
         }
     }
