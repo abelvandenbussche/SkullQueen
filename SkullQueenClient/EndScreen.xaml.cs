@@ -51,7 +51,7 @@ namespace SkullQueenClient
                     // Adding the player
                     ScoringList.Items.Add(new { Place = placing, Name = "You", Score = score });
                 }
-                ScoringList.Items.Add(new { Place = i + 1 >= placing ? i + 1 : i + 2, Name = opp.name, Score = oppScore });
+                ScoringList.Items.Add(new { Place = i + 1 >= placing ? i + 2 : i + 1, Name = opp.name, Score = oppScore });
             }
         }
     }
