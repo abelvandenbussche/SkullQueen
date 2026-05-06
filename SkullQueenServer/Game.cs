@@ -27,7 +27,7 @@ namespace SkullQueenServer
         }
         public async Task StartGame()
         {
-            for (int i = 0; i < players.Count; i++)
+            for (int i = 0; i < 1; i++)
             {
                 this.currentRound = new Round(players);
                 await currentRound.StartRound();
