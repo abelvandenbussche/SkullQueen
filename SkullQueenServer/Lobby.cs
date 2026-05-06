@@ -37,6 +37,11 @@ namespace SkullQueenServer
             {
                 players.Add(new PirateKing());
             }
+            // If there was only 1 player there should be a bot
+            if (players.Count == 2)
+            {
+                players.Add(new RoboPlayer(new()));
+            }
             // Creating a new game instance with the players in the lobby
             Game game = new Game(players);
             return game;
