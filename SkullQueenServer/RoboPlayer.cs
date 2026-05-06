@@ -62,7 +62,7 @@ namespace SkullQueenServer
         }
         private Card PlayCard(Color? leadSuit)
         {
-            List<Card> possible = hand.FindAll(card => card.suit == leadSuit || card.suit == Color.Black || leadSuit == null);
+            List<Card> possible = hand.FindAll(card => card.suit == leadSuit || leadSuit == null);
             if (possible.Count == 0)
             {
                 possible = hand;

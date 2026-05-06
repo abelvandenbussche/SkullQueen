@@ -21,7 +21,7 @@ namespace SkullQueenClient
         }
         public bool HasSuit(Color? suit)
         {
-            return Hand.Any(card => card.suit == suit || card.suit == Color.Black);
+            return Hand.Any(card => card.suit == suit);
         }
         public void CheckChoice()
         {
@@ -31,17 +31,10 @@ namespace SkullQueenClient
                 this.freeChoice = true;
                 return;
             }
-            foreach (Card card in Hand)
+            else
             {
-                if (card.suit == currentLeadSuit || card.suit == Color.Black)
-                {
-                    // The players has atleast 1 card with the leadsuit or black suit so they must play those
-                    this.freeChoice = false;
-                    return;
-                }
+                freeChoice = Hand.FindAll(card => card.suit == currentLeadSuit).Count == 0;
             }
-            // The players does not have any blackcards or cards with the leadsuit so there is free choice
-            this.freeChoice = true;
             return;
         }
     }
