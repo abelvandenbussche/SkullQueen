@@ -30,7 +30,6 @@ namespace SkullQueenServer
             {
                 player.SendMessage(Command.PlayCard, leadSuit != null ? leadSuit.ToString() : "null");
                 string response = player.WaitOnMessage();
-                Console.WriteLine($"Received response from {player.name}: {response}");
                 // Parsing the response to get the card played
                 response = string.Join(' ', response.Split(" ").Skip(1));
                 Card playedCard = player.FindCard(Card.FromString(response));

@@ -41,7 +41,6 @@ namespace SkullQueenServer
                     // That is why we split and take the second part as the player name
                     string[] message = System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRead).Split(" ");
 
-                    Console.WriteLine("Message end");
                     string playerName = message[1].TrimEnd();
                     string lobbyCode;
                     try
@@ -57,10 +56,6 @@ namespace SkullQueenServer
                     Lobby? lobby;
                     lock (lobbyLock)
                     {
-                        foreach(Lobby l in lobbies)
-                        {
-                            Console.WriteLine($"Lobby code: [{l.lobbyCode}], given code: [{lobbyCode}]");
-                        }
                         lobby = lobbies.FirstOrDefault(l => lobbyCode.Equals(l.lobbyCode, StringComparison.OrdinalIgnoreCase));
                         if (lobby == null)
                         {
