@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,19 +30,21 @@ namespace SkullQueenClient
         public void SetScore(int score, Dictionary<Opponent, int> opponentScores)
         {
             // Calculating the scores and places
-            int placing = 1;
-            List<Opponent> opponentPlaces = opponentScores.Keys.OrderBy(opp => opponentScores[opp]).ToList();
-            for (int i = 0; i < opponentPlaces.Count -1; i++)
+            List<Opponent> opponentPlaces = opponentScores.Keys.OrderBy(opp => opponentScores[opp]).Reverse().ToList();
+
+            // Determining the player's place
+            int placing = opponentPlaces.Count + 1;
+            for (int i = 0; i < opponentPlaces.Count - 1; i++)
             {
                 if (score < opponentScores[opponentPlaces[i]] && score > opponentScores[opponentPlaces[i + 1]])
                 {
                     // 1 to negate the i = 0, 1 for the next pos over of i
-                    placing = i + 1 + 1;
+                    placing = i + 2;
                 }
             }
-            ScoreText.Text = $"You scored {score}\nThis caused you to place {placing}" + (score == 1 ? "st" : "nd");
+            ScoreText.Text = $"You scored {score}\nThis caused you to place {placing}" + (placing == 1 ? "st" : placing == 2 ? "nd" : placing == 3 ? "rd" : "th");
 
-            // Displaying the opponents
+            // Displaying the ranking
             for (int i = 0; i < opponentPlaces.Count; i++)
             {
                 Opponent opp = opponentPlaces[i];
@@ -51,7 +54,12 @@ namespace SkullQueenClient
                     // Adding the player
                     ScoringList.Items.Add(new { Place = placing, Name = "You", Score = score });
                 }
-                ScoringList.Items.Add(new { Place = i + 1 >= placing ? i + 2 : i + 1, Name = opp.name, Score = oppScore });
+                ScoringList.Items.Add(new { Place = i + 1 >= placing ? i + 1 : i + 1, Name = opp.name, Score = oppScore });
+            }
+            // If the player is last, add them to the end of the list
+            if (placing == opponentPlaces.Count + 1)
+            {
+                ScoringList.Items.Add(new { Place = placing, Name = "You", Score = score });
             }
         }
     }
