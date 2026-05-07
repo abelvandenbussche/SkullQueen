@@ -310,8 +310,12 @@ namespace SkullQueenClient
                     bitmap.EndInit();
                     Image opponentPicture = new()
                     {
-                        Source = bitmap
+                        Source = bitmap,
+                        Width = 50,
+                        Height = 50,
                     };
+                    Canvas.SetLeft(opponentPicture, opponentBlock.ActualWidth / 2);
+                    opponent.canvas.Children.Add(opponentPicture);
                 }
 
                 // Calculating the amount of space this would take up and deciding if it should be displayed simpler
