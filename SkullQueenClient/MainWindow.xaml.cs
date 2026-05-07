@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Reflection;
 using System.Security.Permissions;
+using System.Security.Policy;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -103,6 +104,19 @@ namespace SkullQueenClient
             services.EndGameScoring += (int playerScore, Dictionary<Opponent, int> opponentScores) =>
             {
                 MainContent.Content = new EndScreen(playerScore, opponentScores);
+            };
+            services.ProfilePicImageChange += url =>
+            {
+                Debug.WriteLine("displaying: " + url);
+                Dispatcher.Invoke(() =>
+                {
+                    BitmapImage bitmap = new();
+                    bitmap.BeginInit();
+                    bitmap.UriSource = new(url);
+                    bitmap.EndInit();
+
+                    gameView.ProfilePictureImage.Source = bitmap;
+                });
             };
 
             // Lobby events
@@ -287,6 +301,18 @@ namespace SkullQueenClient
                     Background = Brushes.LightGray,
                 };
                 opponent.canvas.Children.Add(opponentBlock);
+
+                if (opponent.profilePicUrl != null)
+                {
+                    BitmapImage bitmap = new();
+                    bitmap.BeginInit();
+                    bitmap.UriSource = new(opponent.profilePicUrl);
+                    bitmap.EndInit();
+                    Image opponentPicture = new()
+                    {
+                        Source = bitmap
+                    };
+                }
 
                 // Calculating the amount of space this would take up and deciding if it should be displayed simpler
                 double space = (60 + 70 + 30) * opponents.Count; // 60 for the card, 70 for the plank, 30 for spacing

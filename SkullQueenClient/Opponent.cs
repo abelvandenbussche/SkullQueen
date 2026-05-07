@@ -10,6 +10,7 @@ namespace SkullQueenClient
         public Canvas canvas;
         public Card? playedCard;
         public Plank? plank;
+        public string? profilePicUrl;
         public Opponent(string name)
         {
             this.name = name;

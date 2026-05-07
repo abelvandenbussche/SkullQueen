@@ -1,13 +1,29 @@
-﻿using System.Diagnostics;
+﻿using Shared;
+using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Text.Json;
 using System.Windows;
 using System.Xml.Linq;
-using System.Linq;
-using Shared;
 
 namespace SkullQueenServer
 {
+    class CatImageResult
+    {
+        public string id { get; set; }
+        public string url { get; set; }
+        public int width { get; set; }
+        public int height { get; set; }
+
+        public CatImageResult(string id, string url, int width, int height)
+        {
+            this.id = id;
+            this.url = url;
+            this.width = width;
+            this.height = height;
+        }
+    }
     public class Game
     {
         private List<Player> players;
@@ -23,6 +39,42 @@ namespace SkullQueenServer
             foreach (Player player in players)
             {
                 Utility.BroadCast(players, Command.DisplayOpponent, player.name, player);
+            }
+            // Getting the profile pics for the players
+            List<string> urls = GetCats(players.Count);
+            for (int i  = 0; i < players.Count; i++)
+            {
+                Player player = players[i];
+                string url = urls[i];
+                Utility.BroadCast(players, Command.SendProfilePicture, player.name + " " + url);
+            }
+        }
+        public List<string> GetCats(int amount)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                Task<HttpResponseMessage> res = client.GetAsync($"https://api.thecatapi.com/v1/images/search?mime_types=jpg&format=json&order=RANDOM&page=0&limit={amount}");
+                HttpResponseMessage response = res.Result;
+                Debug.WriteLine(response.Content.ReadAsStringAsync().Result);
+                string data = response.Content.ReadAsStringAsync().Result;
+                List<CatImageResult> images = JsonSerializer.Deserialize<List<CatImageResult>>(data)!;
+                List<string> imageUrls = new();
+                foreach(CatImageResult image in images)
+                {
+                    imageUrls.Add(image.url);
+                }
+                return imageUrls;
+            }
+            catch
+            {
+                // Standard image
+                List<string> images = new();
+                for (int i = 0; i < amount; i++)
+                {
+                    images.Append("https://http.cat/images/102.jpg");
+                }
+                return images;
             }
         }
         public async Task StartGame()
