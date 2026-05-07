@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.DirectoryServices;
+using System.Net.Http;
 
 namespace SkullQueenClient
 {
@@ -46,6 +47,10 @@ namespace SkullQueenClient
                     break;
                 }
             }
+        }
+        public string GetCat()
+        {
+            HttpClient client = new HttpClient();
         }
         public void RemovePlayerFromLobby(string playerName)
         {
