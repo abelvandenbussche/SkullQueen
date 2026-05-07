@@ -124,8 +124,8 @@ namespace SkullQueenServer
                 {
                     if (card is DoubleCard doubleCard)
                     {
-                        if (doubleCard.up) { doubleUp = true; }
-                        else {  doubleDown = true; }
+                        doubleUp = doubleCard.up;
+                        doubleDown = !doubleUp;
                     }
                 }
 
