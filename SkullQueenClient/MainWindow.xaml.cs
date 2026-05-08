@@ -295,12 +295,9 @@ namespace SkullQueenClient
                 Opponent opponent = opponents[i];
                 opponent.canvas.Children.Clear();
 
-                TextBlock opponentBlock = new()
-                {
-                    Text = opponent.name,
-                    Background = Brushes.LightGray,
-                };
-                opponent.canvas.Children.Add(opponentBlock);
+                Grid top = new();
+                top.ColumnDefinitions.Add(new ColumnDefinition());
+                top.ColumnDefinitions.Add(new ColumnDefinition());
 
                 if (opponent.profilePicUrl != null)
                 {
@@ -314,9 +311,22 @@ namespace SkullQueenClient
                         Width = 50,
                         Height = 50,
                     };
-                    Canvas.SetLeft(opponentPicture, opponentBlock.ActualWidth / 2);
-                    opponent.canvas.Children.Add(opponentPicture);
+                    top.Children.Add(opponentPicture);
                 }
+
+                TextBlock opponentBlock = new()
+                {
+                    Text = opponent.name,
+                };
+                Border opponentTextBackground = new()
+                {
+                    Background = Brushes.LightGray,
+                    Child = opponentBlock,
+                    VerticalAlignment = VerticalAlignment.Center,
+                };
+                Grid.SetColumn(opponentTextBackground, 1);
+                top.Children.Add(opponentTextBackground);
+                opponent.canvas.Children.Add(top);
 
                 // Calculating the amount of space this would take up and deciding if it should be displayed simpler
                 double space = (60 + 70 + 30) * opponents.Count; // 60 for the card, 70 for the plank, 30 for spacing

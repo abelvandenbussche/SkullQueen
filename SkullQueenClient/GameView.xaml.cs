@@ -29,13 +29,12 @@ namespace SkullQueenClient
         public bool classicCards = false;
         Grid containmentGrid = new()
         {
-            Margin = new(0, 20, 0, 100),
+            Margin = new(0, 50, 0, 100),
         };
         
         public GameView()
         {
             InitializeComponent();
-            containmentGrid.RowDefinitions.Add(new() { Height = new(1, GridUnitType.Auto) });
             containmentGrid.RowDefinitions.Add(new() { Height = new(1, GridUnitType.Auto) });
             containmentGrid.RowDefinitions.Add(new() { Height = new(1, GridUnitType.Auto) });
             containmentGrid.RowDefinitions.Add(new() { Height = new(1, GridUnitType.Auto) });
@@ -135,14 +134,6 @@ namespace SkullQueenClient
                     block.Tag = 4 - (int)block.Tag;
                 }
             };
-            TextBlock title = new()
-            {
-                Text = "Setup you board",
-                Height = 50,
-                Width = 200,
-                TextAlignment = TextAlignment.Center,
-                FontSize = 20,
-            };
             Button finnishButton = new()
             {
                 Height = 30,
@@ -151,13 +142,11 @@ namespace SkullQueenClient
             };
             finnishButton.Click += (s, e) => ButtonClicked?.Invoke(pieces, flipped);
 
-            Grid.SetRow(title, 0);
-            Grid.SetRow(flipButton, 1);
-            Grid.SetRow(finnishButton, 2);
-            Grid.SetRow(plankGrid, 3);
+            Grid.SetRow(flipButton, 0);
+            Grid.SetRow(finnishButton, 1);
+            Grid.SetRow(plankGrid, 2);
 
             containmentGrid.Children.Add(finnishButton);
-            containmentGrid.Children.Add(title);
             containmentGrid.Children.Add(flipButton);
             containmentGrid.Children.Add(plankGrid);
 

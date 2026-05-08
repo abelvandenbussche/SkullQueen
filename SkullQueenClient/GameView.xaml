@@ -22,6 +22,6 @@
             <RadioButton x:Name="RealRadioButton" Grid.Row="0" Content="Real" HorizontalAlignment="Left" VerticalAlignment="Top" GroupName="HandStyle" IsChecked="True" Checked="RadioButton_Checked"/>
             <RadioButton x:Name="ClassicRadioButton" Grid.Row="1" Content="Classic" HorizontalAlignment="Left" VerticalAlignment="Top" GroupName="HandStyle" Checked="RadioButton_Checked"/>
         </Grid>
-        <Image x:Name="ProfilePictureImage" HorizontalAlignment="Right" Height="50" Margin="0,250,20,0" VerticalAlignment="Top" Width="50"/>
+        <Image x:Name="ProfilePictureImage" HorizontalAlignment="Right" Margin="0,250,0,0" VerticalAlignment="Top" Width="70"/>
     </Grid>
 </UserControl>
