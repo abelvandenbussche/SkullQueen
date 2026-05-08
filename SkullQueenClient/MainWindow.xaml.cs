@@ -339,13 +339,29 @@ namespace SkullQueenClient
                 {
                     Grid cardGrid = MakeCardUI(opponent.playedCard);
                     Grid.SetRow(cardGrid, 1);
+                    if (simple)
+                    {
+                        Grid.SetColumnSpan(cardGrid, 2);
+                        cardGrid.HorizontalAlignment = HorizontalAlignment.Center;
+                    }
                     layoutGrid.Children.Add(cardGrid);
                 }
                 if (opponent.plank != null && (!simple || opponent.playedCard == null))
                 {
                     Grid plankGrid = MakePlank(opponent.plank, 100, 70);
                     // Only move the plank to the right if the card is also being displayed, otherwise it can be centered
-                    Grid.SetColumn(plankGrid, (!simple && opponent.playedCard != null) ? 1 : 0);
+                    if (!simple && opponent.playedCard != null)
+                    {
+                        Grid.SetColumn(plankGrid, 1);
+
+                    }
+                    else
+                    {
+                        Grid.SetColumn(plankGrid, 0);
+                        Grid.SetColumnSpan(plankGrid, 2);
+                        plankGrid.HorizontalAlignment = HorizontalAlignment.Center;
+
+                    }
                     Grid.SetRow(plankGrid, 1);
                     layoutGrid.Children.Add(plankGrid);
                 }

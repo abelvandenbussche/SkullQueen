@@ -40,24 +40,26 @@ namespace SkullQueenServer
             {
                 Utility.BroadCast(players, Command.DisplayOpponent, player.name, player);
             }
-            // Getting the profile pics for the players
-            List<string> urls = GetCats(players.Count);
-            for (int i  = 0; i < players.Count; i++)
+            // Getting the profile pics for the players, this is done asynchronously so the game can start while the images are being fetched
+            Task.Run(() => SendProfilePics());
+        }
+        public async Task SendProfilePics()
+        {
+            List<string> urls = await GetCats(players.Count);
+            for (int i = 0; i < players.Count; i++)
             {
                 Player player = players[i];
                 string url = urls[i];
                 Utility.BroadCast(players, Command.SendProfilePicture, player.name + " " + url);
             }
         }
-        public List<string> GetCats(int amount)
+        public async Task<List<string>> GetCats(int amount)
         {
             try
             {
                 HttpClient client = new HttpClient();
-                Task<HttpResponseMessage> res = client.GetAsync($"https://api.thecatapi.com/v1/images/search?mime_types=jpg&format=json&order=RANDOM&page=0&limit={amount}&width=500&height=500");
-                HttpResponseMessage response = res.Result;
-                Debug.WriteLine(response.Content.ReadAsStringAsync().Result);
-                string data = response.Content.ReadAsStringAsync().Result;
+                HttpResponseMessage response = await client.GetAsync($"https://api.thecatapi.com/v1/images/search?mime_types=jpg&format=json&order=RANDOM&page=0&limit={amount}&width=500&height=500");
+                string data = await response.Content.ReadAsStringAsync();
                 List<CatImageResult> images = JsonSerializer.Deserialize<List<CatImageResult>>(data)!;
                 List<string> imageUrls = new();
                 foreach(CatImageResult image in images)
