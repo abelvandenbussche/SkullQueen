@@ -10,10 +10,11 @@
         <Canvas x:Name="HandCanvas" Margin="20,0,80,0" Height="100" VerticalAlignment="Bottom"/>
         <Canvas x:Name="PlayersCanvas" Margin="0,0,0,300"/>
         <Canvas x:Name="PlayingFieldMiddle" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" Height="100"/>
-        <Canvas x:Name="PlayedCard" Margin="135,0,605,149" Height="96" Width="60" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-        <Canvas x:Name="PlankCanvas"  Height="100" Width="70" RenderTransformOrigin="0.505,0.294" Margin="28,0,702,145" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
-        <TextBlock x:Name="StatusText" HorizontalAlignment="Left" Margin="30,0,0,260" TextWrapping="Wrap" Text="No Activity" VerticalAlignment="Bottom"/>
-        <TextBlock x:Name="ScoreText" HorizontalAlignment="Right" Margin="0,180,20,0" TextWrapping="Wrap" Text="Score: 0" VerticalAlignment="Top"/>
+        <Canvas x:Name="PlayedCard" Margin="130,0,0,109" Height="96" Width="60" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+        <Canvas x:Name="PlankCanvas"  Height="100" Width="70" Margin="24,0,0,105" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+        <TextBlock x:Name="StatusText" HorizontalAlignment="Left" Margin="10,0,0,230" TextWrapping="Wrap" Text="No Activity" VerticalAlignment="Bottom"/>
+        <TextBlock x:Name="ScoreText" HorizontalAlignment="Right" Margin="0,177,20,0" TextWrapping="Wrap" Text="Score: 0" VerticalAlignment="Top"/>
+        <Image x:Name="ProfilePictureImage" HorizontalAlignment="Right" Margin="0,250,0,0" VerticalAlignment="Top" Width="70"/>
         <Grid HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0, 0, 5, 5">
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -22,6 +23,5 @@
             <RadioButton x:Name="RealRadioButton" Grid.Row="0" Content="Real" HorizontalAlignment="Left" VerticalAlignment="Top" GroupName="HandStyle" IsChecked="True" Checked="RadioButton_Checked"/>
             <RadioButton x:Name="ClassicRadioButton" Grid.Row="1" Content="Classic" HorizontalAlignment="Left" VerticalAlignment="Top" GroupName="HandStyle" Checked="RadioButton_Checked"/>
         </Grid>
-        <Image x:Name="ProfilePictureImage" HorizontalAlignment="Right" Margin="0,250,0,0" VerticalAlignment="Top" Width="70"/>
     </Grid>
 </UserControl>

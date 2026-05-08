@@ -295,9 +295,12 @@ namespace SkullQueenClient
                 Opponent opponent = opponents[i];
                 opponent.canvas.Children.Clear();
 
-                Grid top = new();
-                top.ColumnDefinitions.Add(new ColumnDefinition());
-                top.ColumnDefinitions.Add(new ColumnDefinition());
+                Grid layoutGrid = new();
+                // Adding the grid rows and columns
+                layoutGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                layoutGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                layoutGrid.RowDefinitions.Add(new RowDefinition());
+                layoutGrid.RowDefinitions.Add(new RowDefinition());
 
                 if (opponent.profilePicUrl != null)
                 {
@@ -308,10 +311,11 @@ namespace SkullQueenClient
                     Image opponentPicture = new()
                     {
                         Source = bitmap,
-                        Width = 50,
-                        Height = 50,
+                        Height = 30,
+                        Width = 30,
+                        Stretch = Stretch.UniformToFill,
                     };
-                    top.Children.Add(opponentPicture);
+                    layoutGrid.Children.Add(opponentPicture);
                 }
 
                 TextBlock opponentBlock = new()
@@ -325,8 +329,7 @@ namespace SkullQueenClient
                     VerticalAlignment = VerticalAlignment.Center,
                 };
                 Grid.SetColumn(opponentTextBackground, 1);
-                top.Children.Add(opponentTextBackground);
-                opponent.canvas.Children.Add(top);
+                layoutGrid.Children.Add(opponentTextBackground);
 
                 // Calculating the amount of space this would take up and deciding if it should be displayed simpler
                 double space = (60 + 70 + 30) * opponents.Count; // 60 for the card, 70 for the plank, 30 for spacing
@@ -335,24 +338,20 @@ namespace SkullQueenClient
                 if (opponent.playedCard != null)
                 {
                     Grid cardGrid = MakeCardUI(opponent.playedCard);
-                    if (!simple && opponent.plank != null)
-                    {
-                        Canvas.SetLeft(cardGrid, -35); // Move the card to the left if the plank is also being displayed, otherwise it can be centered
-                    }
-                    Canvas.SetTop(cardGrid, 20);
-                    opponent.canvas.Children.Add(cardGrid);
+                    Grid.SetRow(cardGrid, 1);
+                    layoutGrid.Children.Add(cardGrid);
                 }
                 if (opponent.plank != null && (!simple || opponent.playedCard == null))
                 {
                     Grid plankGrid = MakePlank(opponent.plank, 100, 70);
                     // Only move the plank to the right if the card is also being displayed, otherwise it can be centered
-                    if (!simple && opponent.playedCard != null)
-                    {
-                        Canvas.SetLeft(plankGrid, 35);
-                    }
-                    Canvas.SetTop(plankGrid, 20);
-                    opponent.canvas.Children.Add(plankGrid);
+                    Grid.SetColumn(plankGrid, (!simple && opponent.playedCard != null) ? 1 : 0);
+                    Grid.SetRow(plankGrid, 1);
+                    layoutGrid.Children.Add(plankGrid);
                 }
+
+                // Adding everything to together
+                opponent.canvas.Children.Add(layoutGrid);
                 Canvas.SetLeft(opponent.canvas, i * spaceBetween + (spaceBetween / 2));
                 gameView.PlayersCanvas.Children.Add(opponent.canvas);
             }

@@ -54,7 +54,7 @@ namespace SkullQueenServer
             try
             {
                 HttpClient client = new HttpClient();
-                Task<HttpResponseMessage> res = client.GetAsync($"https://api.thecatapi.com/v1/images/search?mime_types=jpg&format=json&order=RANDOM&page=0&limit={amount}");
+                Task<HttpResponseMessage> res = client.GetAsync($"https://api.thecatapi.com/v1/images/search?mime_types=jpg&format=json&order=RANDOM&page=0&limit={amount}&width=500&height=500");
                 HttpResponseMessage response = res.Result;
                 Debug.WriteLine(response.Content.ReadAsStringAsync().Result);
                 string data = response.Content.ReadAsStringAsync().Result;
