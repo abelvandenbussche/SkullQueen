@@ -67,6 +67,7 @@ namespace SkullQueenServer
                 startPlayer = currentTrick.StartTrick(startPlayer);
                 centerCards = currentTrick.centerCards;
 
+                Task.Delay(1000).Wait();
                 Utility.BroadCastMiddleCards(players, centerCards);
                 Utility.BroadCast(players, Command.ClearPlayedCards);
             }

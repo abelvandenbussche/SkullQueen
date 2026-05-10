@@ -139,8 +139,6 @@ namespace SkullQueenServer
 
                         pendingResponse.SetResult(Command.PlayCard.ToString() + " " + PlayCard(leadSuit).ToString());
                     }
-                    // Simulating delays that normal players would have
-                    Thread.Sleep(500);
                     break;
             }
         }
