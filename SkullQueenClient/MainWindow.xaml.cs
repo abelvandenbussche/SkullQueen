@@ -314,6 +314,7 @@ namespace SkullQueenClient
                         Height = 30,
                         Width = 30,
                         Stretch = Stretch.UniformToFill,
+                        Margin = new Thickness(0, 0, 5, 0),
                     };
                     layoutGrid.Children.Add(opponentPicture);
                 }
@@ -350,6 +351,7 @@ namespace SkullQueenClient
                 {
                     Grid plankGrid = MakePlank(opponent.plank, 100, 70);
                     // Only move the plank to the right if the card is also being displayed, otherwise it can be centered
+                    plankGrid.HorizontalAlignment = HorizontalAlignment.Center;
                     if (!simple && opponent.playedCard != null)
                     {
                         Grid.SetColumn(plankGrid, 1);
@@ -359,8 +361,6 @@ namespace SkullQueenClient
                     {
                         Grid.SetColumn(plankGrid, 0);
                         Grid.SetColumnSpan(plankGrid, 2);
-                        plankGrid.HorizontalAlignment = HorizontalAlignment.Center;
-
                     }
                     Grid.SetRow(plankGrid, 1);
                     layoutGrid.Children.Add(plankGrid);
