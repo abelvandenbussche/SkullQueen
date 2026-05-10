@@ -110,7 +110,7 @@ namespace SkullQueenServer
             foreach(List<Card> cards in sorted.Values)
             {
                 // Adding the card to the center if it is the only card in its suit
-                if (cards.Count == 1) { centerCards.Add(cards[0]); }
+                if (cards.Count == 1) { centerCards.Add(cards[0]); continue; }
 
                 // Sort in descending order of rank
                 cards.Sort((a, b) => b.rank.CompareTo(a.rank));
