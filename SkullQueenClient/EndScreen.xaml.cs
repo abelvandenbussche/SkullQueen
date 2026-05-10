@@ -34,15 +34,14 @@ namespace SkullQueenClient
 
             // Determining the player's place
             int placing = opponentPlaces.Count + 1;
-            for (int i = 0; i < opponentPlaces.Count - 1; i++)
+            for (int i = 0; i < opponentPlaces.Count; i++)
             {
-                if (score < opponentScores[opponentPlaces[i]] && score > opponentScores[opponentPlaces[i + 1]])
+                if (score >= opponentScores[opponentPlaces[i]])
                 {
-                    // 1 to negate the i = 0, 1 for the next pos over of i
-                    placing = i + 2;
+                    placing = i + 1;
+                    break;
                 }
             }
-            ScoreText.Text = $"You scored {score}\nThis caused you to place {placing}" + (placing == 1 ? "st" : placing == 2 ? "nd" : placing == 3 ? "rd" : "th");
 
             // Displaying the ranking
             for (int i = 0; i < opponentPlaces.Count; i++)
