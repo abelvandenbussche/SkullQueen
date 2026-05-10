@@ -178,6 +178,10 @@ namespace SkullQueenClient
         }
         private async void RectangleClick(object sender, EventArgs e)
         {
+            // Highlighting the clicked rectangle
+            Rectangle rect = (Rectangle)sender;
+            rect.Stroke = Brushes.Black;
+
             // Waiting until a plank is clicked
             TaskCompletionSource<int> tcs = new();
 
@@ -192,7 +196,10 @@ namespace SkullQueenClient
             // Unsubscribing from the event
             PlankSectionClicked -= OnPlankSectionClicked;
 
-            Grid.SetRow((Rectangle)sender, num);
+            // Unhighlighting the rectangle
+            rect.Stroke = null;
+
+            Grid.SetRow(rect, num);
         }
         private void RadioButton_Checked(object sender,  RoutedEventArgs e)
         {
