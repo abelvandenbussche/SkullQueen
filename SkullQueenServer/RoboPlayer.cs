@@ -1,5 +1,6 @@
 ﻿using Shared;
 using System.Diagnostics;
+using System.Windows.Markup;
 
 namespace SkullQueenServer
 {
@@ -27,7 +28,7 @@ namespace SkullQueenServer
 
         private Plank SetupPlank()
         {
-            Dictionary<Color, int> piecePositions = new()
+            Dictionary<Color, double> piecePositions = new()
             {
                 {Color.Red, 0},
                 {Color.Green, 0},
@@ -40,22 +41,24 @@ namespace SkullQueenServer
                 {
                     continue;
                 }
-                piecePositions[card.suit] += card.rank > 6.5 ? 1 : -1;
+                double change = card.rank > 6.5 ? (card.rank - 6.5) / 6.5 : -(1 - (card.rank / 6.5));
+                piecePositions[card.suit] += change;
             }
             bool flipped = piecePositions.Values.Sum() > 0;
             // Limiting
             foreach (Color color in piecePositions.Keys)
             {
-                int value = piecePositions[color];
-                value = Math.Max(Math.Min(value, 2), -2);
-                value = 2 + value;
+                int value = (int)Math.Round(piecePositions[color]);
+                value += flipped ? 0 : 4;
+                // Clamping the value
+                value = Math.Max(Math.Min(value, 4), 0);
                 piecePositions[color] = value;
             }
             Plank plank = new(
-                piecePositions[Color.Red],
-                piecePositions[Color.Green],
-                piecePositions[Color.Yellow],
-                piecePositions[Color.Blue],
+                (int)piecePositions[Color.Red],
+                (int)piecePositions[Color.Green],
+                (int)piecePositions[Color.Yellow],
+                (int)piecePositions[Color.Blue],
                 flipped
             );
             return plank;
