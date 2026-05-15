@@ -17,7 +17,8 @@ it has 3 components:
 ## some functionalities
  - Multiplayer
     - Usernames
-    - lobbies
+    - lobbies (using lobby codes)
+
  - Game
     - Setting up your plank
     - Playing tricks
