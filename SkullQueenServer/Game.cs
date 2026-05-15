@@ -83,15 +83,20 @@ namespace SkullQueenServer
         {
             for (int i = 0; i < players.Count; i++)
             {
-                this.currentRound = new Round(players);
-                await currentRound.StartRound();
+              //Rotating the players so the start players is different
+              Player first = players[0];
+              players.RemoveAt(0);
+              players.Add(first);
+
+              this.currentRound = new Round(players);
+              await currentRound.StartRound();
             }
             // Sending the scores of the players for the end of the game
             string message = "";
             foreach (Player player in players)
             {
-                message += player.name + " ";
-                message += player.score + " ";
+              message += player.name + " ";
+              message += player.score + " ";
             }
             Utility.BroadCast(players, Command.EndScoring, message);
         }
