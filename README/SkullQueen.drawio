@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0">
   <diagram name="Pagina-1" id="1bGF7VkXLwhyffyrKJBG">
-    <mxGraphModel dx="1845" dy="1786" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1827" dy="1786" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -17,7 +17,7 @@
           <mxGeometry height="62" width="160" y="88" as="geometry" />
         </mxCell>
         <mxCell id="z1Cx5DHdxT-5SP8zWOK4-5" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="Round&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="124" width="160" x="440" y="45" as="geometry" />
+          <mxGeometry height="124" width="160" x="440" y="16" as="geometry" />
         </mxCell>
         <mxCell id="z1Cx5DHdxT-5SP8zWOK4-6" parent="z1Cx5DHdxT-5SP8zWOK4-5" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- currentTrick: Trick&lt;div&gt;- middle: List&amp;lt;Card&amp;gt;&lt;/div&gt;&lt;div&gt;- playedCards: Dict&amp;lt;Player, Card&amp;gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="64" width="160" y="26" as="geometry" />
@@ -52,7 +52,7 @@
         <mxCell id="z1Cx5DHdxT-5SP8zWOK4-17" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="DoubleCard&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="58" width="160" x="220" y="200" as="geometry" />
         </mxCell>
-        <mxCell id="z1Cx5DHdxT-5SP8zWOK4-18" parent="z1Cx5DHdxT-5SP8zWOK4-17" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- up: bools" vertex="1">
+        <mxCell id="z1Cx5DHdxT-5SP8zWOK4-18" parent="z1Cx5DHdxT-5SP8zWOK4-17" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- up: bool" vertex="1">
           <mxGeometry height="24" width="160" y="26" as="geometry" />
         </mxCell>
         <mxCell id="z1Cx5DHdxT-5SP8zWOK4-19" parent="z1Cx5DHdxT-5SP8zWOK4-17" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
