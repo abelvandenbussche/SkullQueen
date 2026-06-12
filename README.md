@@ -17,12 +17,22 @@ it has 3 components:
 ## some functionalities
  - Multiplayer
     - Usernames
+    - Cat pictures
     - lobbies (using lobby codes)
 
  - Game
     - Setting up your plank
     - Playing tricks
     - Automatic scoring
+    - Bots
+    - Pirate King for 2 player games
+
+### Notes
+Because this is my first large project using WPF & events:
+  - It does not implement good MVVM
+  - The events can be a mess
+  - The netcode can be better
+  - It does not handle disconnects
 
 ## Documentation
 [Class diagram](README/SkullQueenClassDiagram.png)
