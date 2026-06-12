@@ -295,11 +295,7 @@ namespace SkullQueenClient
             catch (Exception ex)
             {
                 MessageBox.Show("Error connecting to server: " + ex.Message);
-                // Trying to connect to the server on local host (for testing purposes without network access)
-                TcpClient client = new TcpClient("localhost", 5050);
-                Player player = new(playerName, client);
-                player.SendMessage(Command.JoinLobby, $"{playerName} {lobbyCode}");
-                return player;
+                throw;
             }
         }
         private async Task PlayCard(Player player, Shared.Color? suit)
