@@ -1,11 +1,5 @@
 ﻿using Shared;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
 using System.Text.Json;
-using System.Windows;
-using System.Xml.Linq;
 
 namespace SkullQueenServer
 {
@@ -62,7 +56,7 @@ namespace SkullQueenServer
                 string data = await response.Content.ReadAsStringAsync();
                 List<CatImageResult> images = JsonSerializer.Deserialize<List<CatImageResult>>(data)!;
                 List<string> imageUrls = new();
-                foreach(CatImageResult image in images)
+                foreach (CatImageResult image in images)
                 {
                     imageUrls.Add(image.url);
                 }
@@ -83,20 +77,20 @@ namespace SkullQueenServer
         {
             for (int i = 0; i < players.Count; i++)
             {
-              this.currentRound = new Round(players);
-              await currentRound.StartRound();
+                currentRound = new Round(players);
+                await currentRound.StartRound();
 
-              //Rotating the players so the start players is different
-              Player first = players[0];
-              players.RemoveAt(0);
-              players.Add(first);
+                //Rotating the players so the start players is different
+                Player first = players[0];
+                players.RemoveAt(0);
+                players.Add(first);
             }
             // Sending the scores of the players for the end of the game
             string message = "";
             foreach (Player player in players)
             {
-              message += player.name + " ";
-              message += player.score + " ";
+                message += player.name + " ";
+                message += player.score + " ";
             }
             Utility.BroadCast(players, Command.EndScoring, message);
         }

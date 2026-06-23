@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using Shared;
+﻿using Shared;
 
 namespace SkullQueenServer
 {
@@ -15,7 +13,17 @@ namespace SkullQueenServer
         public Round(List<Player> players)
         {
             this.players = players;
-            this.startPlayer = players[0];
+            if (players.Count == 3)
+            {
+                foreach (Player player in players)
+                {
+                    if (player is PirateKing)
+                    {
+                        startPlayer = player;
+                    }
+                }
+            }
+            startPlayer ??= players[0];
             centerCards = new();
 
             deck = CreateAndShuffleDeck();

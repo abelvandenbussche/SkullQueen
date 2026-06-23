@@ -22,8 +22,8 @@ namespace SkullQueenServer
         public Player StartTrick(Player startingPlayer)
         {
             this.startingPlayer = startingPlayer;
-            this.playerOrder = DeterminePlayerOrder();
-            this.leadSuit = null;
+            playerOrder = DeterminePlayerOrder();
+            leadSuit = null;
 
             // Asking players to play their cards in order
             foreach (Player player in playerOrder)
@@ -107,7 +107,7 @@ namespace SkullQueenServer
                     centerCards.Remove(centerCard);
                 }
             }
-            foreach(List<Card> cards in sorted.Values)
+            foreach (List<Card> cards in sorted.Values)
             {
                 // Adding the card to the center if it is the only card in its suit
                 if (cards.Count <= 1) { centerCards.Add(cards[0]); continue; }
@@ -146,6 +146,17 @@ namespace SkullQueenServer
         }
         public Player DetermineStartPlayer()
         {
+            if (players.Count == 3)
+            {
+                // Finding the pirate king if there is one
+                foreach (Player player in players)
+                {
+                    if (player is PirateKing)
+                    {
+                        return player;
+                    }
+                }
+            }
             int highestRank = -1;
             Card best = new(Color.Black, 0);
             foreach (Card card in playedCards.Keys)
