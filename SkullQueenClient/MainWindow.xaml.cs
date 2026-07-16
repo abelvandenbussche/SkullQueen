@@ -58,6 +58,9 @@ namespace SkullQueenClient
                 Dispatcher.Invoke(() => MainContent.Content = gameView);
             };
 
+            // UI events
+            services.ImportantEvent += message => gameView.AddGameEvent(message);
+
             // Game events
             services.HandUpdated += hand => DisplayCards(hand, gameView.HandCanvas, true);
             services.OpponentsUpdated += opponents => DisplayOpponents(opponents);

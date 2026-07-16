@@ -1,6 +1,7 @@
 ﻿using Shared;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -206,6 +208,13 @@ namespace SkullQueenClient
             RadioButton selected = (RadioButton)sender;
             classicCards = selected == ClassicRadioButton;
             HandUpdated?.Invoke();
+        }
+        private void InfoButton_Click(object sender, RoutedEventArgs e)
+        {
+            InfoPopup.IsOpen = !InfoPopup.IsOpen;
+        }
+        public void AddGameEvent(string e) {
+            InfoItemsControl.Items.Add(new TextBlock() { Text = e });
         }
     }
 }

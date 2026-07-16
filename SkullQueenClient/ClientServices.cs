@@ -40,6 +40,9 @@ namespace SkullQueenClient
         private event Action? BotRemoved;
         private event Action<string>? BotDifficultyChangedOut;
 
+        // UI events
+        public event Action<String>? ImportantEvent;
+
 
         public ClientServices(ClientGame game)
         {
@@ -145,6 +148,7 @@ namespace SkullQueenClient
                         if (opp != null)
                         {
                             opp.playedCard = playedCard;
+                            ImportantEvent?.Invoke($"{opp.name} played a card: {playedCard.suit} {playedCard.rank}");
                             OpponentsUpdated?.Invoke(game.opponents);
                         }
                         break;

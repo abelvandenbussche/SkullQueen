@@ -23,5 +23,38 @@
             <RadioButton x:Name="RealRadioButton" Grid.Row="0" Content="Real" HorizontalAlignment="Left" VerticalAlignment="Top" GroupName="HandStyle" IsChecked="True" Checked="RadioButton_Checked"/>
             <RadioButton x:Name="ClassicRadioButton" Grid.Row="1" Content="Classic" HorizontalAlignment="Left" VerticalAlignment="Top" GroupName="HandStyle" Checked="RadioButton_Checked"/>
         </Grid>
+        <Button x:Name="InfoButton" HorizontalAlignment="Left" Margin="749,204,0,0" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="InfoButton_Click">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <TextBlock x:Name="InfoButtonContent" FontSize="24">🛈</TextBlock>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="Blue" TargetName="InfoButtonContent"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Foreground" Value="RoyalBlue" TargetName="InfoButtonContent"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Popup
+            x:Name="InfoPopup"
+            PlacementTarget="{Binding ElementName=InfoButton}"
+            Placement="Right"
+            StaysOpen="False"
+            >
+            <Border BorderThickness="1" Background="White" BorderBrush="Black">
+                <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Auto">
+                   <ItemsControl x:Name="InfoItemsControl">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="" TextWrapping="Wrap" Margin="5"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+        </Popup>
     </Grid>
 </UserControl>
