@@ -272,6 +272,18 @@ namespace SkullQueenClient
 
             try
             {
+                // Trying to connect to the server with a static ip
+                // TODO: this should be changed to home address
+                TcpClient client = new TcpClient("localhost", 5050);
+                // We can only create this player instance if the previous command did not throw an exception
+                Player new_player = new Player(playerName, client);
+                return new_player;
+            }
+            catch { }
+            try
+            {
+
+
                 // Getting the server ip
                 UdpClient udpClient = new();
                 udpClient.EnableBroadcast = true;
