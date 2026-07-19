@@ -274,12 +274,15 @@ namespace SkullQueenClient
             {
                 // Trying to connect to the server with a static ip
                 // TODO: this should be changed to home address
-                TcpClient client = new TcpClient("localhost", 5050);
+                TcpClient client = new TcpClient("home.bramensofie.be", 5050);
+                Debug.WriteLine("Connected to server at home.bramensofie.be:5050");
                 // We can only create this player instance if the previous command did not throw an exception
                 Player new_player = new Player(playerName, client);
                 return new_player;
             }
-            catch { }
+            catch { 
+                Debug.WriteLine("Could not connect to server at home.bramensofie.be:5050, trying to find server in network");
+            }
             try
             {
 
